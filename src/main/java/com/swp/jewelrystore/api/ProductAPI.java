@@ -25,7 +25,6 @@ public class ProductAPI {
     @PostMapping
     public String addOrUpdateProduct(@RequestBody ProductDTO productDTO){
         productService.addOrUpdateProduct(productDTO);
-
         if(productDTO.getId() == null) return "Add product successfully";
         return "Update product successfully";
     }

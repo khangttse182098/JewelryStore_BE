@@ -55,7 +55,7 @@ public class ProductEntity {
     private List<ProductGemEntity> productGemEntities;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<PurchaseOrderEntity> purchaseOrderEntities;
+    private List<PurchaseOrderDetailEntity> purchaseOrderEntities;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<SellOrderDetailEntity> sellOrderDetailEntities;

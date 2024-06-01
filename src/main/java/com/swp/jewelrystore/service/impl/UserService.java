@@ -1,10 +1,10 @@
-package com.swp.jewelrystore.service;
+package com.swp.jewelrystore.service.impl;
 
 import com.swp.jewelrystore.entity.UserEntity;
 import com.swp.jewelrystore.model.dto.UserDTO;
 import com.swp.jewelrystore.model.response.LoginResponseDTO;
-import com.swp.jewelrystore.model.response.ResponseDTO;
 import com.swp.jewelrystore.repository.UserRepository;
+import com.swp.jewelrystore.service.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

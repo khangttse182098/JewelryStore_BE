@@ -1,4 +1,4 @@
-package com.swp.jewelrystore.service;
+package com.swp.jewelrystore.service.impl;
 
 
 import com.swp.jewelrystore.converter.ProductConverter;
@@ -6,20 +6,18 @@ import com.swp.jewelrystore.entity.*;
 import com.swp.jewelrystore.model.dto.ProductDTO;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
 import com.swp.jewelrystore.repository.*;
-import com.swp.jewelrystore.utils.NumberUtils;
+import com.swp.jewelrystore.service.IProductService;
 import org.modelmapper.ModelMapper;
 import com.swp.jewelrystore.entity.ProductEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class ProductService implements IProductService{
+public class ProductService implements IProductService {
 
 
     @Autowired

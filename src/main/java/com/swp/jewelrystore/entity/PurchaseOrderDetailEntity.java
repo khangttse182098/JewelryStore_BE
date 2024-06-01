@@ -47,4 +47,7 @@ public class PurchaseOrderDetailEntity {
     @Column(name = "weight", precision = 10, scale = 2)
     private BigDecimal weight;
 
+    @Column(name = "price")
+    private Double price;
+
 }

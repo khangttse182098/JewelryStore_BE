@@ -1,19 +1,18 @@
-package com.swp.jewelrystore.service;
+package com.swp.jewelrystore.service.impl;
 
 import com.swp.jewelrystore.entity.CounterEntity;
 import com.swp.jewelrystore.model.response.CounterResponseDTO;
 import com.swp.jewelrystore.repository.CounterRepository;
-import com.swp.jewelrystore.repository.ProductRepository;
+import com.swp.jewelrystore.service.ICounterService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
-public class CounterService implements ICounterService{
+public class CounterService implements ICounterService {
     @Autowired
     private CounterRepository counterRepository;
 

@@ -21,9 +21,6 @@ public class PurchaseOrderEntity {
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerEntity customer;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
-    private ProductEntity product;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
@@ -37,6 +34,5 @@ public class PurchaseOrderEntity {
 
     @Column(name = "status")
     private String status;
-
 
 }

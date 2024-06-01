@@ -5,6 +5,7 @@ import com.swp.jewelrystore.entity.MaterialPriceEntity;
 import com.swp.jewelrystore.entity.ProductEntity;
 import com.swp.jewelrystore.entity.ProductGemEntity;
 import com.swp.jewelrystore.entity.ProductMaterialEntity;
+import com.swp.jewelrystore.model.response.PurchasePriceResponseDTO;
 import com.swp.jewelrystore.repository.GemPriceRepository;
 import com.swp.jewelrystore.repository.MaterialPriceRepository;
 import com.swp.jewelrystore.utils.NumberUtils;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -53,8 +55,31 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         primePrice += productEntity.getMaterialCost() + productEntity.getGemCost() + productEntity.getProductionCost();
         // Giá bán = giá vốn sản phẩm * tỉ lệ áp giá,
         double sellPrice = primePrice * productEntity.getPriceRate();
+        // Làm tron gia ban
+        sellPrice = Math.ceil(sellPrice / 10.0) * 10;
         return sellPrice;
     }
+
+    @Override
+    public double calculateBuyPrice(ProductEntity productEntity) {
+        double buyPrice = 0;
+        // tinh tien material neu co
+        if(!productEntity.getProductMaterialEntities().isEmpty()){
+            List<ProductMaterialEntity> productMaterialEntities = productEntity.getProductMaterialEntities();
+            for(ProductMaterialEntity productMaterialEntity : productMaterialEntities){
+                buyPrice += (productMaterialEntity.getWeight() * 0.267 * materialPriceRepository.findLatestMaterialPrice(productEntity).getBuyPrice());
+            }
+        }
+        // tinh tien kim cuong neu co
+        if(!productEntity.getProductGemEntities().isEmpty()){
+            List<ProductGemEntity> productGemEntities = productEntity.getProductGemEntities();
+            for(ProductGemEntity productGemEntity : productGemEntities) {
+                buyPrice += gemPriceRepository.findLatestGemPrice(productGemEntity.getGem()).getBuyPrice();
+            }
+        }
+        return Math.ceil((buyPrice * 1.2) / 10.0) * 10;  // uu dai 20%);
+    }
+
     @Override
     public List<ProductEntity>getAllProduct(Map<String, String> params) {
         // sql
