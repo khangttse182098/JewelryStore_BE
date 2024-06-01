@@ -36,7 +36,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     @Override
     public void addProductPurchaseOrder(PurchaseInvoiceDTO purchaseInvoiceDTO) {
         PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
-        purchaseOrderEntity.setPurchaseOrderCode("PUR002");
+        purchaseOrderEntity.setPurchaseOrderCode(purchaseOrderRepository.generatePurchaseOrderCode());
         purchaseOrderEntity.setUser(userRepository.findByIdIs(purchaseInvoiceDTO.getUserId()));
         purchaseOrderEntity.setStatus("Chưa thanh toán");
         purchaseOrderRepository.save(purchaseOrderEntity);
