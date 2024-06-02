@@ -17,7 +17,11 @@ public class OrderConverter {
         InvoiceResponseDTO invoiceResponseDTO = modelMapper.map(sellOrderEntity, InvoiceResponseDTO.class);
         invoiceResponseDTO.setInvoiceCode(sellOrderEntity.getSellOrderCode());
         invoiceResponseDTO.setInvoiceType("Bán");
-        invoiceResponseDTO.setCustomerName(sellOrderEntity.getCustomer().getFullName());
+        if(sellOrderEntity.getCustomer() != null) {
+            invoiceResponseDTO.setCustomerName(sellOrderEntity.getCustomer().getFullName());
+        }else{
+            invoiceResponseDTO.setCustomerName("Chưa có khách hàng");
+        }
         invoiceResponseDTO.setStaffName(sellOrderEntity.getUser().getFullName());
         int totalPrice = 0;
         for(SellOrderDetailEntity sellOrderDetailEntity : sellOrderEntity.getSellOrderDetailEntities()){
@@ -30,7 +34,12 @@ public class OrderConverter {
         InvoiceResponseDTO invoiceResponseDTO = modelMapper.map(purchaseOrderEntity, InvoiceResponseDTO.class);
         invoiceResponseDTO.setInvoiceCode(purchaseOrderEntity.getPurchaseOrderCode());
         invoiceResponseDTO.setInvoiceType("Mua lại");
-        invoiceResponseDTO.setCustomerName(purchaseOrderEntity.getCustomer().getFullName());
+        if(purchaseOrderEntity.getCustomer() != null) {
+            invoiceResponseDTO.setCustomerName(purchaseOrderEntity.getCustomer().getFullName());
+        }
+        else{
+            invoiceResponseDTO.setCustomerName("Chưa có khách hàng");
+        }
         invoiceResponseDTO.setStaffName(purchaseOrderEntity.getUser().getFullName());
         int totalPrice = 0;
         for(PurchaseOrderDetailEntity purchaseOrderDetailEntity : purchaseOrderEntity.getPurchaseOrderDetailEntities()){
