@@ -44,8 +44,15 @@ public class ProductService implements IProductService {
 
     @Autowired
     private SellOrderDetailRepository sellOrderDetailRepository;
+
     @Autowired
     private SellOrderRepository sellOrderRepository;
+
+    @Autowired
+    private MaterialRepository materialRepository;
+
+    @Autowired
+    private GemRepository gemRepository;
 
     @Override
     public List<ProductResponseDTO> getAllProduct(Map<String, String > params) {
@@ -74,12 +81,34 @@ public class ProductService implements IProductService {
     @Override
     public void addOrUpdateProduct(ProductDTO productDTO) {
         ProductEntity productEntity = modelMapper.map(productDTO, ProductEntity.class);
-        // Add product category
-//        if(productDTO.getCategoryName().equals)
-//        ProductCategoryEntity productCategoryEntity = productCategoryRepository.findByCategoryName(productDTO.getCategoryName());
-        //
-//        productEntity.setProductCategory();
+        // Product Category
+        ProductCategoryEntity productCategoryEntity = productCategoryRepository.findByIdIs(productDTO.getProductCategoryId());
+        productEntity.setProductCategory(productCategoryEntity);
+        if(productCategoryEntity.getSubCategoryType().equals("Trang sức")){
+            productEntity.getProductCategory().setSubCategoryType(productDTO.getSubCategoryType());
+        }
+        // Counter
+        CounterEntity counterEntity = counterRepository.findCounterEntityById(productDTO.getCounterId());
+        productEntity.setCounter(counterEntity);
+        // Material
+        MaterialEntity materialEntity = materialRepository.findMaterialEntityById(productDTO.getMaterialId());
+        // Product Image
+        productEntity.setProductImage("image.png");
+        // Save product
+        productRepository.save(productEntity);
+        // Product Material
+        ProductMaterialEntity productMaterialEntity = new ProductMaterialEntity();
+        productMaterialEntity.setMaterial(materialEntity);
+        productMaterialEntity.setProduct(productEntity);
+        // Gem
+        GemEntity gemEntity = gemRepository.findGemEntityById(productDTO.getGemId());
+        // ProductGem
+        ProductGemEntity productGemEntity = new ProductGemEntity();
+        productGemEntity.setGem(gemEntity);
+        productGemEntity.setProduct(productEntity);
+        productGemRepository.save(productGemEntity);
     }
+
 
 
 

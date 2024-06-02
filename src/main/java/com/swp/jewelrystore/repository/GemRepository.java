@@ -4,4 +4,5 @@ import com.swp.jewelrystore.entity.GemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GemRepository extends JpaRepository<GemEntity, Long> {
+    GemEntity findGemEntityById(long id);
 }

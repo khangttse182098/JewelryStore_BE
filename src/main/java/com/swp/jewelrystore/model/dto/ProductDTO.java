@@ -10,8 +10,8 @@ public class ProductDTO {
      private Long id;
      private String productCode;
      private String productName;
-     private String categoryName; // loại sản phẩm: kim cương, trang sức
-     private String materialName;
+     private Long productCategoryId; // loại sản phẩm: kim cương, trang sức
+     private Long materialId;
      private Double materialWeight;
      private Long counterId;
      private Double materialCost;
@@ -19,11 +19,7 @@ public class ProductDTO {
      private Double priceRate;
      private Double gemCost;
      private String subCategoryType; // danh muc: nhẫn, dây chuyen, ...
-     private String origin;
-     private String clarity;
-     private Double caratWeight;
-     private String cut;
-     private String color;
+     private Long gemId;
      private String productImage;
 
 }
