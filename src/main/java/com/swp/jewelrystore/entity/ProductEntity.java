@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 @Getter
@@ -23,31 +24,43 @@ public class ProductEntity {
 
     @ManyToOne
     @JoinColumn(name = "counter_id")
-    private CounterEntity counterEntity;
+    private CounterEntity counter;
 
-//    counter_id
+
     @Column(name = "product_name")
-    private String product_name;
+    private String productName;
 
     @Column(name = "product_code")
-    private String product_code;
+    private String productCode;
 
     @Column(name = "product_image")
-    private String product_image;
+    private String productImage;
 
     @Column(name = "material_cost")
-    private Double material_cost;
+    private Double materialCost;
 
     @Column(name = "gem_cost")
-    private Double gem_cost;
+    private Double gemCost;
 
     @Column(name = "production_cost")
-    private Double production_cost;
+    private Double productionCost;
 
     @Column(name = "price_rate")
-    private Double price_rate;
+    private Double priceRate;
 
     @Column(name = "createddate")
-    private Date createddate;
+    private Date createdDate;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductGemEntity> productGemEntities;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<PurchaseOrderDetailEntity> purchaseOrderEntities;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<SellOrderDetailEntity> sellOrderDetailEntities;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductMaterialEntity> productMaterialEntities;
 
 }

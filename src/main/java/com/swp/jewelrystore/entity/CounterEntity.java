@@ -18,14 +18,14 @@ public class CounterEntity {
     private Long id;
 
     @Column(name = "counter_no")
-    private String counter_no;
+    private String counterNo;
 
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "counterEntity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "counter", fetch = FetchType.LAZY)
     private List<ProductEntity> productEntities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "counterEntity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "counter", fetch = FetchType.LAZY)
     private List<AssignmentCounterEntity> assignmentCounterEntities = new ArrayList<>();
 }

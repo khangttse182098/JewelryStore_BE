@@ -24,8 +24,8 @@ public class DiscountEntity {
     private String code;
 
     @Column(name = "start_date")
-    private Date start_date;
+    private Date startDate;
 
     @Column(name = "end_date")
-    private Date end_date;
+    private Date endDate;
 }

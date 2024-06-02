@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -17,10 +18,11 @@ public class ProductCategoryEntity {
     @Column(name = "category_id")
     private Long id;
     @Column(name = "category_name")
-    private String category_name;
+    private String categoryName;
     @Column(name = "sub_category_type")
-    private String sub_category_type;
-//
-//    @OneToMany(mappedBy = "productCategory", fetch = FetchType.LAZY)
-//    private List<ProductEntity> productEntities = new ArrayList<>();
+    private String subCategoryType;
+
+    @OneToMany(mappedBy = "productCategory", fetch = FetchType.LAZY)
+    private List<ProductEntity> productEntities = new ArrayList<>();
+
 }

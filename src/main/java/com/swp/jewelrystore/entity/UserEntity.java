@@ -22,10 +22,10 @@ public class UserEntity {
     private RoleEntity role;
 
     @Column(name = "fullname")
-    private String fullname;
+    private String fullName;
 
     @Column(name = "username")
-    private String username;
+    private String userName;
 
     @Column(name = "password")
     private String password;
@@ -36,9 +36,11 @@ public class UserEntity {
     @Column(name = "status")
     private Long status;
 
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<AssignmentCounterEntity> assignmentCounterEntities = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List <SellOrderEntity> sellOrderEntities =  new ArrayList<>();
 
 }
