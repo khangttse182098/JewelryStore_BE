@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,12 +18,14 @@ public class PurchaseOrderEntity {
     @Column(name = "purchase_order_id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerEntity customer;
 
+    @OneToMany(mappedBy = "purchaseOrder", fetch = FetchType.LAZY)
+    private List<PurchaseOrderDetailEntity> purchaseOrderDetailEntities;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
