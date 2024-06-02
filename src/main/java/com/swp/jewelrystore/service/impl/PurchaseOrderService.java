@@ -1,15 +1,12 @@
 package com.swp.jewelrystore.service.impl;
 
-import com.swp.jewelrystore.entity.ProductEntity;
-import com.swp.jewelrystore.entity.PurchaseOrderDetailEntity;
-import com.swp.jewelrystore.entity.PurchaseOrderEntity;
-import com.swp.jewelrystore.model.dto.PurchaseInvoiceDTO;
+import com.swp.jewelrystore.entity.*;
+import com.swp.jewelrystore.model.dto.*;
+import com.swp.jewelrystore.model.response.MaterialResponseDTO;
 import com.swp.jewelrystore.model.response.PurchasePriceResponseDTO;
-import com.swp.jewelrystore.repository.ProductRepository;
-import com.swp.jewelrystore.repository.PurchaseOrderDetailRepository;
-import com.swp.jewelrystore.repository.PurchaseOrderRepository;
-import com.swp.jewelrystore.repository.UserRepository;
+import com.swp.jewelrystore.repository.*;
 import com.swp.jewelrystore.service.IPurchaseOrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,19 +16,21 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class PurchaseOrderService implements IPurchaseOrderService {
-    @Autowired
-    PurchaseOrderRepository purchaseOrderRepository;
 
-
-    @Autowired
-    UserRepository userRepository;
+    private final GemRepository gemRepository;
+    private final MaterialPriceRepository materialPriceRepository;
+    private final GemPriceRepository gemPriceRepository;
+    private final MaterialRepository materialRepository;
+    private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
+    private final PurchaseOrderRepository purchaseOrderRepository;
+    private final PurchaseOrderDetailRepository purchaseOrderDetailRepository;
 
     @Autowired
     ProductRepository productRepository;
-
-    @Autowired
-    PurchaseOrderDetailRepository purchaseOrderDetailRepository;
 
     @Override
     public void addProductPurchaseOrder(PurchaseInvoiceDTO purchaseInvoiceDTO) {
@@ -61,5 +60,85 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             purchasePriceResponseDTOList.add(purchasePriceResponseDTO);
         }
         return purchasePriceResponseDTOList;
+    }
+    @Override
+    public List<MaterialResponseDTO> addPurchaseOrderInformation(CriteriaDTO criteriaDTO) {
+        List<MaterialResponseDTO> listMaterial = new ArrayList<>();
+        for (GoldCriteriaDTO goldCriteria : criteriaDTO.getListGoldCriteria()){
+            MaterialResponseDTO material = new MaterialResponseDTO();
+            MaterialEntity materialEntity = materialRepository.findById(goldCriteria.getId()).get();
+            material.setWeight(goldCriteria.getWeight());
+            material.setName(materialEntity.getName());
+            // set price
+            double price = goldCriteria.getWeight() * 0.267 *
+                    materialPriceRepository.findLatestGoldPrice(materialEntity).getBuyPrice();
+            material.setPrice(price);
+            // add to listMaterial
+            listMaterial.add(material);
+        }
+        for (DiamondCriteriaDTO diamondCriteria : criteriaDTO.getListDiamondCriteria()){
+            MaterialResponseDTO material = new MaterialResponseDTO();
+            GemEntity gem = gemRepository.findByOriginAndColorAndClarityAndCaratWeightAndCut(
+                    diamondCriteria.getOrigin(), diamondCriteria.getColor(), diamondCriteria.getClarity(), diamondCriteria.getCaratWeight(), diamondCriteria.getCut()
+            );
+            material.setName(gem.getGemName());
+            material.setWeight(gem.getCaratWeight());
+            // set price
+            GemPriceEntity gemPriceEntity = gemPriceRepository.findLatestGemPrice(gem);
+            double price = gemPriceEntity.getBuyPrice();
+            material.setPrice(price);
+            // add to listMaterial
+            listMaterial.add(material);
+        }
+        return listMaterial;
+    }
+
+    @Override
+    public void addPurchaseInvoiceInformation(PurchaseOrderDTO purchaseOrderDTO) {
+        CustomerEntity customer = customerRepository.findByFullNameOrPhoneNumber(purchaseOrderDTO.getFullName(), purchaseOrderDTO.getPhoneNumber());
+        UserEntity user = userRepository.findById(purchaseOrderDTO.getUserId()).get();
+        if (customer == null){
+            CustomerEntity newCustomer = new CustomerEntity();
+            newCustomer.setFullName(purchaseOrderDTO.getFullName());
+            newCustomer.setPhoneNumber(purchaseOrderDTO.getPhoneNumber());
+            newCustomer.setAddress(purchaseOrderDTO.getAddress());
+            customerRepository.save(newCustomer);
+            PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
+            purchaseOrderEntity.setCustomer(newCustomer);
+            purchaseOrderEntity.setUser(user);
+            purchaseOrderEntity.setStatus(purchaseOrderDTO.getPurchaseOrderStatus());
+            purchaseOrderRepository.save(purchaseOrderEntity);
+            splitGoldOrGem(purchaseOrderDTO.getMaterials(), purchaseOrderEntity);
+        } else {
+            PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
+            purchaseOrderEntity.setCustomer(customer);
+            purchaseOrderEntity.setUser(user);
+            purchaseOrderEntity.setStatus(purchaseOrderDTO.getPurchaseOrderStatus());
+            purchaseOrderRepository.save(purchaseOrderEntity);
+            splitGoldOrGem(purchaseOrderDTO.getMaterials(), purchaseOrderEntity);
+        }
+    }
+
+    public void splitGoldOrGem(List<MaterialResponseDTO> list, PurchaseOrderEntity purchaseOrderEntity){
+        for (MaterialResponseDTO item: list){
+            if (item.getName().contains("Vàng")){
+                MaterialEntity materialEntity = materialRepository.findByName(item.getName());
+                PurchaseOrderDetailEntity purchaseOrderDetailEntity = new PurchaseOrderDetailEntity();
+                purchaseOrderDetailEntity.setWeight(item.getWeight());
+                purchaseOrderDetailEntity.setMaterial(materialEntity);
+                purchaseOrderDetailEntity.setPurchaseOrder(purchaseOrderEntity);
+                purchaseOrderDetailRepository.save(purchaseOrderDetailEntity);
+            } else if (item.getName().contains("Diamond")){
+                GemEntity gemEntity = gemRepository.findByGemName(item.getName());
+                PurchaseOrderDetailEntity purchaseOrderDetailEntity = new PurchaseOrderDetailEntity();
+                purchaseOrderDetailEntity.setOrigin(gemEntity.getOrigin());
+                purchaseOrderDetailEntity.setColor(gemEntity.getColor());
+                purchaseOrderDetailEntity.setCut(gemEntity.getCut());
+                purchaseOrderDetailEntity.setCaratWeight(item.getWeight());
+                purchaseOrderDetailEntity.setClarity(gemEntity.getClarity());
+                purchaseOrderDetailEntity.setPurchaseOrder(purchaseOrderEntity);
+                purchaseOrderDetailRepository.save(purchaseOrderDetailEntity);
+            }
+        }
     }
 }

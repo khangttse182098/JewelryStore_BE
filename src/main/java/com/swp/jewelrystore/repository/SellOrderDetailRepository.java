@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
-public interface SellOrderDetailRepository extends JpaRepository<SellOrderDetailEntity, Integer> {
+public interface SellOrderDetailRepository extends JpaRepository<SellOrderDetailEntity, Long> {
     List<SellOrderDetailEntity> findBySellOrder(SellOrderEntity sellDetailEntity);
 }

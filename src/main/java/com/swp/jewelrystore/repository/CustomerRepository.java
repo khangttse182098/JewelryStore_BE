@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> {
     CustomerEntity findByIdIs(Long customerId);
+     CustomerEntity findByPhoneNumber(String phoneNumber);
+     CustomerEntity findByFullNameOrPhoneNumber(String fullName, String phoneNumber);
 }

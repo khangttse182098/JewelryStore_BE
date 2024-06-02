@@ -35,7 +35,7 @@ public class PurchaseOrderDetailEntity {
     private String clarity;
 
     @Column(name = "carat_weight", nullable = false)
-    private Integer caratWeight;
+    private Double caratWeight;
 
     @Column(name = "cut", nullable = false)
     private String cut;
@@ -44,8 +44,8 @@ public class PurchaseOrderDetailEntity {
     @JoinColumn(name = "material_id")
     private MaterialEntity material;
 
-    @Column(name = "weight", precision = 10, scale = 2)
-    private BigDecimal weight;
+    @Column(name = "weight")
+    private Double weight;
 
     @Column(name = "price")
     private Double price;

@@ -1,6 +1,7 @@
 package com.swp.jewelrystore.custom.impl;
 
 import com.swp.jewelrystore.custom.MaterialPriceRepositoryCustom;
+import com.swp.jewelrystore.entity.MaterialEntity;
 import com.swp.jewelrystore.entity.MaterialPriceEntity;
 import com.swp.jewelrystore.entity.ProductEntity;
 import org.springframework.stereotype.Repository;
@@ -23,8 +24,17 @@ public class MaterialPriceRepositoryCustomImpl implements MaterialPriceRepositor
         List<MaterialPriceEntity> materialPriceEntities = query.getResultList();
         return materialPriceEntities.get(0);
     }
+
+    @Override
+    public MaterialPriceEntity findLatestGoldPrice(MaterialEntity materialEntity) {
+        String sql = buildQueryFilter(materialEntity.getId().toString());
+        Query query = entityManager.createNativeQuery(sql,MaterialPriceEntity.class);
+        List<MaterialPriceEntity> materialPriceEntities = query.getResultList();
+        return materialPriceEntities.get(0);
+    }
+
     private String buildQueryFilter(String materialId) {
-        String sql = "select materialprice.* from materialprice where material_id = " + materialId+ " and effect_date <= current_date() limit 1";
+        String sql = "select materialprice.* from materialprice where material_id = " + materialId+ " and effect_date <= current_date() order by effect_date DESC limit 1";
         return sql;
     }
 }

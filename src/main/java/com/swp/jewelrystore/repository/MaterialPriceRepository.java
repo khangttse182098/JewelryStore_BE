@@ -7,4 +7,5 @@ import org.springframework.stereotype.Service;
 
 
 public interface MaterialPriceRepository extends JpaRepository<MaterialPriceEntity, Long>, MaterialPriceRepositoryCustom {
+  MaterialPriceEntity findByMaterial_Id(Long material_Id);
 }

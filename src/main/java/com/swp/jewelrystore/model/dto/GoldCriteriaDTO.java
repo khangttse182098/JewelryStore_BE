@@ -1,12 +1,13 @@
-package com.swp.jewelrystore.model.response;
+package com.swp.jewelrystore.model.dto;
+
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class MaterialResponseDTO {
+public class GoldCriteriaDTO {
+    private Long id;
     private String name;
     private Double weight;
-    private Double price;
 }

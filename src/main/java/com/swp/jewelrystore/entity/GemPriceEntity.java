@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -28,18 +29,18 @@ public class GemPriceEntity {
     private String clarity;
 
     @Column(name = "carat_weight", nullable = false)
-    private Integer caratWeight;
+    private Double caratWeight;
 
     @Column(name = "cut", nullable = false)
     private String cut;
 
     @Column(name = "buy_price", nullable = false)
-    private Integer buyPrice;
+    private Double buyPrice;
 
     @Column(name = "sell_price", nullable = false)
-    private Integer sellPrice;
+    private Double sellPrice;
 
     @Column(name = "effect_date", nullable = false)
-    private Instant effectDate;
+    private Date effectDate;
 
 }
