@@ -1,12 +1,16 @@
 package com.swp.jewelrystore.api;
 
 
+import com.swp.jewelrystore.model.dto.CriteriaDTO;
 import com.swp.jewelrystore.model.dto.InvoiceDTO;
+import com.swp.jewelrystore.model.dto.PurchaseOrderDTO;
+import com.swp.jewelrystore.model.response.MaterialResponseDTO;
 import com.swp.jewelrystore.service.IPurchaseOrderService;
 import com.swp.jewelrystore.service.ISellOrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/order")
@@ -24,7 +28,12 @@ public class OrderAPI {
 
      // sửa lại object truyen vào
      @PostMapping("/purchase")
-     public void addPurchaseOrderInformation(@RequestBody InvoiceDTO invoiceDTO){
-          purchaseOrderService.addPurchaseOrderInformation(invoiceDTO);
+     public List<MaterialResponseDTO> addPurchaseOrderInformation(@RequestBody CriteriaDTO criteriaDTO){
+          return purchaseOrderService.addPurchaseOrderInformation(criteriaDTO);
+     }
+
+     @PostMapping("/purchase-invoice")
+     public void addPurchaseInvoiceInformation(@RequestBody PurchaseOrderDTO purchaseOrderDTO){
+          purchaseOrderService.addPurchaseInvoiceInformation(purchaseOrderDTO);
      }
 }

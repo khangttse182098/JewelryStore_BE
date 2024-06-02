@@ -3,6 +3,7 @@ package com.swp.jewelrystore.custom.impl;
 import com.swp.jewelrystore.custom.GemPriceRepositoryCustom;
 import com.swp.jewelrystore.entity.GemEntity;
 import com.swp.jewelrystore.entity.GemPriceEntity;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,6 +11,7 @@ import javax.persistence.Query;
 import java.time.LocalDate;
 import java.util.List;
 
+@Repository
 public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;
@@ -22,7 +24,7 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
         return gemPriceEntities.get(0);
     }
     private String buildQueryFilter(GemEntity gemEntity) {
-        String sql = "select gemprice.* from gemprice where origin = '" + gemEntity.getOrigin() +"' and color = '" + gemEntity.getColor()+ "' and clarity = '" + gemEntity.getClarity() + "' and carat_weight = " + gemEntity.getCaratWeight() + " and cut = '"+gemEntity.getCut()+"' and effect_date <= current_date() limit 1";
+        String sql = "select gemprice.* from gemprice where origin = '" + gemEntity.getOrigin() +"' and color = '" + gemEntity.getColor()+ "' and clarity = '" + gemEntity.getClarity() + "' and carat_weight = " + gemEntity.getCaratWeight() + " and cut = '" + gemEntity.getCut()+"' and effect_date <= current_date() order by buy_price DESC limit 1";
         return sql;
     }
 }

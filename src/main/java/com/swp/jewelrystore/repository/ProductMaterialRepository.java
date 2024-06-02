@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ProductMaterialRepository extends JpaRepository<ProductMaterialEntity, Long> {
     List<ProductMaterialEntity> findAllByProductId(Long productId);
+    ProductMaterialEntity findByWeight(Double weight);
 }

@@ -9,6 +9,7 @@ import com.swp.jewelrystore.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 
 @Service
@@ -32,12 +33,13 @@ public class SellOrderService implements ISellOrderService{
             SellOrderEntity sellOrder = new SellOrderEntity();
             sellOrder.setUser(userRepository.findById(invoiceDTO.getUserId()).get());
             sellOrder.setCustomer(checkCustomer);
+            sellOrder.setSellOrderCode("SEL007");
             sellOrder.setStatus(invoiceDTO.getSellOrderStatus());
             sellOrderRepository.save(sellOrder);
-            SellOrderDetailEntity sellOrderDetail = new SellOrderDetailEntity();
-            sellOrderDetail.setSellOrder(sellOrder);
             int i = 0;
             for (ProductEntity item : listProduct) {
+                SellOrderDetailEntity sellOrderDetail = new SellOrderDetailEntity();
+                sellOrderDetail.setSellOrder(sellOrder);
                 sellOrderDetail.setProduct(item);
                 sellOrderDetail.setPrice(invoiceDTO.getPrice().get(i));
                 i++;
@@ -51,13 +53,14 @@ public class SellOrderService implements ISellOrderService{
             customerRepository.save(newCustomer);
             SellOrderEntity sellOrder = new SellOrderEntity();
             sellOrder.setUser(userRepository.findById(invoiceDTO.getUserId()).get());
-            sellOrder.setCustomer(checkCustomer);
+            sellOrder.setCustomer(newCustomer);
+            sellOrder.setSellOrderCode("SEL009");
             sellOrder.setStatus(invoiceDTO.getSellOrderStatus());
             sellOrderRepository.save(sellOrder);
-            SellOrderDetailEntity sellOrderDetail = new SellOrderDetailEntity();
-            sellOrderDetail.setSellOrder(sellOrder);
             int i = 0;
             for (ProductEntity item : listProduct) {
+                SellOrderDetailEntity sellOrderDetail = new SellOrderDetailEntity();
+                sellOrderDetail.setSellOrder(sellOrder);
                 sellOrderDetail.setProduct(item);
                 sellOrderDetail.setPrice(invoiceDTO.getPrice().get(i));
                 i++;
