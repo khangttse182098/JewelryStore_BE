@@ -1,6 +1,7 @@
 package com.swp.jewelrystore.api;
 
 import com.swp.jewelrystore.entity.MaterialEntity;
+import com.swp.jewelrystore.model.response.MaterialDropDownResponseDTO;
 import com.swp.jewelrystore.model.response.MaterialResponseDTO;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
 import com.swp.jewelrystore.repository.MaterialRepository;
@@ -22,12 +23,12 @@ public class MaterialAPI {
     private ModelMapper modelMapper;
 
     @GetMapping
-    public List<MaterialResponseDTO> getMaterial(){
-        List<MaterialResponseDTO> materialResponseDTOList = new ArrayList<MaterialResponseDTO>();
+    public List<MaterialDropDownResponseDTO> getMaterial(){
+        List<MaterialDropDownResponseDTO> materialDropDownResponseDTOS = new ArrayList<MaterialDropDownResponseDTO>();
         List<MaterialEntity> materialEntities = materialRepository.findAll();
         for (MaterialEntity materialEntity : materialEntities) {
-            materialResponseDTOList.add(modelMapper.map(materialEntity, MaterialResponseDTO.class));
+            materialDropDownResponseDTOS.add(modelMapper.map(materialEntity, MaterialDropDownResponseDTO.class));
         }
-        return materialResponseDTOList;
+        return materialDropDownResponseDTOS;
     }
 }

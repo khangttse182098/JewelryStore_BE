@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -33,7 +34,7 @@ public class PurchaseOrderEntity {
     private String purchaseOrderCode;
 
     @Column(name = "created_date", nullable = false)
-    private Instant createdDate;
+    private Date createdDate;
 
     @Column(name = "status")
     private String status;

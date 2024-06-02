@@ -106,6 +106,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
             purchaseOrderEntity.setCustomer(newCustomer);
             purchaseOrderEntity.setUser(user);
+            purchaseOrderEntity.setPurchaseOrderCode(purchaseOrderRepository.generatePurchaseOrderCode());
             purchaseOrderEntity.setStatus(purchaseOrderDTO.getPurchaseOrderStatus());
             purchaseOrderRepository.save(purchaseOrderEntity);
             splitGoldOrGem(purchaseOrderDTO.getMaterials(), purchaseOrderEntity);
@@ -113,6 +114,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
             purchaseOrderEntity.setCustomer(customer);
             purchaseOrderEntity.setUser(user);
+            purchaseOrderEntity.setPurchaseOrderCode(purchaseOrderRepository.generatePurchaseOrderCode());
             purchaseOrderEntity.setStatus(purchaseOrderDTO.getPurchaseOrderStatus());
             purchaseOrderRepository.save(purchaseOrderEntity);
             splitGoldOrGem(purchaseOrderDTO.getMaterials(), purchaseOrderEntity);
