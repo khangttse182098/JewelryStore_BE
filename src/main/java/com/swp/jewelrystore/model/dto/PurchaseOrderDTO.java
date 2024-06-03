@@ -13,6 +13,6 @@ public class PurchaseOrderDTO {
     private String address;
     private String phoneNumber;
     private Long userId;
-    private List<MaterialResponseDTO> materials;
+    private List<MaterialResponseDTO> listMaterialResponse;
     private String purchaseOrderStatus;
 }

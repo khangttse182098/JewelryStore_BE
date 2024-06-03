@@ -109,7 +109,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             purchaseOrderEntity.setPurchaseOrderCode(purchaseOrderRepository.generatePurchaseOrderCode());
             purchaseOrderEntity.setStatus(purchaseOrderDTO.getPurchaseOrderStatus());
             purchaseOrderRepository.save(purchaseOrderEntity);
-            splitGoldOrGem(purchaseOrderDTO.getMaterials(), purchaseOrderEntity);
+            splitGoldOrGem(purchaseOrderDTO.getListMaterialResponse(), purchaseOrderEntity);
         } else {
             PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
             purchaseOrderEntity.setCustomer(customer);
@@ -117,7 +117,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             purchaseOrderEntity.setPurchaseOrderCode(purchaseOrderRepository.generatePurchaseOrderCode());
             purchaseOrderEntity.setStatus(purchaseOrderDTO.getPurchaseOrderStatus());
             purchaseOrderRepository.save(purchaseOrderEntity);
-            splitGoldOrGem(purchaseOrderDTO.getMaterials(), purchaseOrderEntity);
+            splitGoldOrGem(purchaseOrderDTO.getListMaterialResponse(), purchaseOrderEntity);
         }
     }
 
@@ -129,6 +129,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
                 purchaseOrderDetailEntity.setWeight(item.getWeight());
                 purchaseOrderDetailEntity.setMaterial(materialEntity);
                 purchaseOrderDetailEntity.setPurchaseOrder(purchaseOrderEntity);
+                purchaseOrderDetailEntity.setPrice(item.getPrice());
                 purchaseOrderDetailRepository.save(purchaseOrderDetailEntity);
             } else if (item.getName().contains("Diamond")){
                 GemEntity gemEntity = gemRepository.findByGemName(item.getName());
@@ -138,6 +139,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
                 purchaseOrderDetailEntity.setCut(gemEntity.getCut());
                 purchaseOrderDetailEntity.setCaratWeight(item.getWeight());
                 purchaseOrderDetailEntity.setClarity(gemEntity.getClarity());
+                purchaseOrderDetailEntity.setPrice(item.getPrice());
                 purchaseOrderDetailEntity.setPurchaseOrder(purchaseOrderEntity);
                 purchaseOrderDetailRepository.save(purchaseOrderDetailEntity);
             }

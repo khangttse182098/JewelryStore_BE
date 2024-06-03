@@ -7,16 +7,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.swp.jewelrystore.model.dto.CriteriaDTO;
 import com.swp.jewelrystore.model.dto.InvoiceDTO;
 import com.swp.jewelrystore.model.dto.PurchaseOrderDTO;
-import com.swp.jewelrystore.model.response.MaterialResponseDTO;
 import com.swp.jewelrystore.service.IPurchaseOrderService;
 import com.swp.jewelrystore.service.ISellOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -36,18 +32,14 @@ public class OrderAPI {
      private final ISellOrderService sellOrderService;
 
      @PostMapping("/sell")
-     public void addSellOrderInformation(@RequestBody InvoiceDTO invoiceDTO){
+     public String addSellOrderInformation(@RequestBody InvoiceDTO invoiceDTO){
           sellOrderService.addSellOrderInformation(invoiceDTO);
-     }
-
-     // sửa lại object truyen vào
-     @PostMapping("/purchase")
-     public List<MaterialResponseDTO> addPurchaseOrderInformation(@RequestBody CriteriaDTO criteriaDTO){
-          return purchaseOrderService.addPurchaseOrderInformation(criteriaDTO);
+          return "Added sell order successfully";
      }
 
      @PostMapping("/purchase-invoice")
-     public void addPurchaseInvoiceInformation(@RequestBody PurchaseOrderDTO purchaseOrderDTO){
+     public String addPurchaseInvoiceInformation(@RequestBody PurchaseOrderDTO purchaseOrderDTO){
           purchaseOrderService.addPurchaseInvoiceInformation(purchaseOrderDTO);
+          return "Add successfully";
      }
 }

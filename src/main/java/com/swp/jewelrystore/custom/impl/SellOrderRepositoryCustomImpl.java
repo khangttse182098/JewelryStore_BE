@@ -23,7 +23,7 @@ public class SellOrderRepositoryCustomImpl implements SellOrderRepositoryCustom 
 
     @Override
     public String generateSellOrderCode() {
-        String sellOrderCode = "SELl";
+        String sellOrderCode = "SELL";
         int number = countTotalSellOrder() + 1;
         sellOrderCode += String.valueOf(number);
         return sellOrderCode;

@@ -34,7 +34,7 @@ public class SellOrderService implements ISellOrderService {
             SellOrderEntity sellOrder = new SellOrderEntity();
             sellOrder.setUser(userRepository.findById(invoiceDTO.getUserId()).get());
             sellOrder.setCustomer(checkCustomer);
-            sellOrder.setSellOrderCode("SEL007");
+            sellOrder.setSellOrderCode(sellOrderRepository.generateSellOrderCode());
             sellOrder.setStatus(invoiceDTO.getSellOrderStatus());
             sellOrderRepository.save(sellOrder);
             int i = 0;
@@ -55,7 +55,7 @@ public class SellOrderService implements ISellOrderService {
             SellOrderEntity sellOrder = new SellOrderEntity();
             sellOrder.setUser(userRepository.findById(invoiceDTO.getUserId()).get());
             sellOrder.setCustomer(newCustomer);
-            sellOrder.setSellOrderCode("SEL009");
+            sellOrder.setSellOrderCode(sellOrderRepository.generateSellOrderCode());
             sellOrder.setStatus(invoiceDTO.getSellOrderStatus());
             sellOrderRepository.save(sellOrder);
             int i = 0;

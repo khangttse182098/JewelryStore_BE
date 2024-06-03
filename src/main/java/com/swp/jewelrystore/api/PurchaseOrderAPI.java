@@ -32,10 +32,6 @@ public class PurchaseOrderAPI {
         purchaseOrderService.addProductPurchaseOrder(purchaseInvoiceDTO);
         return "Add product successfully!";
     }
-   // @PostMapping("/material-gem-price")
-    // public List<PurchasePriceResponseDTO> getMaterialGemPurchasePrice(@RequestBody PurchaseNoInvoiceDTO purchaseNoInvoiceDTO ){
-//        List<PurchasePriceResponseDTO> result = purchaseOrderService.showPurchasePrice(purchaseNoInvoiceDTO.get);
-//        return result;
-//    }
+
 
 }
