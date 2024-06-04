@@ -10,7 +10,7 @@ public class ProductDTO {
      private Long id;
      private String productCode;
      private String productName;
-     private Long productCategoryId; // loại sản phẩm: kim cương, trang sức
+     private String productCategoryName; // loại sản phẩm: kim cương, trang sức
      private Long materialId;
      private Double materialWeight;
      private Long counterId;

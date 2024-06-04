@@ -88,10 +88,13 @@ public class ProductService implements IProductService {
     public void addOrUpdateProduct(ProductDTO productDTO) {
         ProductEntity productEntity = modelMapper.map(productDTO, ProductEntity.class);
         // Product Category
-        ProductCategoryEntity productCategoryEntity = productCategoryRepository.findByIdIs(productDTO.getProductCategoryId());
-        productEntity.setProductCategory(productCategoryEntity);
-        if(productCategoryEntity.getSubCategoryType().equals("Trang sức")){
-            productEntity.getProductCategory().setSubCategoryType(productDTO.getSubCategoryType());
+        ProductCategoryEntity productCategoryEntity = new ProductCategoryEntity();
+        if(productDTO.getProductCategoryName().equals("Trang sức")){
+            productCategoryEntity = productCategoryRepository.findByCategoryNameAndSubCategoryType(productDTO.getProductCategoryName(), productDTO.getSubCategoryType());
+            productEntity.setProductCategory(productCategoryEntity);
+        }else{
+            productCategoryEntity = productCategoryRepository.findByCategoryName(productDTO.getProductCategoryName());
+            productEntity.setProductCategory(productCategoryEntity);
         }
         // Counter
         CounterEntity counterEntity = counterRepository.findCounterEntityById(productDTO.getCounterId());
