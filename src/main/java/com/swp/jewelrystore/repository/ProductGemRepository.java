@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface ProductGemRepository extends JpaRepository<ProductGemEntity, Long> {
     List<ProductGemEntity> findAllByProductId(Long id);
+    void deleteAllByProductIdIn(List<Long> ids);
 }

@@ -12,10 +12,11 @@ import com.swp.jewelrystore.entity.ProductEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+@Transactional
 @Service
 public class ProductService implements IProductService {
 
@@ -53,6 +54,9 @@ public class ProductService implements IProductService {
 
     @Autowired
     private GemRepository gemRepository;
+
+    @Autowired
+    private PurchaseOrderDetailRepository purchaseOrderDetailRepository;
 
     @Override
     public List<ProductResponseDTO> getAllProduct(Map<String, String > params) {
@@ -118,13 +122,15 @@ public class ProductService implements IProductService {
         productGemRepository.save(productGemEntity);
     }
 
-
-
-
-
-
-
-
+    @Override
+    public void deleteByIdsIn(List<Long> ids) {
+        productMaterialRepository.deleteAllByProductIdIn(ids);
+        productGemRepository.deleteAllByProductIdIn(ids);
+        List<ProductEntity> productEntities = productRepository.findByIdIsIn(ids);
+        purchaseOrderDetailRepository.deleteByProductIn(productEntities);
+        sellOrderDetailRepository.deleteByProductIn(productEntities);
+        productRepository.deleteByIdIn(ids);
+    }
 
 
 }

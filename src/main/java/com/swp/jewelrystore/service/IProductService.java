@@ -13,5 +13,5 @@ public interface IProductService {
      List<ProductResponseDTO> getAllProduct(Map< String, String> params);
     List<ProductResponseDTO>getProductBySellOrderCode(String sellOrderCode);
     void addOrUpdateProduct(ProductDTO productDTO);
-
+    void deleteByIdsIn(List<Long> ids);
 }

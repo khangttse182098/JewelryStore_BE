@@ -27,7 +27,9 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final PurchaseOrderRepository purchaseOrderRepository;
-    private final PurchaseOrderDetailRepository purchaseOrderDetailRepository;
+
+    @Autowired
+    PurchaseOrderDetailRepository purchaseOrderDetailRepository;
 
     @Autowired
     ProductRepository productRepository;

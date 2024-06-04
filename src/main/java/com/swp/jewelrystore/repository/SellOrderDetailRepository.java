@@ -1,5 +1,6 @@
 package com.swp.jewelrystore.repository;
 
+import com.swp.jewelrystore.entity.ProductEntity;
 import com.swp.jewelrystore.entity.SellOrderDetailEntity;
 import com.swp.jewelrystore.entity.SellOrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,4 +10,5 @@ import java.util.List;
 @Repository
 public interface SellOrderDetailRepository extends JpaRepository<SellOrderDetailEntity, Long> {
     List<SellOrderDetailEntity> findBySellOrder(SellOrderEntity sellDetailEntity);
+    void deleteByProductIn(List <ProductEntity> productEntities);
 }
