@@ -73,7 +73,13 @@ public class ProductService implements IProductService {
         List<ProductEntity> productEntities = productRepository.findBySellOrderDetailEntitiesIn(sellOrderDetailEntities);
         List<ProductResponseDTO> productResponseDTOList = new ArrayList<>();
         for (ProductEntity productEntity : productEntities) {
-            productResponseDTOList.add(productConverter.toProductResponseDTO(productEntity));
+            ProductResponseDTO productResponseDTO = productConverter.toProductResponseDTO(productEntity);
+            for (SellOrderDetailEntity sellOrderDetailEntity : sellOrderDetailEntities) {
+                if (sellOrderDetailEntity.getProduct().getId() == productEntity.getId()) {
+                    productResponseDTO.setPrice(Double.valueOf(sellOrderDetailEntity.getPrice()));
+                }
+            }
+            productResponseDTOList.add(productResponseDTO);
         }
         return productResponseDTOList;
     }

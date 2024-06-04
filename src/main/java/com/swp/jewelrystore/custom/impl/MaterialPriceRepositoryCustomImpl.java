@@ -18,14 +18,6 @@ public class MaterialPriceRepositoryCustomImpl implements MaterialPriceRepositor
     private EntityManager entityManager;
 
     @Override
-    public MaterialPriceEntity findLatestMaterialPrice(ProductEntity productEntity) {
-        String sql = buildQueryFilter(productEntity.getId().toString());
-        Query query = entityManager.createNativeQuery(sql,MaterialPriceEntity.class);
-        List<MaterialPriceEntity> materialPriceEntities = query.getResultList();
-        return materialPriceEntities.get(0);
-    }
-
-    @Override
     public MaterialPriceEntity findLatestGoldPrice(MaterialEntity materialEntity) {
         String sql = buildQueryFilter(materialEntity.getId().toString());
         Query query = entityManager.createNativeQuery(sql,MaterialPriceEntity.class);
@@ -34,7 +26,7 @@ public class MaterialPriceRepositoryCustomImpl implements MaterialPriceRepositor
     }
 
     private String buildQueryFilter(String materialId) {
-        String sql = "select materialprice.* from materialprice where material_id = " + materialId+ " and effect_date <= current_date() order by effect_date DESC limit 1";
+        String sql = "select materialprice.* from materialprice where material_id = " + materialId + " and effect_date <= current_date() order by effect_date DESC limit 1";
         return sql;
     }
 }

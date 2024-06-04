@@ -41,7 +41,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         if(!productEntity.getProductMaterialEntities().isEmpty()){
             List<ProductMaterialEntity> productMaterialEntities = productEntity.getProductMaterialEntities();
             for(ProductMaterialEntity productMaterialEntity : productMaterialEntities){
-                primePrice += (productMaterialEntity.getWeight() * 0.267 * materialPriceRepository.findLatestMaterialPrice(productEntity).getSellPrice());
+                primePrice += (productMaterialEntity.getWeight() * 0.267 * materialPriceRepository.findLatestGoldPrice(productMaterialEntity.getMaterial()).getSellPrice());
             }
         }
         // tinh tien kim cuong neu co
@@ -67,7 +67,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         if(!productEntity.getProductMaterialEntities().isEmpty()){
             List<ProductMaterialEntity> productMaterialEntities = productEntity.getProductMaterialEntities();
             for(ProductMaterialEntity productMaterialEntity : productMaterialEntities){
-                buyPrice += (productMaterialEntity.getWeight() * 0.267 * materialPriceRepository.findLatestMaterialPrice(productEntity).getBuyPrice());
+                buyPrice += (productMaterialEntity.getWeight() * 0.267 * materialPriceRepository.findLatestGoldPrice(productMaterialEntity.getMaterial()).getBuyPrice());
             }
         }
         // tinh tien kim cuong neu co

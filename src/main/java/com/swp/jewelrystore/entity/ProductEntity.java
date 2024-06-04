@@ -48,7 +48,7 @@ public class ProductEntity {
     @Column(name = "price_rate")
     private Double priceRate;
 
-    @Column(name = "createddate")
+    @Column(name = "created_date")
     private Date createdDate;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
