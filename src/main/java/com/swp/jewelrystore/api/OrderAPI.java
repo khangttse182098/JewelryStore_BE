@@ -1,6 +1,8 @@
 package com.swp.jewelrystore.api;
 
+import com.swp.jewelrystore.model.dto.CriteriaDTO;
 import com.swp.jewelrystore.model.response.InvoiceResponseDTO;
+import com.swp.jewelrystore.model.response.MaterialResponseDTO;
 import com.swp.jewelrystore.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,7 +38,10 @@ public class OrderAPI {
           sellOrderService.addSellOrderInformation(invoiceDTO);
           return "Added sell order successfully";
      }
-
+    @PostMapping("/purchase")
+    public List<MaterialResponseDTO> addPurchaseOrderInformation(@RequestBody CriteriaDTO criteriaDTO){
+        return purchaseOrderService.addPurchaseOrderInformation(criteriaDTO);
+    }
      @PostMapping("/purchase-invoice")
      public String addPurchaseInvoiceInformation(@RequestBody PurchaseOrderDTO purchaseOrderDTO){
           purchaseOrderService.addPurchaseInvoiceInformation(purchaseOrderDTO);

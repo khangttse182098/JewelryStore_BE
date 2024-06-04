@@ -70,17 +70,14 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             material.setWeight(goldCriteria.getWeight());
             material.setName(materialEntity.getName());
             // set price
-            double price = goldCriteria.getWeight() * 0.267 *
-                    materialPriceRepository.findLatestGoldPrice(materialEntity).getBuyPrice();
+            double price = goldCriteria.getWeight() * 0.267 * materialPriceRepository.findLatestGoldPrice(materialEntity).getBuyPrice();
             material.setPrice(price);
             // add to listMaterial
             listMaterial.add(material);
         }
         for (DiamondCriteriaDTO diamondCriteria : criteriaDTO.getListDiamondCriteria()){
             MaterialResponseDTO material = new MaterialResponseDTO();
-            GemEntity gem = gemRepository.findByOriginAndColorAndClarityAndCaratWeightAndCut(
-                    diamondCriteria.getOrigin(), diamondCriteria.getColor(), diamondCriteria.getClarity(), diamondCriteria.getCaratWeight(), diamondCriteria.getCut()
-            );
+            GemEntity gem = gemRepository.findByOriginAndColorAndClarityAndCaratWeightAndCut( diamondCriteria.getOrigin(), diamondCriteria.getColor(), diamondCriteria.getClarity(), diamondCriteria.getCaratWeight(), diamondCriteria.getCut());
             material.setName(gem.getGemName());
             material.setWeight(gem.getCaratWeight());
             // set price
