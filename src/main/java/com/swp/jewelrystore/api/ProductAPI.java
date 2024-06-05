@@ -29,8 +29,8 @@ public class ProductAPI {
         return "Update product successfully";
     }
 
-    @DeleteMapping
-    public String deleteProduct(@RequestBody List<Long> ids){
+    @DeleteMapping("/{ids}")
+    public String deleteProduct(@PathVariable List<Long> ids){
         productService.deleteByIdsIn(ids);
         return "Delete product successfully";
     }
