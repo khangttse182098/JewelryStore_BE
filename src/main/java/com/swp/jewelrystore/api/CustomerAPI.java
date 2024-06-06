@@ -57,4 +57,6 @@ public class CustomerAPI {
         if(customerDTO.getId() == null) return "Add customer successfully";
         return "Update customer successfully";
     }
+    @DeleteMapping("{ids}")
+    public String deleteCustomer(@PathVariable Long[] ids){}
 }
