@@ -2,30 +2,28 @@ package com.swp.jewelrystore.service.impl;
 
 import com.swp.jewelrystore.entity.MaterialEntity;
 import com.swp.jewelrystore.entity.MaterialPriceEntity;
-import com.swp.jewelrystore.model.dto.MaterialDTO;
+import com.swp.jewelrystore.model.dto.MaterialPriceDTO;
 import com.swp.jewelrystore.repository.MaterialPriceRepository;
 import com.swp.jewelrystore.repository.MaterialRepository;
-import com.swp.jewelrystore.service.IMaterialService;
+import com.swp.jewelrystore.service.IMaterialPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class MaterialService implements IMaterialService {
+public class MaterialPriceService implements IMaterialPriceService {
     @Autowired
     private MaterialRepository materialRepository;
     @Autowired
     private MaterialPriceRepository materialPriceRepository;
 
     @Override
-    public void addOrUpdateMaterial(MaterialDTO materialDTO) {
-        MaterialEntity materialEntity = materialRepository.findMaterialEntityById(materialDTO.getMaterialId());
+    public void addOrUpdateMaterialPrice(MaterialPriceDTO materialPriceDTO) {
+        MaterialEntity materialEntity = materialRepository.findMaterialEntityById(materialPriceDTO.getMaterialId());
         MaterialPriceEntity materialPriceEntity = new MaterialPriceEntity();
         materialPriceEntity.setMaterial(materialEntity);
-        materialPriceEntity.setBuyPrice(materialDTO.getBuyPrice());
-        materialPriceEntity.setSellPrice(materialDTO.getSellPrice());
-        materialPriceEntity.setEffectDate(materialDTO.getEffectDate());
+        materialPriceEntity.setBuyPrice(materialPriceDTO.getBuyPrice());
+        materialPriceEntity.setSellPrice(materialPriceDTO.getSellPrice());
+        materialPriceEntity.setEffectDate(materialPriceDTO.getEffectDate());
         materialPriceRepository.save(materialPriceEntity);
     }
 }

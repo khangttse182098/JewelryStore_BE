@@ -3,9 +3,11 @@ package com.swp.jewelrystore.api;
 
 import com.swp.jewelrystore.entity.MaterialEntity;
 import com.swp.jewelrystore.entity.MaterialPriceEntity;
+import com.swp.jewelrystore.model.dto.MaterialPriceDTO;
 import com.swp.jewelrystore.model.response.GoldResponseDTO;
 import com.swp.jewelrystore.repository.MaterialRepository;
 import com.swp.jewelrystore.service.IGoldPriceService;
+import com.swp.jewelrystore.service.impl.MaterialPriceService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +26,15 @@ public class GoldPriceAPI {
     private final MaterialRepository materialRepository;
     private final ModelMapper modelMapper;
 
+    @Autowired
+    private MaterialPriceService materialPriceService;
     @GetMapping
       public List<GoldResponseDTO> goldPriceList(){
           return goldPriceService.goldPriceList();
       }
 
       @GetMapping("/{id}")
-    public List<GoldResponseDTO> getPriceByMaterialId(@PathVariable Long id){
+    public List<GoldResponseDTO> getListPriceByMaterialId(@PathVariable Long id){
           MaterialEntity materialEntity = materialRepository.findMaterialEntityById(id);
           List<MaterialPriceEntity> materialPriceEntities =  materialEntity.getMaterialPriceEntities();
           List<GoldResponseDTO> goldResponseDTOList = new ArrayList<>();
@@ -40,5 +44,12 @@ public class GoldPriceAPI {
               goldResponseDTOList.add(goldResponseDTO);
           }
           return goldResponseDTOList;
+    }
+
+    @PostMapping
+    public String addOrUpdateGoldPrice(@RequestBody MaterialPriceDTO materialPriceDTO){
+        materialPriceService.addOrUpdateMaterialPrice(materialPriceDTO);
+        if(materialPriceDTO.getMaterialId() == null) return  "Add product successfully";
+        else return  "Update product successfully";
     }
 }

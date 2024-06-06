@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.util.Date;
 @Getter
 @Setter
-public class MaterialDTO {
+public class MaterialPriceDTO {
     private Long materialId;
     private Double buyPrice;
     private Double sellPrice;
