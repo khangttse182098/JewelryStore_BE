@@ -1,5 +1,6 @@
 package com.swp.jewelrystore.service.impl;
 
+import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.entity.MaterialEntity;
 import com.swp.jewelrystore.entity.MaterialPriceEntity;
 import com.swp.jewelrystore.model.dto.MaterialPriceDTO;
@@ -15,6 +16,8 @@ public class MaterialPriceService implements IMaterialPriceService {
     private MaterialRepository materialRepository;
     @Autowired
     private MaterialPriceRepository materialPriceRepository;
+    @Autowired
+    private DateTimeConverter dateTimeConverter;
 
     @Override
     public void addOrUpdateMaterialPrice(MaterialPriceDTO materialPriceDTO) {
@@ -23,7 +26,7 @@ public class MaterialPriceService implements IMaterialPriceService {
         materialPriceEntity.setMaterial(materialEntity);
         materialPriceEntity.setBuyPrice(materialPriceDTO.getBuyPrice());
         materialPriceEntity.setSellPrice(materialPriceDTO.getSellPrice());
-        materialPriceEntity.setEffectDate(materialPriceDTO.getEffectDate());
+        materialPriceEntity.setEffectDate(dateTimeConverter.convertToDateTimeDTO(materialPriceDTO.getEffectDate()));
         materialPriceRepository.save(materialPriceEntity);
     }
 }

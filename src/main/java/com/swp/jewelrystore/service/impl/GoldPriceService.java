@@ -1,5 +1,6 @@
 package com.swp.jewelrystore.service.impl;
 
+import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.entity.MaterialEntity;
 import com.swp.jewelrystore.entity.MaterialPriceEntity;
 import com.swp.jewelrystore.model.response.GoldResponseDTO;
@@ -20,6 +21,7 @@ public class GoldPriceService implements IGoldPriceService {
     private final MaterialRepository materialRepository;
     private final MaterialPriceRepository materialPriceRepository;
     private final ModelMapper modelMapper;
+    private final DateTimeConverter dateTimeConverter;
 
     @Override
     public List<GoldResponseDTO> goldPriceList() {
@@ -27,9 +29,10 @@ public class GoldPriceService implements IGoldPriceService {
         List<GoldResponseDTO> result = new ArrayList<>();
         for (MaterialEntity item : listMaterial) {
             MaterialPriceEntity materialPrice = materialPriceRepository.findLatestGoldPrice(item);
-            GoldResponseDTO goldEntity = modelMapper.map(materialPrice, GoldResponseDTO.class);
-            goldEntity.setGoldName(item.getName());
-            result.add(goldEntity);
+            GoldResponseDTO goldResponseDTO = modelMapper.map(materialPrice, GoldResponseDTO.class);
+            goldResponseDTO.setGoldName(item.getName());
+            goldResponseDTO.setEffectDate(dateTimeConverter.convertToDateTimeResponse(materialPrice.getEffectDate().toString()));
+            result.add(goldResponseDTO);
         }
         return result;
     }

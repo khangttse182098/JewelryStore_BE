@@ -12,5 +12,5 @@ public class GoldResponseDTO {
       private String goldName;
       private Double buyPrice;
       private Double sellPrice;
-      private Date effectDate;
+      private String effectDate;
 }
