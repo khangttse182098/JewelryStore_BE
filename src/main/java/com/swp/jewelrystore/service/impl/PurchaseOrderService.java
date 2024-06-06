@@ -33,22 +33,17 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    private SellOrderRepository sellOrderRepository;
 
     @Override
     public void addProductPurchaseOrder(PurchaseInvoiceDTO purchaseInvoiceDTO) {
-        CustomerEntity customerEntity = customerRepository.findByFullNameOrPhoneNumber(purchaseInvoiceDTO.getFullName(), purchaseInvoiceDTO.getPhoneNumber());
-        if (customerEntity == null) {
-            CustomerEntity newCustomer = new CustomerEntity();
-            newCustomer.setFullName(purchaseInvoiceDTO.getFullName());
-            newCustomer.setPhoneNumber(purchaseInvoiceDTO.getPhoneNumber());
-            newCustomer.setAddress(purchaseInvoiceDTO.getAddress());
-            customerRepository.save(newCustomer);
-        }
+        SellOrderEntity sellOrderEntity = sellOrderRepository.findBySellOrderCodeIs(purchaseInvoiceDTO.getSellOrderCode());
         PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
         purchaseOrderEntity.setPurchaseOrderCode(purchaseOrderRepository.generatePurchaseOrderCode());
         purchaseOrderEntity.setUser(userRepository.findByIdIs(purchaseInvoiceDTO.getUserId()));
         purchaseOrderEntity.setStatus("Chưa thanh toán");
-        purchaseOrderEntity.setCustomer(customerEntity);
+        purchaseOrderEntity.setCustomer(sellOrderEntity.getCustomer());
         purchaseOrderRepository.save(purchaseOrderEntity);
         for (Long id : purchaseInvoiceDTO.getProductId()) {
             PurchaseOrderDetailEntity purchaseOrderDetailEntity = new PurchaseOrderDetailEntity();

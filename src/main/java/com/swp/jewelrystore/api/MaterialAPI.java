@@ -1,10 +1,12 @@
 package com.swp.jewelrystore.api;
 
 import com.swp.jewelrystore.entity.MaterialEntity;
+import com.swp.jewelrystore.model.dto.MaterialDTO;
 import com.swp.jewelrystore.model.response.MaterialDropDownResponseDTO;
 import com.swp.jewelrystore.model.response.MaterialResponseDTO;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
 import com.swp.jewelrystore.repository.MaterialRepository;
+import com.swp.jewelrystore.service.impl.MaterialService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,8 @@ public class MaterialAPI {
     private MaterialRepository materialRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private MaterialService materialService;
 
     @GetMapping
     public List<MaterialDropDownResponseDTO> getMaterial(){
@@ -30,5 +34,11 @@ public class MaterialAPI {
             materialDropDownResponseDTOS.add(modelMapper.map(materialEntity, MaterialDropDownResponseDTO.class));
         }
         return materialDropDownResponseDTOS;
+    }
+    @PostMapping
+    public String addOrUpdateMaterial(@RequestBody MaterialDTO materialDTO){
+        materialService.addOrUpdateMaterial(materialDTO);
+        if(materialDTO.getMaterialId() == null) return  "Add product successfully";
+        else return  "Update product successfully";
     }
 }
