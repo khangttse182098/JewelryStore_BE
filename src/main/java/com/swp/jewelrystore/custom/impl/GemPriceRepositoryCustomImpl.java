@@ -24,7 +24,7 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
         return gemPriceEntities.get(0);
     }
     private String buildQueryFilter(GemEntity gemEntity) {
-        String sql = "select gemprice.* from gemprice where origin = '" + gemEntity.getOrigin() +"' and color = '" + gemEntity.getColor()+ "' and clarity = '" + gemEntity.getClarity() + "' and carat_weight = " + gemEntity.getCaratWeight() + " and cut = '" + gemEntity.getCut()+"' and effect_date <= current_date() order by buy_price DESC limit 1";
+        String sql = "select gemprice.* from gemprice where origin = '" + gemEntity.getOrigin() +"' and color = '" + gemEntity.getColor()+ "' and clarity = '" + gemEntity.getClarity() + "' and carat_weight = " + gemEntity.getCaratWeight() + " and cut = '" + gemEntity.getCut()+"' and effect_date <= now() order by buy_price DESC limit 1";
         return sql;
     }
 }

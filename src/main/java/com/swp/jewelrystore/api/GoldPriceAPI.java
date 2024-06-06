@@ -54,7 +54,6 @@ public class GoldPriceAPI {
     @PostMapping
     public String addOrUpdateGoldPrice(@RequestBody MaterialPriceDTO materialPriceDTO){
         materialPriceService.addOrUpdateMaterialPrice(materialPriceDTO);
-        if(materialPriceDTO.getMaterialId() == null) return  "Add product successfully";
-        else return  "Update product successfully";
+        return  "Add marterial price successfully";
     }
 }
