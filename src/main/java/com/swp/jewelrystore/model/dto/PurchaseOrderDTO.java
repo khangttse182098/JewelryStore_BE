@@ -1,5 +1,6 @@
 package com.swp.jewelrystore.model.dto;
 
+import com.swp.jewelrystore.model.response.CriteriaResponseDTO;
 import com.swp.jewelrystore.model.response.MaterialResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,6 @@ public class PurchaseOrderDTO {
     private String address;
     private String phoneNumber;
     private Long userId;
-    private List<MaterialResponseDTO> listMaterialResponse;
+    private CriteriaResponseDTO criteria;
     private String purchaseOrderStatus;
 }
