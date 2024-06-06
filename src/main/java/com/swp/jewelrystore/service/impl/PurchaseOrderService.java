@@ -2,11 +2,11 @@ package com.swp.jewelrystore.service.impl;
 
 import com.swp.jewelrystore.entity.*;
 import com.swp.jewelrystore.model.dto.*;
-import com.swp.jewelrystore.model.response.MaterialResponseDTO;
-import com.swp.jewelrystore.model.response.PurchasePriceResponseDTO;
+import com.swp.jewelrystore.model.response.*;
 import com.swp.jewelrystore.repository.*;
 import com.swp.jewelrystore.service.IPurchaseOrderService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +35,8 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     ProductRepository productRepository;
     @Autowired
     private SellOrderRepository sellOrderRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public void addProductPurchaseOrder(PurchaseInvoiceDTO purchaseInvoiceDTO) {
@@ -68,31 +70,38 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return purchasePriceResponseDTOList;
     }
     @Override
-    public List<MaterialResponseDTO> showMaterialInvoice(CriteriaDTO criteriaDTO) {
-        List<MaterialResponseDTO> listMaterial = new ArrayList<>();
+    public CriteriaResponseDTO showMaterialInvoice(CriteriaDTO criteriaDTO) {
+        CriteriaResponseDTO listMaterial = new CriteriaResponseDTO();
+        List<GoldCriteriaResponseDTO> listGold = new ArrayList<>();
+        List<DiamondCriteriaResponseDTO> listDiamond = new ArrayList<>();
+        // gold criteria (done)
         for (GoldCriteriaDTO goldCriteria : criteriaDTO.getListGoldCriteria()){
-            MaterialResponseDTO material = new MaterialResponseDTO();
+            GoldCriteriaResponseDTO gold = new GoldCriteriaResponseDTO();
+            gold.setId(goldCriteria.getId());
             MaterialEntity materialEntity = materialRepository.findById(goldCriteria.getId()).get();
-            material.setWeight(goldCriteria.getWeight());
-            material.setName(materialEntity.getName());
+            gold.setWeight(goldCriteria.getWeight());
+            gold.setName(materialEntity.getName());
             // set price
             double price = goldCriteria.getWeight() * 0.267 * materialPriceRepository.findLatestGoldPrice(materialEntity).getBuyPrice();
-            material.setPrice(price);
-            // add to listMaterial
-            listMaterial.add(material);
+            gold.setPrice(price);
+            // add to list gold
+            listGold.add(gold);
         }
+        // diamond criteria (done)
         for (DiamondCriteriaDTO diamondCriteria : criteriaDTO.getListDiamondCriteria()){
-            MaterialResponseDTO material = new MaterialResponseDTO();
-            GemEntity gem = gemRepository.findByOriginAndColorAndClarityAndCaratWeightAndCut( diamondCriteria.getOrigin(), diamondCriteria.getColor(), diamondCriteria.getClarity(), diamondCriteria.getCaratWeight(), diamondCriteria.getCut());
-            material.setName(gem.getGemName());
-            material.setWeight(gem.getCaratWeight());
+            GemEntity gem = gemRepository.findByOriginAndColorAndClarityAndCaratWeightAndCut(
+    diamondCriteria.getOrigin(), diamondCriteria.getColor(), diamondCriteria.getClarity(), diamondCriteria.getCaratWeight(),
+                     diamondCriteria.getCut());
+            DiamondCriteriaResponseDTO diamond = modelMapper.map(gem, DiamondCriteriaResponseDTO.class);
             // set price
             GemPriceEntity gemPriceEntity = gemPriceRepository.findLatestGemPrice(gem);
             double price = gemPriceEntity.getBuyPrice();
-            material.setPrice(price);
-            // add to listMaterial
-            listMaterial.add(material);
+            diamond.setPrice(price);
+            // add to listDiamond
+            listDiamond.add(diamond);
         }
+        listMaterial.setGoldCriteriaResponseDTO(listGold);
+        listMaterial.setDiamondCriteriaResponseDTO(listDiamond);
         return listMaterial;
     }
 
@@ -113,7 +122,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             purchaseOrderEntity.setPurchaseOrderCode(purchaseOrderRepository.generatePurchaseOrderCode());
             purchaseOrderEntity.setStatus(purchaseOrderDTO.getPurchaseOrderStatus());
             purchaseOrderRepository.save(purchaseOrderEntity);
-            splitGoldOrGem(purchaseOrderDTO.getListMaterialResponse(), purchaseOrderEntity);
+            splitGoldOrGem(purchaseOrderDTO.getCriteria(), purchaseOrderEntity);
         } else {
             PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
             purchaseOrderEntity.setCustomer(customer);
@@ -121,32 +130,35 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             purchaseOrderEntity.setPurchaseOrderCode(purchaseOrderRepository.generatePurchaseOrderCode());
             purchaseOrderEntity.setStatus(purchaseOrderDTO.getPurchaseOrderStatus());
             purchaseOrderRepository.save(purchaseOrderEntity);
-            splitGoldOrGem(purchaseOrderDTO.getListMaterialResponse(), purchaseOrderEntity);
+            splitGoldOrGem(purchaseOrderDTO.getCriteria(), purchaseOrderEntity);
         }
     }
 
-    public void splitGoldOrGem(List<MaterialResponseDTO> list, PurchaseOrderEntity purchaseOrderEntity){
-        for (MaterialResponseDTO item: list){
-            if (item.getName().contains("Vàng")){
-                MaterialEntity materialEntity = materialRepository.findByName(item.getName());
-                PurchaseOrderDetailEntity purchaseOrderDetailEntity = new PurchaseOrderDetailEntity();
-                purchaseOrderDetailEntity.setWeight(item.getWeight());
-                purchaseOrderDetailEntity.setMaterial(materialEntity);
-                purchaseOrderDetailEntity.setPurchaseOrder(purchaseOrderEntity);
-                purchaseOrderDetailEntity.setPrice(item.getPrice());
-                purchaseOrderDetailRepository.save(purchaseOrderDetailEntity);
-            } else if (item.getName().contains("Diamond")){
-                GemEntity gemEntity = gemRepository.findByGemName(item.getName());
+    public void splitGoldOrGem(CriteriaResponseDTO criteriaResponseDTO, PurchaseOrderEntity purchaseOrderEntity){
+        // save information when purchase gold
+        for (GoldCriteriaResponseDTO item: criteriaResponseDTO.getGoldCriteriaResponseDTO()){
+            MaterialEntity materialEntity = materialRepository.findByName(item.getName());
+            PurchaseOrderDetailEntity purchaseOrderDetailEntity = new PurchaseOrderDetailEntity();
+            purchaseOrderDetailEntity.setWeight(item.getWeight());
+            purchaseOrderDetailEntity.setMaterial(materialEntity);
+            purchaseOrderDetailEntity.setPurchaseOrder(purchaseOrderEntity);
+            purchaseOrderDetailEntity.setPrice(item.getPrice());
+            purchaseOrderDetailRepository.save(purchaseOrderDetailEntity);
+        }
+        // save information when purchase diamond
+        for (DiamondCriteriaResponseDTO item: criteriaResponseDTO.getDiamondCriteriaResponseDTO()){
+                GemEntity gemEntity = gemRepository.findByOriginAndColorAndClarityAndCaratWeightAndCut(
+                        item.getOrigin(), item.getColor(), item.getClarity(), item.getCaratWeight(), item.getCut()
+                );
                 PurchaseOrderDetailEntity purchaseOrderDetailEntity = new PurchaseOrderDetailEntity();
                 purchaseOrderDetailEntity.setOrigin(gemEntity.getOrigin());
                 purchaseOrderDetailEntity.setColor(gemEntity.getColor());
                 purchaseOrderDetailEntity.setCut(gemEntity.getCut());
-                purchaseOrderDetailEntity.setCaratWeight(item.getWeight());
+                purchaseOrderDetailEntity.setCaratWeight(gemEntity.getCaratWeight());
                 purchaseOrderDetailEntity.setClarity(gemEntity.getClarity());
                 purchaseOrderDetailEntity.setPrice(item.getPrice());
                 purchaseOrderDetailEntity.setPurchaseOrder(purchaseOrderEntity);
                 purchaseOrderDetailRepository.save(purchaseOrderDetailEntity);
-            }
         }
     }
 }

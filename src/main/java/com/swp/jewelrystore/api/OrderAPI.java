@@ -1,6 +1,7 @@
 package com.swp.jewelrystore.api;
 
 import com.swp.jewelrystore.model.dto.CriteriaDTO;
+import com.swp.jewelrystore.model.response.CriteriaResponseDTO;
 import com.swp.jewelrystore.model.response.InvoiceResponseDTO;
 import com.swp.jewelrystore.model.response.MaterialResponseDTO;
 import com.swp.jewelrystore.service.IOrderService;
@@ -42,7 +43,7 @@ public class OrderAPI {
      }
 
     @PostMapping("/purchase")
-    public List<MaterialResponseDTO> showMaterialInvoice(@RequestBody CriteriaDTO criteriaDTO){
+    public CriteriaResponseDTO showMaterialInvoice(@RequestBody CriteriaDTO criteriaDTO){
         return purchaseOrderService.showMaterialInvoice(criteriaDTO);
     }
 
