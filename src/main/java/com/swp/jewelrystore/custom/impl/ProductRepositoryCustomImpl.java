@@ -92,9 +92,9 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         sql.append(where);
         for(Map.Entry<String, String> param : params.entrySet()){
             if(NumberUtils.isLong(param.getValue())){
-                sql.append(" AND " + param.getKey() + " = " + param.getValue());
+                sql.append(" AND " + param.getKey() + " = " + param.getValue().trim());
             }else if(StringUtils.check(param.getValue())){
-                sql.append(" AND " + param.getKey() + " LIKE '%" + param.getValue() + "%'");
+                sql.append(" AND " + param.getKey() + " LIKE '%" + param.getValue().trim() + "%'");
             }
         }
         sql.append(groupby);

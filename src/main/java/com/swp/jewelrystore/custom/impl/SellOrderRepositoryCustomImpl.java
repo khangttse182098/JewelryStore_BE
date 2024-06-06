@@ -43,12 +43,12 @@ public class SellOrderRepositoryCustomImpl implements SellOrderRepositoryCustom 
         sql.append(where);
         for(Map.Entry<String, String> param : params.entrySet()){
             if(NumberUtils.isLong(param.getValue())){
-                sql.append(" AND " + param.getKey() + " = " + param.getValue());
+                sql.append(" AND " + param.getKey() + " = " + param.getValue().trim());
             }else if(StringUtils.check(param.getValue())){
                 if(param.getKey().contains("code")){
-                    sql.append(" AND sell_order_code LIKE '%" + param.getValue() + "%'");
+                    sql.append(" AND sell_order_code LIKE '%" + param.getValue().trim() + "%'");
                 }else{
-                    sql.append(" AND " + param.getKey() + " LIKE '%" + param.getValue() + "%'");
+                    sql.append(" AND " + param.getKey() + " LIKE '%" + param.getValue().trim() + "%'");
                 }
             }
         }
