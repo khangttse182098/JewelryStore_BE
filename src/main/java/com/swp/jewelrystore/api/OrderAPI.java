@@ -16,6 +16,7 @@ import com.swp.jewelrystore.service.ISellOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/order")
@@ -25,8 +26,8 @@ public class OrderAPI {
     @Autowired
     IOrderService orderService;
     @GetMapping
-    public List<InvoiceResponseDTO> getAllOrder(){
-        List<InvoiceResponseDTO> invoiceList =orderService.getAllOrder();
+    public List<InvoiceResponseDTO> getAllOrder(@RequestParam Map<String, String> params){
+        List<InvoiceResponseDTO> invoiceList =orderService.getAllOrder(params);
         return invoiceList;
     }
 

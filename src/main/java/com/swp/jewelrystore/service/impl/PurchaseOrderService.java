@@ -36,10 +36,19 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
     @Override
     public void addProductPurchaseOrder(PurchaseInvoiceDTO purchaseInvoiceDTO) {
+        CustomerEntity customerEntity = customerRepository.findByFullNameOrPhoneNumber(purchaseInvoiceDTO.getFullName(), purchaseInvoiceDTO.getPhoneNumber());
+        if (customerEntity == null) {
+            CustomerEntity newCustomer = new CustomerEntity();
+            newCustomer.setFullName(purchaseInvoiceDTO.getFullName());
+            newCustomer.setPhoneNumber(purchaseInvoiceDTO.getPhoneNumber());
+            newCustomer.setAddress(purchaseInvoiceDTO.getAddress());
+            customerRepository.save(newCustomer);
+        }
         PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
         purchaseOrderEntity.setPurchaseOrderCode(purchaseOrderRepository.generatePurchaseOrderCode());
         purchaseOrderEntity.setUser(userRepository.findByIdIs(purchaseInvoiceDTO.getUserId()));
         purchaseOrderEntity.setStatus("Chưa thanh toán");
+        purchaseOrderEntity.setCustomer(customerEntity);
         purchaseOrderRepository.save(purchaseOrderEntity);
         for (Long id : purchaseInvoiceDTO.getProductId()) {
             PurchaseOrderDetailEntity purchaseOrderDetailEntity = new PurchaseOrderDetailEntity();

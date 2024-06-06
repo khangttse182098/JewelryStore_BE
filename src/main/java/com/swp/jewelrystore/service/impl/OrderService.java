@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
 @Service
 public class OrderService implements IOrderService {
     @Autowired
@@ -25,13 +27,13 @@ public class OrderService implements IOrderService {
     OrderConverter orderConverter;
 
     @Override
-    public List<InvoiceResponseDTO> getAllOrder() {
+    public List<InvoiceResponseDTO> getAllOrder(Map<String, String> params) {
         List<InvoiceResponseDTO> invoiceResponseDTOs = new ArrayList<>();
-        List<PurchaseOrderEntity> purchaseOrderEntities = purchaseOrderRepository.findAll();
+        List<PurchaseOrderEntity> purchaseOrderEntities = purchaseOrderRepository.findAllPurchaseOrder(params);
         for(PurchaseOrderEntity purchaseOrderEntity : purchaseOrderEntities) {
             invoiceResponseDTOs.add(orderConverter.toInvoiceResponseDTO(purchaseOrderEntity));
         }
-        List<SellOrderEntity> sellOrderEntitiesv = sellOrderRepository.findAll();
+        List<SellOrderEntity> sellOrderEntitiesv = sellOrderRepository.findAllSellOrder(params);
         for(SellOrderEntity sellOrderEntity : sellOrderEntitiesv) {
             invoiceResponseDTOs.add(orderConverter.toInvoiceResponseDTO(sellOrderEntity));
         }
