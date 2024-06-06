@@ -23,11 +23,12 @@ import java.util.Map;
 @CrossOrigin
 @RequiredArgsConstructor
 public class OrderAPI {
+
     @Autowired
-    IOrderService orderService;
+    private IOrderService orderService;
     @GetMapping
     public List<InvoiceResponseDTO> getAllOrder(@RequestParam Map<String, String> params){
-        List<InvoiceResponseDTO> invoiceList =orderService.getAllOrder(params);
+        List<InvoiceResponseDTO> invoiceList = orderService.getAllOrder(params);
         return invoiceList;
     }
 
@@ -39,10 +40,12 @@ public class OrderAPI {
           sellOrderService.addSellOrderInformation(invoiceDTO);
           return "Added sell order successfully";
      }
+
     @PostMapping("/purchase")
-    public List<MaterialResponseDTO> addPurchaseOrderInformation(@RequestBody CriteriaDTO criteriaDTO){
-        return purchaseOrderService.addPurchaseOrderInformation(criteriaDTO);
+    public List<MaterialResponseDTO> showMaterialInvoice(@RequestBody CriteriaDTO criteriaDTO){
+        return purchaseOrderService.showMaterialInvoice(criteriaDTO);
     }
+
      @PostMapping("/purchase-invoice")
      public String addPurchaseInvoiceInformation(@RequestBody PurchaseOrderDTO purchaseOrderDTO){
           purchaseOrderService.addPurchaseInvoiceInformation(purchaseOrderDTO);

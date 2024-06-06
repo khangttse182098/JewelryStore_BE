@@ -10,7 +10,7 @@ import java.util.Date;
 @Setter
 public class GoldResponseDTO {
       private String goldName;
-      private Long buyPrice;
-      private Long sellPrice;
+      private Double buyPrice;
+      private Double sellPrice;
       private Date effectDate;
 }

@@ -11,8 +11,9 @@ import com.swp.jewelrystore.model.response.MaterialResponseDTO;
 import java.util.List;
 @Service
 public interface IPurchaseOrderService {
-    List<MaterialResponseDTO> addPurchaseOrderInformation(CriteriaDTO criteriaDTO);
+    List<MaterialResponseDTO> showMaterialInvoice(CriteriaDTO criteriaDTO);
     void addPurchaseInvoiceInformation(PurchaseOrderDTO purchaseOrderDTO);
     void addProductPurchaseOrder(PurchaseInvoiceDTO purchaseInvoiceDTO);
     List<PurchasePriceResponseDTO> showPurchasePrice(List<Long> productIds);
+
 }

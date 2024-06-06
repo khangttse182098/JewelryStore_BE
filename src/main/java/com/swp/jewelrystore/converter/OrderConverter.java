@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class OrderConverter {
     @Autowired
     private ModelMapper modelMapper;
+
     public InvoiceResponseDTO toInvoiceResponseDTO(SellOrderEntity sellOrderEntity) {
         InvoiceResponseDTO invoiceResponseDTO = modelMapper.map(sellOrderEntity, InvoiceResponseDTO.class);
         invoiceResponseDTO.setInvoiceCode(sellOrderEntity.getSellOrderCode());

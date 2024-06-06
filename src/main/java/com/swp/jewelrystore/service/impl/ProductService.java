@@ -73,8 +73,11 @@ public class ProductService implements IProductService {
     @Override
     public List<ProductResponseDTO> getProductBySellOrderCode(String sellOrderCode) {
         SellOrderEntity sellOrderEntity = sellOrderRepository.findBySellOrderCodeIs(sellOrderCode);
-        List<SellOrderDetailEntity> sellOrderDetailEntities = sellOrderDetailRepository.findBySellOrder(sellOrderEntity);
-        List<ProductEntity> productEntities = productRepository.findBySellOrderDetailEntitiesIn(sellOrderDetailEntities);
+        List<SellOrderDetailEntity> sellOrderDetailEntities = sellOrderEntity.getSellOrderDetailEntities();
+        List<ProductEntity> productEntities = new ArrayList<>();
+        for (SellOrderDetailEntity sellOrderDetailEntity : sellOrderDetailEntities) {
+            productEntities.add(sellOrderDetailEntity.getProduct());
+        }
         List<ProductResponseDTO> productResponseDTOList = new ArrayList<>();
         for (ProductEntity productEntity : productEntities) {
             ProductResponseDTO productResponseDTO = productConverter.toProductResponseDTO(productEntity);

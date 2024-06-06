@@ -8,7 +8,9 @@ import lombok.Setter;
 public class CustomerResponseDTO {
     private Long id;
     private String fullName;
-    private String address;
     private String phoneNumber;
+    private String address;
     private String gender;
+    private int quantityOrder;
+    private Double expense;
 }

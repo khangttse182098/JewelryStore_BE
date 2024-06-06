@@ -15,8 +15,4 @@ public class InvoiceResponseDTO {
     private int totalPrice;
     private String status;
 
-
-
-
-
 }

@@ -7,10 +7,15 @@ import com.swp.jewelrystore.model.dto.CustomerDTO;
 import com.swp.jewelrystore.model.response.CustomerResponseDTO;
 import com.swp.jewelrystore.repository.CustomerRepository;
 import com.swp.jewelrystore.repository.SellOrderRepository;
+import com.swp.jewelrystore.model.response.CustomerDetailDTO;
+import com.swp.jewelrystore.model.response.CustomerResponseDTO;
 import com.swp.jewelrystore.service.ICustomerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -26,16 +31,23 @@ public class CustomerAPI {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @PostMapping("/information")
-    public Long getCustomerId(@RequestBody CustomerDTO customerDTO){
-        Long id = customerService.checkExisted(customerDTO);
-        return id;
+    @GetMapping("/list")
+    public List<CustomerResponseDTO> customerList(@RequestParam Map<String, String> phoneNumber){
+        return customerService.getCustomerList(phoneNumber);
     }
+
+    @GetMapping("/list-{id}")
+    public CustomerDetailDTO detailCustomerInformation(@PathVariable Long id){
+        return customerService.getCustomerDetail(id);
+    }
+
 
     @GetMapping
     public CustomerResponseDTO findCustomerBySellOrderCode(@RequestParam String sellOrderCode){
         SellOrderEntity sellOrderEntity = sellOrderRepository.findBySellOrderCodeIs(sellOrderCode);
         CustomerResponseDTO customerResponseDTO = modelMapper.map(sellOrderEntity.getCustomer(), CustomerResponseDTO.class);
+        customerResponseDTO.setExpense(null);
+        customerResponseDTO.setQuantityOrder(0);
         return customerResponseDTO;
     }
     @PostMapping

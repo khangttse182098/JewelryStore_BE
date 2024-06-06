@@ -68,7 +68,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return purchasePriceResponseDTOList;
     }
     @Override
-    public List<MaterialResponseDTO> addPurchaseOrderInformation(CriteriaDTO criteriaDTO) {
+    public List<MaterialResponseDTO> showMaterialInvoice(CriteriaDTO criteriaDTO) {
         List<MaterialResponseDTO> listMaterial = new ArrayList<>();
         for (GoldCriteriaDTO goldCriteria : criteriaDTO.getListGoldCriteria()){
             MaterialResponseDTO material = new MaterialResponseDTO();
@@ -95,6 +95,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         }
         return listMaterial;
     }
+
 
     @Override
     public void addPurchaseInvoiceInformation(PurchaseOrderDTO purchaseOrderDTO) {
