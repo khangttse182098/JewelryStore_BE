@@ -1,10 +1,10 @@
 package com.swp.jewelrystore.repository;
 
+import com.swp.jewelrystore.custom.CustomerRepositoryCustom;
 import com.swp.jewelrystore.entity.CustomerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> {
-    CustomerEntity findByIdIs(Long customerId);
-     CustomerEntity findByPhoneNumber(String phoneNumber);
+public interface CustomerRepository extends JpaRepository<CustomerEntity, Long>, CustomerRepositoryCustom {
      CustomerEntity findByFullNameOrPhoneNumber(String fullName, String phoneNumber);
-}
+     CustomerEntity findByPhoneNumber(String phoneNumber);
+  }

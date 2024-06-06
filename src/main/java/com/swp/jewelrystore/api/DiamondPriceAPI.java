@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/diamond-price")
 @CrossOrigin
 @RequiredArgsConstructor
-public class DiamondAPI {
+public class DiamondPriceAPI {
      private final IDiamondPriceService diamondPriceService;
 
      @GetMapping

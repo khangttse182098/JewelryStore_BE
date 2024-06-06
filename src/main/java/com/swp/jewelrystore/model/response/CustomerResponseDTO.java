@@ -1,5 +1,16 @@
 package com.swp.jewelrystore.model.response;
 
-public class CustomerResponseDTO {
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class CustomerResponseDTO {
+    private Long id;
+    private String fullName;
+    private String phoneNumber;
+    private String address;
+    private int quantityOrder;
+    private Double expense;
 }
