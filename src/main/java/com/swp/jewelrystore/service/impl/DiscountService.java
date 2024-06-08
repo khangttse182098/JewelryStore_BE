@@ -54,8 +54,9 @@ public class DiscountService implements IDiscountService {
     }
 
     @Override
-    public void addDiscountInformation(DiscountDTO discountDTO) {
+    public void addOrUpdateDiscountInformation(DiscountDTO discountDTO) {
          DiscountEntity discountEntity = new DiscountEntity();
+         discountEntity.setId(discountDTO.getId());
          discountEntity.setCode(discountDTO.getCode());
          discountEntity.setValue(discountDTO.getValue());
          discountEntity.setStartDate(dateTimeConverter.convertToDateTimeDTO(discountDTO.getStartDateDTO()));

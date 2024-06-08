@@ -1,6 +1,7 @@
 package com.swp.jewelrystore.service.impl;
 
 import com.swp.jewelrystore.converter.CustomerConverter;
+import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.entity.CustomerEntity;
 import com.swp.jewelrystore.entity.SellOrderDetailEntity;
 import com.swp.jewelrystore.entity.SellOrderEntity;
@@ -32,6 +33,7 @@ public class CustomerService implements ICustomerService {
     private final SellOrderRepository sellOrderRepository;
     private final SellOrderDetailRepository sellOrderDetailRepository;
     private final CustomerConverter customerConverter;
+    private final DateTimeConverter dateTimeConverter;
 
     @Override
     public Long checkExisted(CustomerDTO customerDTO) {
@@ -63,6 +65,7 @@ public class CustomerService implements ICustomerService {
         // 1 Order - N product
         for (SellOrderEntity item : listPaidSellOrder) {
             CustomerInvoiceDTO paidInvoice = modelMapper.map(item, CustomerInvoiceDTO.class);
+            paidInvoice.setCreatedDate(dateTimeConverter.convertToDateTimeResponse(item.getCreatedDate()));
             List<SellOrderDetailEntity> sellOrder = sellOrderDetailRepository.findBySellOrderId(item.getId());
             double price = sellOrder.stream()
                     .mapToDouble(SellOrderDetailEntity::getPrice)

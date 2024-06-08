@@ -6,6 +6,8 @@ import com.swp.jewelrystore.model.response.DiscountResponseDTO;
 import com.swp.jewelrystore.service.IDiscountService;
 
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,15 +22,21 @@ public class DiscountAPI {
 
     private final IDiscountService discountService;
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "time", dataType = "Long", paramType = "query"),
+            @ApiImplicitParam(name = "startDate", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "endDate", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "code", dataType = "string", paramType = "query")
+    })
     @GetMapping
     public List<DiscountResponseDTO> getDiscountInformation(@RequestParam Map<String, String> filter){
         return discountService.getDiscountInformation(filter);
     }
 
     @PostMapping("/add")
-    public String addDiscountInformation(@RequestBody DiscountDTO discountDTO){
-        discountService.addDiscountInformation(discountDTO);
-        return "Add new discount information successfully";
+    public String addOrUpdateDiscountInformation(@RequestBody DiscountDTO discountDTO){
+        discountService.addOrUpdateDiscountInformation(discountDTO);
+        return "Add or update discount information successfully";
     }
 
 
