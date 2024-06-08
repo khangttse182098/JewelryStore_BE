@@ -10,8 +10,8 @@ import java.util.StringTokenizer;
 @Component
 public class DateTimeConverter {
 
-    public String convertToDateTimeResponse(String date) {
-        StringTokenizer token = new StringTokenizer(date, " ");
+    public String convertToDateTimeResponse(Date date) {
+        StringTokenizer token = new StringTokenizer(date.toString(), " ");
         String dateResponse = token.nextToken();
         String timeResponse = token.nextToken();
         String[] splitDateResponse = dateResponse.split("-");

@@ -10,7 +10,7 @@ import java.util.Date;
 @Setter
 public class CustomerInvoiceDTO {
      private String sellOrderCode;
-     private Date createdDate;
+     private String createdDate;
      private Double price;
      private String status;
 }

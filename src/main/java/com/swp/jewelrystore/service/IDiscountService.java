@@ -9,5 +9,5 @@ import java.util.Map;
 
 public interface IDiscountService {
    List<DiscountResponseDTO> getDiscountInformation(Map<String, String> filter);
-   void addDiscountInformation(DiscountDTO discountDTO);
+   void addOrUpdateDiscountInformation(DiscountDTO discountDTO);
 }

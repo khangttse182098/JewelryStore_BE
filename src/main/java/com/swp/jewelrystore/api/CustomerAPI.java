@@ -9,6 +9,7 @@ import com.swp.jewelrystore.repository.CustomerRepository;
 import com.swp.jewelrystore.repository.SellOrderRepository;
 import com.swp.jewelrystore.model.response.CustomerDetailDTO;
 import com.swp.jewelrystore.service.ICustomerService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +21,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/customer")
 @CrossOrigin
+@RequiredArgsConstructor
 public class CustomerAPI {
-    @Autowired
-    private ICustomerService customerService;
-    @Autowired
-    private SellOrderRepository sellOrderRepository;
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private CustomerRepository customerRepository;
+
+    private final ICustomerService customerService;
+    private final SellOrderRepository sellOrderRepository;
+    private final ModelMapper modelMapper;
+    private final CustomerRepository customerRepository;
 
     @GetMapping("/list")
     public List<CustomerResponseDTO> customerList(@RequestParam Map<String, String> phoneNumber){

@@ -28,7 +28,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     private ApiInfo apiInfoMetaData() {
 
         return new ApiInfoBuilder().title("API Management Page for Mahika Jewelry Store ")
-                .contact(new Contact("Mahika Jewelry Store", "http://mahika.store/login", "phucphse181514@gmail.com"))
+                .contact(new Contact("Mahika Jewelry Store", "http://mahika.store/login", "khanghnse181562@gmail.com"))
                 .license("Apache 2.0")
                 .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
                 .version("1.0.0")
