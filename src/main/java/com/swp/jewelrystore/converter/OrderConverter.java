@@ -20,6 +20,7 @@ public class OrderConverter {
         invoiceResponseDTO.setInvoiceType("Bán");
         if(sellOrderEntity.getCustomer() != null) {
             invoiceResponseDTO.setCustomerName(sellOrderEntity.getCustomer().getFullName());
+            invoiceResponseDTO.setCustomerId(sellOrderEntity.getCustomer().getId());
         }else{
             invoiceResponseDTO.setCustomerName("Chưa có khách hàng");
         }
@@ -37,6 +38,7 @@ public class OrderConverter {
         invoiceResponseDTO.setInvoiceType("Mua lại");
         if(purchaseOrderEntity.getCustomer() != null) {
             invoiceResponseDTO.setCustomerName(purchaseOrderEntity.getCustomer().getFullName());
+            invoiceResponseDTO.setCustomerId(purchaseOrderEntity.getCustomer().getId());
         }
         else{
             invoiceResponseDTO.setCustomerName("Chưa có khách hàng");

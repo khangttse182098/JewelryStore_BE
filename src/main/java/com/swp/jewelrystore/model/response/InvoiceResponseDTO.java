@@ -14,5 +14,5 @@ public class InvoiceResponseDTO {
     private String staffName;
     private int totalPrice;
     private String status;
-
+    private Long customerId;
 }

@@ -5,5 +5,5 @@ import com.swp.jewelrystore.entity.PurchaseOrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PurchaseOrderRepository extends JpaRepository <PurchaseOrderEntity, Long>, PurchaseOrderRepositoryCustom {
-
+    PurchaseOrderEntity findByPurchaseOrderCode(String code);
 }
