@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/discount")
@@ -18,8 +19,8 @@ public class DiscountAPI {
     private final IDiscountService discountService;
 
     @GetMapping
-    public List<DiscountResponseDTO> getDiscountInformation(){
-        return discountService.getDiscountInformation();
+    public List<DiscountResponseDTO> getDiscountInformation(@RequestParam Map<String, String> filter){
+        return discountService.getDiscountInformation(filter);
     }
 
     @PostMapping("/add")

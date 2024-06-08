@@ -40,4 +40,12 @@ public class DateTimeConverter {
         }
         return null;
     }
+
+    public String convertToDateCompareToDB(String date) {
+        StringTokenizer token = new StringTokenizer(date, "/");
+        String day = token.nextToken();
+        String month = token.nextToken();
+        String year = token.nextToken();
+        return year + "-" + month + "-" + day;
+    }
 }

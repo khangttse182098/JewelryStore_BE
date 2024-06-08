@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +27,9 @@ public class DiscountService implements IDiscountService {
     private final DateTimeConverter dateTimeConverter;
 
     @Override
-    public List<DiscountResponseDTO> getDiscountInformation() {
+    public List<DiscountResponseDTO> getDiscountInformation(Map<String, String> filter) {
         List<DiscountResponseDTO> result = new ArrayList<>();
-        List<DiscountEntity> listDiscount = discountRepository.findAll();
+         List<DiscountEntity> listDiscount = discountRepository.searchWithRequired(filter);
         // get current date
         LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
