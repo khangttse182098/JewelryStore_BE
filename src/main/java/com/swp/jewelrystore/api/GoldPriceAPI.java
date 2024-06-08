@@ -44,8 +44,7 @@ public class GoldPriceAPI {
           for(MaterialPriceEntity materialPriceEntity : materialPriceEntities){
               GoldResponseDTO goldResponseDTO = modelMapper.map(materialPriceEntity, GoldResponseDTO.class);
               goldResponseDTO.setGoldName(materialEntity.getName());
-              System.out.println(materialPriceEntity.getEffectDate().toString());
-              goldResponseDTO.setEffectDate(dateTimeConverter.convertToDateTimeResponse(materialPriceEntity.getEffectDate().toString()));
+              goldResponseDTO.setEffectDate(dateTimeConverter.convertToDateTimeResponse(materialPriceEntity.getEffectDate()));
               goldResponseDTOList.add(goldResponseDTO);
           }
           return goldResponseDTOList;

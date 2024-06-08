@@ -46,8 +46,8 @@ public class DiscountService implements IDiscountService {
              } else {
                  responseDTO.setStatus("Chưa áp dụng");
              }
-             responseDTO.setStartDate(dateTimeConverter.convertToDateTimeResponse(startDate));
-             responseDTO.setEndDate(dateTimeConverter.convertToDateTimeResponse(endDate));
+             responseDTO.setStartDate(dateTimeConverter.convertToDateTimeResponse(item.getStartDate()));
+             responseDTO.setEndDate(dateTimeConverter.convertToDateTimeResponse(item.getEndDate()));
              result.add(responseDTO);
          }
          return result;
