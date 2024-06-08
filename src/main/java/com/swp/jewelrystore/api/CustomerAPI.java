@@ -9,6 +9,9 @@ import com.swp.jewelrystore.repository.CustomerRepository;
 import com.swp.jewelrystore.repository.SellOrderRepository;
 import com.swp.jewelrystore.model.response.CustomerDetailDTO;
 import com.swp.jewelrystore.service.ICustomerService;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +41,6 @@ public class CustomerAPI {
     public CustomerDetailDTO detailCustomerInformation(@PathVariable Long id){
         return customerService.getCustomerDetail(id);
     }
-
 
     @GetMapping
     public CustomerResponseDTO findCustomerBySellOrderCode(@RequestParam String sellOrderCode){

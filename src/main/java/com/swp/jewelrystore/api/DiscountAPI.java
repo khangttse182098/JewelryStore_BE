@@ -33,7 +33,7 @@ public class DiscountAPI {
         return discountService.getDiscountInformation(filter);
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     public String addOrUpdateDiscountInformation(@RequestBody DiscountDTO discountDTO){
         discountService.addOrUpdateDiscountInformation(discountDTO);
         return "Add or update discount information successfully";

@@ -1,5 +1,6 @@
 package com.swp.jewelrystore.service.impl;
 
+import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.entity.GemEntity;
 import com.swp.jewelrystore.entity.GemPriceEntity;
 import com.swp.jewelrystore.model.response.DiamondResponseDTO;
@@ -23,6 +24,7 @@ public class DiamondPriceService implements IDiamondPriceService {
     private final GemPriceRepository gemPriceRepository;
     private final GemRepository gemRepository;
     private final ModelMapper modelMapper;
+    private final DateTimeConverter dateTimeConverter;
 
     @Override
     public List<DiamondResponseDTO> getDiamondPrice() {
@@ -32,6 +34,7 @@ public class DiamondPriceService implements IDiamondPriceService {
             GemPriceEntity gemPrice = gemPriceRepository.findLatestGemPrice(gem);
             DiamondResponseDTO diamond = modelMapper.map(gemPrice, DiamondResponseDTO.class);
             diamond.setName(gem.getGemName());
+            diamond.setEffectDate(dateTimeConverter.convertToDateTimeResponse(gemPrice.getEffectDate()));
             result.add(diamond);
         }
         return result;

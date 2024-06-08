@@ -109,7 +109,7 @@ public class ProductService implements IProductService {
         // Material
         MaterialEntity materialEntity = materialRepository.findMaterialEntityById(productDTO.getMaterialId());
         // Product Image
-        productEntity.setProductImage("image.png");
+        productEntity.setProductImage(productDTO.getProductImage());
         // Save product
         productRepository.save(productEntity);
         // Product Material

@@ -11,5 +11,5 @@ public class DiamondResponseDTO {
     private String name;
     private Double buyPrice;
     private Double sellPrice;
-    private Date effectDate;
+    private String effectDate;
 }
