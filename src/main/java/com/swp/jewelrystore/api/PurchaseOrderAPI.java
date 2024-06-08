@@ -1,6 +1,9 @@
 package com.swp.jewelrystore.api;
 
+import com.swp.jewelrystore.model.dto.CriteriaDTO;
 import com.swp.jewelrystore.model.dto.PurchaseInvoiceDTO;
+import com.swp.jewelrystore.model.dto.PurchaseOrderDTO;
+import com.swp.jewelrystore.model.response.CriteriaResponseDTO;
 import com.swp.jewelrystore.model.response.PurchasePriceResponseDTO;
 import com.swp.jewelrystore.repository.ProductRepository;
 import com.swp.jewelrystore.service.IPurchaseOrderService;
@@ -23,14 +26,23 @@ public class PurchaseOrderAPI {
     IPurchaseOrderService purchaseOrderService;
 
     @PostMapping("/product-price")
-    public List<PurchasePriceResponseDTO> getProductPurchasePrice(@RequestBody PurchaseInvoiceDTO purchaseInvoiceDTO ){
+    public List<PurchasePriceResponseDTO> showProductPurchasePrice(@RequestBody PurchaseInvoiceDTO purchaseInvoiceDTO ){
         List<PurchasePriceResponseDTO> result = purchaseOrderService.showPurchasePrice(purchaseInvoiceDTO.getProductId());
         return result;
     }
-    @PostMapping
-    public String addPurchaseOrder(@RequestBody PurchaseInvoiceDTO purchaseInvoiceDTO ){
+    @PostMapping("/have-invoice")
+    public String addPurchaseOrderHavingInvoice(@RequestBody PurchaseInvoiceDTO purchaseInvoiceDTO ){
         purchaseOrderService.addProductPurchaseOrder(purchaseInvoiceDTO);
         return "Add product successfully!";
+    }
+    @PostMapping("/material-gem-price")
+    public CriteriaResponseDTO showMaterialGemPrice(@RequestBody CriteriaDTO criteriaDTO){
+        return purchaseOrderService.showMaterialInvoice(criteriaDTO);
+    }
+    @PostMapping("/no-invoice")
+    public String addPurchaseInvoiceNoInvoice(@RequestBody PurchaseOrderDTO purchaseOrderDTO){
+        purchaseOrderService.addPurchaseInvoiceInformation(purchaseOrderDTO);
+        return "Add successfully";
     }
 
 

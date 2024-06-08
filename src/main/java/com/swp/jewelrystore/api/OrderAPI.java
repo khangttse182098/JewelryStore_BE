@@ -40,23 +40,6 @@ public class OrderAPI {
         return invoiceList;
     }
 
-     private final IPurchaseOrderService purchaseOrderService;
-     private final ISellOrderService sellOrderService;
 
-     @PostMapping("/sell")
-     public String addSellOrderInformation(@RequestBody InvoiceDTO invoiceDTO){
-          sellOrderService.addSellOrderInformation(invoiceDTO);
-          return "Added sell order successfully";
-     }
 
-    @PostMapping("/purchase")
-    public CriteriaResponseDTO showMaterialInvoice(@RequestBody CriteriaDTO criteriaDTO){
-        return purchaseOrderService.showMaterialInvoice(criteriaDTO);
-    }
-
-     @PostMapping("/purchase-invoice")
-     public String addPurchaseInvoiceInformation(@RequestBody PurchaseOrderDTO purchaseOrderDTO){
-          purchaseOrderService.addPurchaseInvoiceInformation(purchaseOrderDTO);
-          return "Add successfully";
-     }
 }
