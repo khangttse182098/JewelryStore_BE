@@ -21,4 +21,5 @@ public class ProductResponseDTO {
     private String gemName;
     private String categoryName;
     private Double price;
+    private String counterNo;
 }

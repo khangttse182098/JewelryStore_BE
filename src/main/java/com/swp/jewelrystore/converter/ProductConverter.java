@@ -52,6 +52,8 @@ public class ProductConverter {
         productResponseDTO.setCategoryName(productEntity.getProductCategory().getCategoryName());
         //price
         productResponseDTO.setPrice(productRepository.calculateSellPrice(productEntity));
+        // counterNo
+        productResponseDTO.setCounterNo(productEntity.getCounter().getCounterNo());
         return productResponseDTO;
     }
 }
