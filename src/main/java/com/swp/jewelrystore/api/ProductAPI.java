@@ -18,9 +18,10 @@ public class ProductAPI {
     @Autowired
     private IProductService productService;
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "counter_id",  required = false, dataType = "Long", paramType = "query"),
-            @ApiImplicitParam(name = "category_name", required = false, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "product_name", required = false, dataType = "string", paramType = "query")
+            @ApiImplicitParam(name = "counter_id", dataType = "Long", paramType = "query"),
+            @ApiImplicitParam(name = "category_name", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "product_name", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "product_code", dataType = "string", paramType = "query")
     })
     @GetMapping
     public List<ProductResponseDTO> getListProduct(@RequestParam Map <String, String> params ){

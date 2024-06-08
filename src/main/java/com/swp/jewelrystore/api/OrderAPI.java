@@ -5,6 +5,8 @@ import com.swp.jewelrystore.model.response.CriteriaResponseDTO;
 import com.swp.jewelrystore.model.response.InvoiceResponseDTO;
 import com.swp.jewelrystore.model.response.MaterialResponseDTO;
 import com.swp.jewelrystore.service.IOrderService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,11 @@ public class OrderAPI {
 
     @Autowired
     private IOrderService orderService;
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "code", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "status", dataType = "string", paramType = "query")
+    })
     @GetMapping
     public List<InvoiceResponseDTO> getAllOrder(@RequestParam Map<String, String> params){
         List<InvoiceResponseDTO> invoiceList = orderService.getAllOrder(params);
