@@ -52,7 +52,7 @@ public class OrderAPI {
         return invoiceList;
     }
 
-    @PostMapping("/status")
+    @PostMapping("/status/paid")
     public String changeStatusToPaid(@RequestBody StatusDTO statusDTO){
         PurchaseOrderEntity purchaseOrderEntity = purchaseOrderRepository.findByPurchaseOrderCode(statusDTO.getInvoiceCode());
         if(purchaseOrderEntity != null){
@@ -66,5 +66,20 @@ public class OrderAPI {
             sellOrderRepository.save(sellOrderEntity);
         }
         return "Change to Paid successfully";
+    }
+    @PostMapping("/status/delivered")
+    public String changeStatusToDelivered(@RequestBody StatusDTO statusDTO){
+        PurchaseOrderEntity purchaseOrderEntity = purchaseOrderRepository.findByPurchaseOrderCode(statusDTO.getInvoiceCode());
+        if(purchaseOrderEntity != null){
+            purchaseOrderEntity.setStatus("Đã nhận hàng");
+            purchaseOrderRepository.save(purchaseOrderEntity);
+            return "Change to Delivered successfully";
+        }
+        SellOrderEntity sellOrderEntity = sellOrderRepository.findBySellOrderCodeIs(statusDTO.getInvoiceCode());
+        if(sellOrderEntity != null){
+            sellOrderEntity.setStatus("Đã nhận hàng");
+            sellOrderRepository.save(sellOrderEntity);
+        }
+        return "Change to Delivered successfully";
     }
 }
