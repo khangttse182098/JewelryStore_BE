@@ -52,4 +52,17 @@ public class OrderService implements IOrderService {
         }
         return invoiceResponseDTOs;
     }
+
+    @Override
+    public List<InvoiceResponseDTO> getPaidAndReceivedPurchaseOrder() {
+        List<InvoiceResponseDTO> invoiceResponseDTOs = new ArrayList<>();
+        List<String> status = new ArrayList<>();
+        status.add("Đã thanh toán");
+        status.add("Đã nhận hàng");
+        List<PurchaseOrderEntity> purchaseOrderEntities = purchaseOrderRepository.findPurchaseOrderEntitiesByStatusIsIn(status);
+        for(PurchaseOrderEntity purchaseOrderEntity : purchaseOrderEntities) {
+            invoiceResponseDTOs.add(orderConverter.toInvoiceResponseDTO(purchaseOrderEntity));
+        }
+        return invoiceResponseDTOs;
+    }
 }

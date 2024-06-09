@@ -8,4 +8,5 @@ import lombok.Setter;
 public class MaterialResponseDTO {
     private String name;
     private Double weight;
+    private Double price;
 }

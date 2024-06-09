@@ -74,11 +74,13 @@ public class OrderConverter {
                 diamondCriteriaResponseDTO.setClarity(purchaseOrderDetailEntity.getClarity());
                 diamondCriteriaResponseDTO.setColor(purchaseOrderDetailEntity.getColor());
                 diamondCriteriaResponseDTO.setCaratWeight(purchaseOrderDetailEntity.getCaratWeight());
+                diamondCriteriaResponseDTO.setPrice(purchaseOrderDetailEntity.getPrice());
                 diamondCriteriaResponseDTOS.add(diamondCriteriaResponseDTO);
             }else if(purchaseOrderDetailEntity.getMaterial() != null){
                 MaterialResponseDTO materialResponseDTO = new MaterialResponseDTO();
                 materialResponseDTO.setName(purchaseOrderDetailEntity.getMaterial().getName());
                 materialResponseDTO.setWeight(purchaseOrderDetailEntity.getWeight());
+                materialResponseDTO.setPrice(purchaseOrderDetailEntity.getPrice());
                 materialResponseDTOS.add(materialResponseDTO);
             }
 
