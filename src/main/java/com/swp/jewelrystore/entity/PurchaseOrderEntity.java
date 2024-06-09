@@ -31,7 +31,7 @@ public class PurchaseOrderEntity {
     @Column(name= "purchase_order_code")
     private String purchaseOrderCode;
 
-    @Column(name = "created_date", nullable = false)
+    @Column(name = "created_date")
     private Date createdDate;
 
     @Column(name = "status")
