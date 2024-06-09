@@ -20,3 +20,6 @@ spring:
       file-size-threshold: 2MB
       max-file-size: 5MB
       max-request-size: 10MB
+
+
+spring.autoconfigure.exclude: org.springframework.cloud.aws.autoconfigure.context.ContextInstanceDataAutoConfiguration
