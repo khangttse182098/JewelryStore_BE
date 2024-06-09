@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+
 
 @Getter
 @Setter
@@ -16,8 +16,8 @@ public class PurchaseOrderDetailEntity {
     @Column(name = "purchase_order_detail_id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     private ProductEntity product;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -25,19 +25,19 @@ public class PurchaseOrderDetailEntity {
     private PurchaseOrderEntity purchaseOrder;
 
 
-    @Column(name = "origin", nullable = false)
+    @Column(name = "origin")
     private String origin;
 
-    @Column(name = "color", nullable = false)
+    @Column(name = "color")
     private String color;
 
-    @Column(name = "clarity", nullable = false)
+    @Column(name = "clarity")
     private String clarity;
 
-    @Column(name = "carat_weight", nullable = false)
+    @Column(name = "carat_weight")
     private Double caratWeight;
 
-    @Column(name = "cut", nullable = false)
+    @Column(name = "cut")
     private String cut;
 
     @ManyToOne(fetch = FetchType.LAZY)

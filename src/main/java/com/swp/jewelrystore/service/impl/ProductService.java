@@ -7,12 +7,14 @@ import com.swp.jewelrystore.model.dto.ProductDTO;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
 import com.swp.jewelrystore.repository.*;
 import com.swp.jewelrystore.service.IProductService;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 import com.swp.jewelrystore.entity.ProductEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -135,5 +137,19 @@ public class ProductService implements IProductService {
         productRepository.deleteByIdIn(ids);
     }
 
+//    private void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
+//        String path = "/building/" + buildingDTO.getImageName();
+//        if (null != buildingDTO.getImageBase64()) {
+//            if (null != buildingEntity.getImage()) {
+//                if (!path.equals(buildingEntity.getImage())) {
+//                    File file = new File("C://home/office" + buildingEntity.getImage());
+//                    file.delete();
+//                }
+//            }
+//            byte[] bytes = Base64.decodeBase64(buildingDTO.getImageBase64().getBytes());
+//            uploadFileUtils.writeOrUpdate(path, bytes);
+//            buildingEntity.setImage(path);
+//        }
+//    }
 
 }
