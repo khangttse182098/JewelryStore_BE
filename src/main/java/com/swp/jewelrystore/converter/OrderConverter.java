@@ -59,11 +59,16 @@ public class OrderConverter {
         List<ProductResponseDTO> productResponseDTOList = new ArrayList<>();
         for(PurchaseOrderDetailEntity purchaseOrderDetailEntity : purchaseOrderEntity.getPurchaseOrderDetailEntities()){
             totalPrice += purchaseOrderDetailEntity.getPrice();
-            ProductResponseDTO productResponseDTO = productConverter.toProductResponseDTO(purchaseOrderDetailEntity.getProduct());
-            productResponseDTO.setPrice(purchaseOrderDetailEntity.getPrice());
-            productResponseDTOList.add(productResponseDTO);
+            if(purchaseOrderDetailEntity.getProduct() != null){
+                ProductResponseDTO productResponseDTO = productConverter.toProductResponseDTO(purchaseOrderDetailEntity.getProduct());
+                productResponseDTO.setPrice(purchaseOrderDetailEntity.getPrice());
+                productResponseDTOList.add(productResponseDTO);
+            }
+
         }
-        invoiceResponseDTO.setProductResponseDTOList(productResponseDTOList);
+        if(!productResponseDTOList.isEmpty()){
+            invoiceResponseDTO.setProductResponseDTOList(productResponseDTOList);
+        }
         invoiceResponseDTO.setTotalPrice(totalPrice);
         return invoiceResponseDTO;
     }
