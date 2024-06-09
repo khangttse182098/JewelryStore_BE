@@ -39,4 +39,17 @@ public class OrderService implements IOrderService {
         }
         return invoiceResponseDTOs;
     }
+
+    @Override
+    public List<InvoiceResponseDTO> getPaidAndDeliveredSellOrder() {
+        List<InvoiceResponseDTO> invoiceResponseDTOs = new ArrayList<>();
+        List<String> status = new ArrayList<>();
+        status.add("Đã thanh toán");
+        status.add("Đã giao hàng");
+        List<SellOrderEntity> sellOrderEntities = sellOrderRepository.findSellOrderEntitiesByStatusIsIn(status);
+        for(SellOrderEntity sellOrderEntity : sellOrderEntities) {
+            invoiceResponseDTOs.add(orderConverter.toInvoiceResponseDTO(sellOrderEntity));
+        }
+        return invoiceResponseDTOs;
+    }
 }

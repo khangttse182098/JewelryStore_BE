@@ -9,4 +9,5 @@ import java.util.List;
 public interface SellOrderRepository extends JpaRepository<SellOrderEntity, Long> , SellOrderRepositoryCustom {
     SellOrderEntity findBySellOrderCodeIs(String sellOrderCode);
     List<SellOrderEntity> findByCustomer_IdAndStatusNot(Long id, String status);
+    List<SellOrderEntity> findSellOrderEntitiesByStatusIsIn(List<String> status);
 }

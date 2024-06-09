@@ -7,4 +7,5 @@ import java.util.Map;
 
 public interface IOrderService {
     List<InvoiceResponseDTO> getAllOrder(Map<String,String> params);
+    List<InvoiceResponseDTO> getPaidAndDeliveredSellOrder();
 }

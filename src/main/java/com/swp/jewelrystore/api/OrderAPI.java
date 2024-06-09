@@ -51,6 +51,11 @@ public class OrderAPI {
         List<InvoiceResponseDTO> invoiceList = orderService.getAllOrder(params);
         return invoiceList;
     }
+    @GetMapping("/seller-page")
+    public List<InvoiceResponseDTO> getPaidAndDeliveredSellOrder(){
+        List<InvoiceResponseDTO> invoiceList = orderService.getPaidAndDeliveredSellOrder();
+        return invoiceList;
+    }
 
     @PostMapping("/status/paid")
     public String changeStatusToPaid(@RequestBody StatusDTO statusDTO){
@@ -77,7 +82,7 @@ public class OrderAPI {
         }
         SellOrderEntity sellOrderEntity = sellOrderRepository.findBySellOrderCodeIs(statusDTO.getInvoiceCode());
         if(sellOrderEntity != null){
-            sellOrderEntity.setStatus("Đã nhận hàng");
+            sellOrderEntity.setStatus("Đã giao hàng");
             sellOrderRepository.save(sellOrderEntity);
         }
         return "Change to Delivered successfully";
