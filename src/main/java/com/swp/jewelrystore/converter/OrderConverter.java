@@ -4,7 +4,9 @@ import com.swp.jewelrystore.entity.PurchaseOrderDetailEntity;
 import com.swp.jewelrystore.entity.PurchaseOrderEntity;
 import com.swp.jewelrystore.entity.SellOrderDetailEntity;
 import com.swp.jewelrystore.entity.SellOrderEntity;
+import com.swp.jewelrystore.model.response.DiamondCriteriaResponseDTO;
 import com.swp.jewelrystore.model.response.InvoiceResponseDTO;
+import com.swp.jewelrystore.model.response.MaterialResponseDTO;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,17 +59,40 @@ public class OrderConverter {
         invoiceResponseDTO.setStaffName(purchaseOrderEntity.getUser().getFullName());
         int totalPrice = 0;
         List<ProductResponseDTO> productResponseDTOList = new ArrayList<>();
+        List<DiamondCriteriaResponseDTO> diamondCriteriaResponseDTOS = new ArrayList<>();
+        List<MaterialResponseDTO> materialResponseDTOS = new ArrayList<>();
         for(PurchaseOrderDetailEntity purchaseOrderDetailEntity : purchaseOrderEntity.getPurchaseOrderDetailEntities()){
             totalPrice += purchaseOrderDetailEntity.getPrice();
             if(purchaseOrderDetailEntity.getProduct() != null){
                 ProductResponseDTO productResponseDTO = productConverter.toProductResponseDTO(purchaseOrderDetailEntity.getProduct());
                 productResponseDTO.setPrice(purchaseOrderDetailEntity.getPrice());
                 productResponseDTOList.add(productResponseDTO);
+            }else if(purchaseOrderDetailEntity.getOrigin() != null){
+                DiamondCriteriaResponseDTO diamondCriteriaResponseDTO = new DiamondCriteriaResponseDTO();
+                diamondCriteriaResponseDTO.setCut(purchaseOrderDetailEntity.getCut());
+                diamondCriteriaResponseDTO.setOrigin(purchaseOrderDetailEntity.getOrigin());
+                diamondCriteriaResponseDTO.setClarity(purchaseOrderDetailEntity.getClarity());
+                diamondCriteriaResponseDTO.setColor(purchaseOrderDetailEntity.getColor());
+                diamondCriteriaResponseDTO.setCaratWeight(purchaseOrderDetailEntity.getCaratWeight());
+                diamondCriteriaResponseDTOS.add(diamondCriteriaResponseDTO);
+            }else if(purchaseOrderDetailEntity.getMaterial() != null){
+                MaterialResponseDTO materialResponseDTO = new MaterialResponseDTO();
+                materialResponseDTO.setName(purchaseOrderDetailEntity.getMaterial().getName());
+                materialResponseDTO.setWeight(purchaseOrderDetailEntity.getWeight());
+                materialResponseDTOS.add(materialResponseDTO);
             }
+
+
 
         }
         if(!productResponseDTOList.isEmpty()){
             invoiceResponseDTO.setProductResponseDTOList(productResponseDTOList);
+        }
+        if(!diamondCriteriaResponseDTOS.isEmpty()){
+            invoiceResponseDTO.setDiamondCriteriaResponseDTOS(diamondCriteriaResponseDTOS);
+        }
+        if(!materialResponseDTOS.isEmpty()){
+            invoiceResponseDTO.setMaterialResponseDTOList(materialResponseDTOS);
         }
         invoiceResponseDTO.setTotalPrice(totalPrice);
         return invoiceResponseDTO;

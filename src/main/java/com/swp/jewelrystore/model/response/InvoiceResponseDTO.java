@@ -18,4 +18,6 @@ public class InvoiceResponseDTO {
     private String status;
     private Long customerId;
     List<ProductResponseDTO> productResponseDTOList;
+    List<MaterialResponseDTO> materialResponseDTOList;
+    List<DiamondCriteriaResponseDTO> diamondCriteriaResponseDTOS;
 }

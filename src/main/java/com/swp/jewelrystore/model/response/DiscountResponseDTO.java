@@ -14,4 +14,5 @@ public class DiscountResponseDTO {
     private String code;
     private String startDate;
     private String endDate;
+
 }
