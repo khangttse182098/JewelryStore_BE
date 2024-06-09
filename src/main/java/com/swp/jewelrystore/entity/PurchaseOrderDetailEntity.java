@@ -16,7 +16,7 @@ public class PurchaseOrderDetailEntity {
     @Column(name = "purchase_order_detail_id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private ProductEntity product;
 
@@ -47,7 +47,7 @@ public class PurchaseOrderDetailEntity {
     @Column(name = "weight")
     private Double weight;
 
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private Double price;
 
 }
