@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
+
 @Getter
 @Setter
 public class InvoiceResponseDTO {
@@ -15,4 +17,5 @@ public class InvoiceResponseDTO {
     private int totalPrice;
     private String status;
     private Long customerId;
+    List<ProductResponseDTO> productResponseDTOList;
 }

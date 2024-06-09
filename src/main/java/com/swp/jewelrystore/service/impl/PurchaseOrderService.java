@@ -82,7 +82,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             gold.setWeight(goldCriteria.getWeight());
             gold.setName(materialEntity.getName());
             // set price
-            double price = goldCriteria.getWeight() * 3.75 * materialPriceRepository.findLatestGoldPrice(materialEntity).getBuyPrice();
+            double price = goldCriteria.getWeight() * materialPriceRepository.findLatestGoldPrice(materialEntity).getBuyPrice();
             gold.setPrice(price);
             // add to list gold
             listGold.add(gold);

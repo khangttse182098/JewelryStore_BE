@@ -86,15 +86,6 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         StringBuilder sql = new StringBuilder("SELECT product.* FROM product ") ;
         StringBuilder where = new StringBuilder(" WHERE 1=1 ");
         String groupby = " GROUP BY product.product_id";
-        if(params.containsKey("invoiceCode")){
-            if(params.get("invoiceCode").trim().startsWith("PURC")){
-                sql.append("JOIN purchaseorderdetail ON product.product_id = purchaseorderdetail.product_id JOIN purchaseorder ON purchaseorderdetail.purchase_order_id = purchaseorder.purchase_order_id");
-                where.append(" AND purchase_order_code LIKE '%"+ params.get("invoiceCode") +"%'");
-            }else if(params.get("invoiceCode").trim().startsWith("SELL")){
-                sql.append("JOIN sellorderdetail ON product.product_id = sellorderdetail.product_id JOIN sellorder ON sellorderdetail.sell_order_id = sellorder.sell_order_id");
-                where.append(" AND sell_order_code LIKE '%"+params.get("invoiceCode")+"%' " );
-            }
-        }
         if(params.containsKey("category_name")){
             sql.append("JOIN productcategory ON product.product_category_id = productcategory.category_id ");
         }
@@ -103,7 +94,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
             if(NumberUtils.isLong(param.getValue())){
                 sql.append(" AND " + param.getKey() + " = " + param.getValue().trim());
-            }else if(StringUtils.check(param.getValue()) && !param.getKey().equals("invoiceCode")){
+            }else if(StringUtils.check(param.getValue())){
                 sql.append(" AND " + param.getKey() + " LIKE '%" + param.getValue().trim() + "%'");
             }
         }

@@ -26,5 +26,5 @@ public class InvoiceDTO {
     private String sellOrderStatus;
 
     @ApiModelProperty(example = "[92714, 89660]")
-    private List<Long> price;
+    private List<Double> price;
 }

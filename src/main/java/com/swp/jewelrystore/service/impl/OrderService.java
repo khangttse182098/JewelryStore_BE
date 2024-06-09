@@ -33,8 +33,8 @@ public class OrderService implements IOrderService {
         for(PurchaseOrderEntity purchaseOrderEntity : purchaseOrderEntities) {
             invoiceResponseDTOs.add(orderConverter.toInvoiceResponseDTO(purchaseOrderEntity));
         }
-        List<SellOrderEntity> sellOrderEntitiesv = sellOrderRepository.findAllSellOrder(params);
-        for(SellOrderEntity sellOrderEntity : sellOrderEntitiesv) {
+        List<SellOrderEntity> sellOrderEntities = sellOrderRepository.findAllSellOrder(params);
+        for(SellOrderEntity sellOrderEntity : sellOrderEntities) {
             invoiceResponseDTOs.add(orderConverter.toInvoiceResponseDTO(sellOrderEntity));
         }
         return invoiceResponseDTOs;

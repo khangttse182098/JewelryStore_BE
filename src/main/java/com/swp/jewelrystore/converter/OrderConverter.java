@@ -5,14 +5,20 @@ import com.swp.jewelrystore.entity.PurchaseOrderEntity;
 import com.swp.jewelrystore.entity.SellOrderDetailEntity;
 import com.swp.jewelrystore.entity.SellOrderEntity;
 import com.swp.jewelrystore.model.response.InvoiceResponseDTO;
+import com.swp.jewelrystore.model.response.ProductResponseDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class OrderConverter {
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private ProductConverter productConverter;
 
     public InvoiceResponseDTO toInvoiceResponseDTO(SellOrderEntity sellOrderEntity) {
         InvoiceResponseDTO invoiceResponseDTO = modelMapper.map(sellOrderEntity, InvoiceResponseDTO.class);
@@ -26,9 +32,14 @@ public class OrderConverter {
         }
         invoiceResponseDTO.setStaffName(sellOrderEntity.getUser().getFullName());
         int totalPrice = 0;
+        List<ProductResponseDTO> productResponseDTOList = new ArrayList<>();
         for(SellOrderDetailEntity sellOrderDetailEntity : sellOrderEntity.getSellOrderDetailEntities()){
             totalPrice += sellOrderDetailEntity.getPrice();
+            ProductResponseDTO productResponseDTO = productConverter.toProductResponseDTO(sellOrderDetailEntity.getProduct());
+            productResponseDTO.setPrice(sellOrderDetailEntity.getPrice());
+            productResponseDTOList.add(productResponseDTO);
         }
+        invoiceResponseDTO.setProductResponseDTOList(productResponseDTOList);
         invoiceResponseDTO.setTotalPrice(totalPrice);
         return invoiceResponseDTO;
     }
@@ -45,9 +56,14 @@ public class OrderConverter {
         }
         invoiceResponseDTO.setStaffName(purchaseOrderEntity.getUser().getFullName());
         int totalPrice = 0;
+        List<ProductResponseDTO> productResponseDTOList = new ArrayList<>();
         for(PurchaseOrderDetailEntity purchaseOrderDetailEntity : purchaseOrderEntity.getPurchaseOrderDetailEntities()){
             totalPrice += purchaseOrderDetailEntity.getPrice();
+            ProductResponseDTO productResponseDTO = productConverter.toProductResponseDTO(purchaseOrderDetailEntity.getProduct());
+            productResponseDTO.setPrice(purchaseOrderDetailEntity.getPrice());
+            productResponseDTOList.add(productResponseDTO);
         }
+        invoiceResponseDTO.setProductResponseDTOList(productResponseDTOList);
         invoiceResponseDTO.setTotalPrice(totalPrice);
         return invoiceResponseDTO;
     }

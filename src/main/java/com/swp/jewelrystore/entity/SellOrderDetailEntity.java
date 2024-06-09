@@ -25,6 +25,6 @@ public class SellOrderDetailEntity {
     private SellOrderEntity sellOrder;
 
     @Column(name = "price", nullable = false)
-    private Long price;
+    private Double price;
 
 }
