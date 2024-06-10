@@ -54,6 +54,7 @@ public class UserService implements IUserService {
         List<UserEntity> userEntities = userRepository.getAllUsers(params);
         List<UserResponseDTO> userResponseDTOS = new ArrayList<>();
         for(UserEntity userEntity : userEntities) {
+
             userResponseDTOS.add(userConverter.toUserResponseDTO(userEntity));
         }
         return userResponseDTOS;
@@ -67,6 +68,14 @@ public class UserService implements IUserService {
         userEntity.setPassword(bCrypt.encode(registerDTO.getPassword()));
         userEntity.setStatus(1L);
         userRepository.save(userEntity);
+    }
+
+    @Override
+    public void softDeleteUser(List<Long> userId) {
+         List<UserEntity> listUser = userRepository.findAllByIdIn(userId);
+         for (UserEntity item: listUser){
+             item.setStatus(0L);
+         }
     }
 
 

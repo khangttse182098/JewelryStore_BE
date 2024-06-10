@@ -14,4 +14,6 @@ public class SystemConstant {
     public static final String NO_CUSTOMER_YET = "Chưa có khách hàng";
     public static final String REPURCHASE = "Mua lại";
     public static final String JEWELRY = "Trang sức";
+    public static final String ON_STATUS = "Đang làm việc";
+    public static final String OFF_STATUS = "Đang tạm nghỉ";
 }

@@ -12,4 +12,5 @@ public interface IUserService {
     LoginResponseDTO login(UserDTO userDTO);
     List<UserResponseDTO> getAllUser(Map<String, String> params);
     void registerMember(RegisterDTO registerDTO);
+    void softDeleteUser(List<Long> userId);
 }
