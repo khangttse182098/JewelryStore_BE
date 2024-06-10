@@ -1,5 +1,6 @@
 package com.swp.jewelrystore.service.impl;
 
+import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.converter.UserConverter;
 import com.swp.jewelrystore.entity.UserEntity;
 import com.swp.jewelrystore.model.dto.RegisterDTO;
@@ -23,19 +24,13 @@ import java.util.Map;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService implements IUserService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private UserConverter userConverter;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final ModelMapper modelMapper;
+    private final UserConverter userConverter;
 
 
     @Override
@@ -44,12 +39,12 @@ public class UserService implements IUserService {
         UserEntity userEntity = userRepository.findByUserName(userDTO.getUsername());
         BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
         if (!bCrypt.matches(userDTO.getPassword(), userEntity.getPassword())) {
-            loginResponseDTO.setMessage("Invalid username or password!");
+            loginResponseDTO.setMessage(SystemConstant.LOGIN_FAIL);
         }else {
             loginResponseDTO = modelMapper.map(userEntity, LoginResponseDTO.class);
             loginResponseDTO.setRoleCode(userEntity.getRole().getCode());
             loginResponseDTO.setRoleName(userEntity.getRole().getName());
-            loginResponseDTO.setMessage("Successfully logged in!");
+            loginResponseDTO.setMessage(SystemConstant.LOGIN_SUCCESS);
         }
         return loginResponseDTO;
     }

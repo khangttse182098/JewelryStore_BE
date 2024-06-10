@@ -7,6 +7,7 @@ import com.swp.jewelrystore.model.response.CriteriaResponseDTO;
 import com.swp.jewelrystore.model.response.PurchasePriceResponseDTO;
 import com.swp.jewelrystore.repository.ProductRepository;
 import com.swp.jewelrystore.service.IPurchaseOrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +18,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/purchase-order")
 @CrossOrigin
-
+@RequiredArgsConstructor
 public class PurchaseOrderAPI {
-    @Autowired
-    ProductRepository productRepository;
 
-    @Autowired
-    IPurchaseOrderService purchaseOrderService;
+    private final IPurchaseOrderService purchaseOrderService;
 
     @PostMapping("/product-price")
     public List<PurchasePriceResponseDTO> showProductPurchasePrice(@RequestBody PurchaseInvoiceDTO purchaseInvoiceDTO ){

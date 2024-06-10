@@ -1,5 +1,6 @@
 package com.swp.jewelrystore.service.impl;
 
+import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.entity.DiscountEntity;
 import com.swp.jewelrystore.model.dto.DiscountDTO;
@@ -42,9 +43,9 @@ public class DiscountService implements IDiscountService {
              String endDate = item.getEndDate().toString();
              System.out.println("End date: " + endDate);
              if (startDate.compareTo(currentDate) < 0 && endDate.compareTo(currentDate) > 0) {
-                 responseDTO.setStatus("Đang áp dụng");
+                 responseDTO.setStatus(SystemConstant.APPLYING);
              } else {
-                 responseDTO.setStatus("Chưa áp dụng");
+                 responseDTO.setStatus(SystemConstant.NOT_APPLY_YET);
              }
              responseDTO.setStartDate(dateTimeConverter.convertToDateTimeResponse(item.getStartDate()));
              responseDTO.setEndDate(dateTimeConverter.convertToDateTimeResponse(item.getEndDate()));

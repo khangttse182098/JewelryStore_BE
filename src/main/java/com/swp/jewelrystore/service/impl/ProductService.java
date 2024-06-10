@@ -1,12 +1,14 @@
 package com.swp.jewelrystore.service.impl;
 
 
+import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.converter.ProductConverter;
 import com.swp.jewelrystore.entity.*;
 import com.swp.jewelrystore.model.dto.ProductDTO;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
 import com.swp.jewelrystore.repository.*;
 import com.swp.jewelrystore.service.IProductService;
+import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 import com.swp.jewelrystore.entity.ProductEntity;
@@ -20,45 +22,21 @@ import java.util.List;
 import java.util.Map;
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class ProductService implements IProductService {
 
-
-    @Autowired
-    private CounterRepository counterRepository;
-
-    @Autowired
-    private ProductGemRepository productGemRepository;
-
-    @Autowired
-    private ProductMaterialRepository productMaterialRepository;
-
-    @Autowired
-    private ProductCategoryRepository productCategoryRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private ProductConverter productConverter;
-
-    @Autowired
-    private SellOrderDetailRepository sellOrderDetailRepository;
-
-    @Autowired
-    private SellOrderRepository sellOrderRepository;
-
-    @Autowired
-    private MaterialRepository materialRepository;
-
-    @Autowired
-    private GemRepository gemRepository;
-
-    @Autowired
-    private PurchaseOrderDetailRepository purchaseOrderDetailRepository;
+    private final CounterRepository counterRepository;
+    private final ProductGemRepository productGemRepository;
+    private final ProductMaterialRepository productMaterialRepository;
+    private final ProductCategoryRepository productCategoryRepository;
+    private final ModelMapper modelMapper;
+    private final ProductRepository productRepository;
+    private final ProductConverter productConverter;
+    private final SellOrderDetailRepository sellOrderDetailRepository;
+    private final SellOrderRepository sellOrderRepository;
+    private final MaterialRepository materialRepository;
+    private final GemRepository gemRepository;
+    private final PurchaseOrderDetailRepository purchaseOrderDetailRepository;
 
     @Override
     public List<ProductResponseDTO> getAllProduct(Map<String, String > params) {
@@ -98,7 +76,7 @@ public class ProductService implements IProductService {
         ProductEntity productEntity = modelMapper.map(productDTO, ProductEntity.class);
         // Product Category
         ProductCategoryEntity productCategoryEntity = new ProductCategoryEntity();
-        if(productDTO.getProductCategoryName().equals("Trang sức")){
+        if(productDTO.getProductCategoryName().equals(SystemConstant.JEWELRY)){
             productCategoryEntity = productCategoryRepository.findByCategoryNameAndSubCategoryType(productDTO.getProductCategoryName(), productDTO.getSubCategoryType());
             productEntity.setProductCategory(productCategoryEntity);
         }else{
@@ -137,19 +115,5 @@ public class ProductService implements IProductService {
         productRepository.deleteByIdIn(ids);
     }
 
-//    private void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
-//        String path = "/building/" + buildingDTO.getImageName();
-//        if (null != buildingDTO.getImageBase64()) {
-//            if (null != buildingEntity.getImage()) {
-//                if (!path.equals(buildingEntity.getImage())) {
-//                    File file = new File("C://home/office" + buildingEntity.getImage());
-//                    file.delete();
-//                }
-//            }
-//            byte[] bytes = Base64.decodeBase64(buildingDTO.getImageBase64().getBytes());
-//            uploadFileUtils.writeOrUpdate(path, bytes);
-//            buildingEntity.setImage(path);
-//        }
-//    }
 
 }

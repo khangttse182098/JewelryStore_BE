@@ -29,7 +29,6 @@ public class SellOrderService implements ISellOrderService {
         CustomerEntity checkCustomer = customerRepository.findByFullNameOrPhoneNumber(invoiceDTO.getFullName(), invoiceDTO.getPhoneNumber());
         List<ProductEntity> listProduct = productRepository.findAllByIdIn(invoiceDTO.getProductId());
         // customer already existed
-        // Sellordercode: SEL001
         if (checkCustomer != null ){
             SellOrderEntity sellOrder = new SellOrderEntity();
             sellOrder.setUser(userRepository.findById(invoiceDTO.getUserId()).get());

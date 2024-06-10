@@ -7,17 +7,17 @@ import com.swp.jewelrystore.model.dto.MaterialPriceDTO;
 import com.swp.jewelrystore.repository.MaterialPriceRepository;
 import com.swp.jewelrystore.repository.MaterialRepository;
 import com.swp.jewelrystore.service.IMaterialPriceService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class MaterialPriceService implements IMaterialPriceService {
-    @Autowired
-    private MaterialRepository materialRepository;
-    @Autowired
-    private MaterialPriceRepository materialPriceRepository;
-    @Autowired
-    private DateTimeConverter dateTimeConverter;
+
+    private final MaterialRepository materialRepository;
+    private final MaterialPriceRepository materialPriceRepository;
+    private final DateTimeConverter dateTimeConverter;
 
     @Override
     public void addOrUpdateMaterialPrice(MaterialPriceDTO materialPriceDTO) {

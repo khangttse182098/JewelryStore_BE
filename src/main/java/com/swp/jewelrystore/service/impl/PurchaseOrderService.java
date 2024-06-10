@@ -1,5 +1,6 @@
 package com.swp.jewelrystore.service.impl;
 
+import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.entity.*;
 import com.swp.jewelrystore.model.dto.*;
 import com.swp.jewelrystore.model.response.*;
@@ -27,16 +28,10 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final PurchaseOrderRepository purchaseOrderRepository;
-
-    @Autowired
-    PurchaseOrderDetailRepository purchaseOrderDetailRepository;
-
-    @Autowired
-    ProductRepository productRepository;
-    @Autowired
-    private SellOrderRepository sellOrderRepository;
-    @Autowired
-    private ModelMapper modelMapper;
+    private final PurchaseOrderDetailRepository purchaseOrderDetailRepository;
+    private final ProductRepository productRepository;
+    private final SellOrderRepository sellOrderRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public void addProductPurchaseOrder(PurchaseInvoiceDTO purchaseInvoiceDTO) {
@@ -44,7 +39,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
         purchaseOrderEntity.setPurchaseOrderCode(purchaseOrderRepository.generatePurchaseOrderCode());
         purchaseOrderEntity.setUser(userRepository.findByIdIs(purchaseInvoiceDTO.getUserId()));
-        purchaseOrderEntity.setStatus("Chưa thanh toán");
+        purchaseOrderEntity.setStatus(SystemConstant.UNPAID);
         purchaseOrderEntity.setCustomer(sellOrderEntity.getCustomer());
         purchaseOrderRepository.save(purchaseOrderEntity);
         for (Long id : purchaseInvoiceDTO.getProductId()) {

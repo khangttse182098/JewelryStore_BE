@@ -6,6 +6,7 @@ import com.swp.jewelrystore.model.response.ProductResponseDTO;
 import com.swp.jewelrystore.service.IProductService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
@@ -14,9 +15,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/product")
 @CrossOrigin
+@RequiredArgsConstructor
 public class ProductAPI {
-    @Autowired
-    private IProductService productService;
+
+    private final IProductService productService;
     @ApiImplicitParams({
             @ApiImplicitParam(name = "counter_id", value = "1", dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "category_name", value = "Trang sức", dataType = "string", paramType = "query"),
