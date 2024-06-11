@@ -24,5 +24,4 @@ public class ProductResponseDTO {
     private String categoryName;
     private Double price;
     private String counterNo;
-    private ResponseEntity<ByteArrayResource> fetchedImage;
 }
