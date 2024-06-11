@@ -22,7 +22,7 @@ public class ProductAPI {
             @ApiImplicitParam(name = "category_name", value = "Trang sức", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "product_name", value = "Nhẫn Kim cương Vàng trắng 14K",dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "product_code", value = "NKCVT14K", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "is_sell_page", value = "true", dataType = "string", paramType = "query")
+            @ApiImplicitParam(name = "is_available", value = "true", dataType = "string", paramType = "query")
     })
     @GetMapping
     public List<ProductResponseDTO> getListProduct(@RequestParam Map <String, String> params ){
