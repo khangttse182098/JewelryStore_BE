@@ -84,17 +84,23 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     // getProduct
     public void queryWhereNormal(StringBuilder where, Map<String, String> params) {
         for(Map.Entry<String, String> param : params.entrySet()){
-            if(NumberUtils.isLong(param.getValue())){
-                where.append(" AND " + param.getKey() + " = " + param.getValue().trim());
-            }else if(StringUtils.check(param.getValue()) && !param.getKey().equals("isSellPage")){
-                where.append(" AND " + param.getKey() + " LIKE '%" + param.getValue().trim() + "%'");
+            if(!param.getKey().equals("is_sell_page") && !param.getKey().equals("category_name")){
+                if(NumberUtils.isLong(param.getValue())){
+                    where.append(" AND " + param.getKey() + " = " + param.getValue().trim());
+                }else if(StringUtils.check(param.getValue())){
+                    where.append(" AND " + param.getKey() + " LIKE '%" + param.getValue().trim() + "%'");
+                }
             }
         }
     }
     public void queryWhereSpecial(StringBuilder where, Map<String, String> params) {
-        String isSellPage = params.get("isSellPage");
+        String isSellPage = params.get("is_sell_page");
         if (StringUtils.check(isSellPage)) {
             where.append(" AND sellorderdetail.sell_order_detail_id IS NULL ") ;
+        }
+        String categoryName = params.get("category_name");
+        if (StringUtils.check(categoryName)) {
+            where.append(" AND productcategory.categoryName LIKE '%" +categoryName+"%' ") ;
         }
 
     }
@@ -102,7 +108,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         if(StringUtils.check(params.get("category_name"))){
             sql.append("JOIN productcategory ON product.product_category_id = productcategory.category_id ");
         }
-        if(StringUtils.check(params.get("isSellPage"))){
+        if(StringUtils.check(params.get("is_sell_page"))){
             sql.append("LEFT JOIN sellorderdetail ON product.product_id = sellorderdetail.product_id ");
         }
 
