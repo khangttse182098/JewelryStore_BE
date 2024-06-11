@@ -16,10 +16,12 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
@@ -79,25 +81,42 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         }
         return Math.ceil((buyPrice * 1.2) / 10.0) * 10;  // uu dai 20%);
     }
+    // getProduct
+    public void queryWhereNormal(StringBuilder where, Map<String, String> params) {
+        for(Map.Entry<String, String> param : params.entrySet()){
+            if(NumberUtils.isLong(param.getValue())){
+                where.append(" AND " + param.getKey() + " = " + param.getValue().trim());
+            }else if(StringUtils.check(param.getValue()) && !param.getKey().equals("isSellPage")){
+                where.append(" AND " + param.getKey() + " LIKE '%" + param.getValue().trim() + "%'");
+            }
+        }
+    }
+    public void queryWhereSpecial(StringBuilder where, Map<String, String> params) {
+        String isSellPage = params.get("isSellPage");
+        if (StringUtils.check(isSellPage)) {
+            where.append(" AND sellorderdetail.sell_order_detail_id IS NULL ") ;
+        }
 
+    }
+    public void queryJoin(StringBuilder sql, Map<String, String> params) {
+        if(StringUtils.check(params.get("category_name"))){
+            sql.append("JOIN productcategory ON product.product_category_id = productcategory.category_id ");
+        }
+        if(StringUtils.check(params.get("isSellPage"))){
+            sql.append("LEFT JOIN sellorderdetail ON product.product_id = sellorderdetail.product_id ");
+        }
+
+    }
     @Override
     public List<ProductEntity>getAllProduct(Map<String, String> params) {
         // sql
         StringBuilder sql = new StringBuilder("SELECT product.* FROM product ") ;
         StringBuilder where = new StringBuilder(" WHERE 1=1 ");
         String groupby = " GROUP BY product.product_id";
-        if(params.containsKey("category_name")){
-            sql.append("JOIN productcategory ON product.product_category_id = productcategory.category_id ");
-        }
+        queryJoin(sql,params);
+        queryWhereNormal(where, params);
+        queryWhereSpecial(where,params);
         sql.append(where);
-        for(Map.Entry<String, String> param : params.entrySet()){
-
-            if(NumberUtils.isLong(param.getValue())){
-                sql.append(" AND " + param.getKey() + " = " + param.getValue().trim());
-            }else if(StringUtils.check(param.getValue())){
-                sql.append(" AND " + param.getKey() + " LIKE '%" + param.getValue().trim() + "%'");
-            }
-        }
         sql.append(groupby);
         System.out.println(sql.toString());
         Query query = entityManager.createNativeQuery(sql.toString(), ProductEntity.class);

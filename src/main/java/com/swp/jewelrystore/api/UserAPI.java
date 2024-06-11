@@ -31,7 +31,8 @@ public class UserAPI {
             @ApiImplicitParam(name = "roleName", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "status", dataType = "long", paramType = "query"),
             @ApiImplicitParam(name = "phone", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "fullName", dataType = "string", paramType = "query")
+            @ApiImplicitParam(name = "fullName", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "user_id", dataType = "Long", paramType = "query")
     })
 
     @GetMapping
