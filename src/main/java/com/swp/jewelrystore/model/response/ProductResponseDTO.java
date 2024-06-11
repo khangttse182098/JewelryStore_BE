@@ -2,6 +2,8 @@ package com.swp.jewelrystore.model.response;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 
@@ -22,4 +24,5 @@ public class ProductResponseDTO {
     private String categoryName;
     private Double price;
     private String counterNo;
+    private ResponseEntity<ByteArrayResource> fetchedImage;
 }

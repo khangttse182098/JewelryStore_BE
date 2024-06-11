@@ -7,8 +7,11 @@ import com.swp.jewelrystore.model.response.ProductResponseDTO;
 import com.swp.jewelrystore.repository.ProductGemRepository;
 import com.swp.jewelrystore.repository.ProductMaterialRepository;
 import com.swp.jewelrystore.repository.ProductRepository;
+import com.swp.jewelrystore.service.IStorageService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
@@ -29,6 +32,9 @@ public class ProductConverter {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private IStorageService storageService;
 
     public ProductResponseDTO toProductResponseDTO(ProductEntity productEntity) {
         ProductResponseDTO productResponseDTO = modelMapper.map(productEntity, ProductResponseDTO.class);
@@ -54,6 +60,10 @@ public class ProductConverter {
         productResponseDTO.setPrice(productRepository.calculateSellPrice(productEntity));
         // counterNo
         productResponseDTO.setCounterNo(productEntity.getCounter().getCounterNo());
+        // image
+        String productImage = "http://mahika.foundation:8080/swp/api/file/download/"+ productEntity.getProductCode() +".jpg";
+        productResponseDTO.setProductImage(productImage);
         return productResponseDTO;
+
     }
 }

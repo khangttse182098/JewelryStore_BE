@@ -21,6 +21,10 @@ public class OrderConverter {
     private ModelMapper modelMapper;
     @Autowired
     private ProductConverter productConverter;
+    @Autowired
+    private DiamondCriteriaConverter diamondCriteriaConverter;
+    @Autowired
+    private MaterialConverter materialConverter;
 
     public InvoiceResponseDTO toInvoiceResponseDTO(SellOrderEntity sellOrderEntity) {
         InvoiceResponseDTO invoiceResponseDTO = modelMapper.map(sellOrderEntity, InvoiceResponseDTO.class);
@@ -68,24 +72,13 @@ public class OrderConverter {
                 productResponseDTO.setPrice(purchaseOrderDetailEntity.getPrice());
                 productResponseDTOList.add(productResponseDTO);
             }else if(purchaseOrderDetailEntity.getOrigin() != null){
-                DiamondCriteriaResponseDTO diamondCriteriaResponseDTO = new DiamondCriteriaResponseDTO();
-                diamondCriteriaResponseDTO.setCut(purchaseOrderDetailEntity.getCut());
-                diamondCriteriaResponseDTO.setOrigin(purchaseOrderDetailEntity.getOrigin());
-                diamondCriteriaResponseDTO.setClarity(purchaseOrderDetailEntity.getClarity());
-                diamondCriteriaResponseDTO.setColor(purchaseOrderDetailEntity.getColor());
-                diamondCriteriaResponseDTO.setCaratWeight(purchaseOrderDetailEntity.getCaratWeight());
-                diamondCriteriaResponseDTO.setPrice(purchaseOrderDetailEntity.getPrice());
+                DiamondCriteriaResponseDTO diamondCriteriaResponseDTO = diamondCriteriaConverter.toDiamondCriteriaResponseDTO(purchaseOrderDetailEntity);
                 diamondCriteriaResponseDTOS.add(diamondCriteriaResponseDTO);
             }else if(purchaseOrderDetailEntity.getMaterial() != null){
-                MaterialResponseDTO materialResponseDTO = new MaterialResponseDTO();
+                MaterialResponseDTO materialResponseDTO = materialConverter.toMaterialResponseDTO(purchaseOrderDetailEntity);
                 materialResponseDTO.setName(purchaseOrderDetailEntity.getMaterial().getName());
-                materialResponseDTO.setWeight(purchaseOrderDetailEntity.getWeight());
-                materialResponseDTO.setPrice(purchaseOrderDetailEntity.getPrice());
                 materialResponseDTOS.add(materialResponseDTO);
             }
-
-
-
         }
         if(!productResponseDTOList.isEmpty()){
             invoiceResponseDTO.setProductResponseDTOList(productResponseDTOList);
