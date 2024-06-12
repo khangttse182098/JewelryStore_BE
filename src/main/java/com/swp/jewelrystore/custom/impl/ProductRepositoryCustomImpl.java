@@ -5,6 +5,7 @@ import com.swp.jewelrystore.entity.MaterialPriceEntity;
 import com.swp.jewelrystore.entity.ProductEntity;
 import com.swp.jewelrystore.entity.ProductGemEntity;
 import com.swp.jewelrystore.entity.ProductMaterialEntity;
+import com.swp.jewelrystore.model.request.ProductSearchRequestDTO;
 import com.swp.jewelrystore.model.response.PurchasePriceResponseDTO;
 import com.swp.jewelrystore.repository.GemPriceRepository;
 import com.swp.jewelrystore.repository.MaterialPriceRepository;
@@ -17,10 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -82,46 +80,96 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         return Math.ceil((buyPrice * 1.2) / 10.0) * 10;  // uu dai 20%);
     }
     // getProduct
-    public void queryWhereNormal(StringBuilder where, Map<String, String> params) {
-        for(Map.Entry<String, String> param : params.entrySet()){
-            if(!param.getKey().equals("is_available") && !param.getKey().equals("category_name")){
-                if(NumberUtils.isLong(param.getValue())){
-                    where.append(" AND " + param.getKey() + " = " + param.getValue().trim());
-                }else if(StringUtils.check(param.getValue())){
-                    where.append(" AND " + param.getKey() + " LIKE '%" + param.getValue().trim() + "%'");
+    public void queryWhereNormal(StringBuilder where, ProductSearchRequestDTO productSearchRequestDTO) {
+        try {
+            // reflection
+            Field[] fields = ProductSearchRequestDTO.class.getDeclaredFields();
+            for(Field item : fields) {
+                item.setAccessible(true);
+                String fieldName = item.getName();
+                if(fieldName.equals("product_name") || fieldName.equals("product_code") || fieldName.equals("counter_id")) {
+                    Object value = item.get(productSearchRequestDTO);
+                    if(value != null) {
+                        if(StringUtils.check(value.toString())) {
+                            if(item.getType().getName().equals("java.lang.Long") ) {
+                                where.append(" AND product." + fieldName + " = " + value);
+                            }else if(item.getType().getName().equals("java.lang.Integer") ) {
+                                where.append(" AND product." + fieldName + " = " + value);
+                            }
+                            else if(item.getType().getName().equals("java.lang.String") ) {
+                                where.append(" AND product." + fieldName+ " Like '%" + value + "%'");
+                            }
+                        }
+                    }
+
                 }
             }
+        }catch(Exception ex) {
+            ex.printStackTrace();
         }
     }
-    public void queryWhereSpecial(StringBuilder where, Map<String, String> params) {
-        String isSellPage = params.get("is_available");
-        if (StringUtils.check(isSellPage)) {
+    public void queryWhereSpecial(StringBuilder where, ProductSearchRequestDTO productSearchRequestDTO) {
+        String isAvailable = productSearchRequestDTO.getIs_available();
+        if (StringUtils.check(isAvailable)) {
             where.append(" AND sellorderdetail.sell_order_detail_id IS NULL ") ;
         }
-        String categoryName = params.get("category_name");
+        String categoryName = productSearchRequestDTO.getCategory_name();
         if (StringUtils.check(categoryName)) {
-            where.append(" AND productcategory.categoryName LIKE '%" +categoryName+"%' ") ;
+            where.append(" AND productcategory.category_name LIKE '%" +categoryName+"%' ") ;
         }
-
+        Long materialId = productSearchRequestDTO.getMaterial_id();
+        if(materialId != null) {
+            where.append(" AND material.material_id = " + materialId) ;
+        }
+        Long gemId = productSearchRequestDTO.getGem_id();
+        if(gemId != null) {
+            where.append(" AND gem.gem_id = " + gemId) ;
+        }
+        String origin = productSearchRequestDTO.getOrigin();
+        if (StringUtils.check(origin)) {
+            where.append(" AND gem.origin LIKE '%" +origin+"%' ");
+        }
+        String cut = productSearchRequestDTO.getCut();
+        if (StringUtils.check(cut)) {
+            where.append(" AND gem.cut LIKE '%" +cut+"%' ");
+        }
+        Double caratWeight = productSearchRequestDTO.getCarat_weight();
+        if (caratWeight != null) {
+            where.append(" AND gem.carat_weight = " +caratWeight+" ");
+        }
+        String color = productSearchRequestDTO.getColor();
+        if (StringUtils.check(color)) {
+            where.append(" AND gem.color LIKE '%" +color+"%' ");
+        }
+        String clarity = productSearchRequestDTO.getClarity();
+        if (StringUtils.check(clarity)) {
+            where.append(" AND gem.clarity LIKE '%" +clarity+"%' ");
+        }
     }
-    public void queryJoin(StringBuilder sql, Map<String, String> params) {
-        if(StringUtils.check(params.get("category_name"))){
+    public void queryJoin(StringBuilder sql, ProductSearchRequestDTO productSearchRequestDTO) {
+        if(StringUtils.check(productSearchRequestDTO.getCategory_name())){
             sql.append("JOIN productcategory ON product.product_category_id = productcategory.category_id ");
         }
-        if(StringUtils.check(params.get("is_available"))){
+        if(StringUtils.check(productSearchRequestDTO.getIs_available())){
             sql.append("LEFT JOIN sellorderdetail ON product.product_id = sellorderdetail.product_id ");
+        }
+        if(productSearchRequestDTO.getMaterial_id() != null){
+            sql.append("JOIN productmaterial ON product.product_id = productmaterial.product_id JOIN material ON productmaterial.material_id = material.material_id");
+        }
+        if(productSearchRequestDTO.getGem_id() != null || StringUtils.check(productSearchRequestDTO.getOrigin()) || StringUtils.check(productSearchRequestDTO.getColor()) || StringUtils.check(productSearchRequestDTO.getClarity()) || StringUtils.check(productSearchRequestDTO.getCut()) || productSearchRequestDTO.getCarat_weight() != null){
+            sql.append("JOIN productgem ON product.product_id = productgem.product_id JOIN gem ON productgem.gem_id = gem.gem_id");
         }
 
     }
     @Override
-    public List<ProductEntity>getAllProduct(Map<String, String> params) {
+    public List<ProductEntity>getAllProduct(ProductSearchRequestDTO productSearchRequestDTO) {
         // sql
         StringBuilder sql = new StringBuilder("SELECT product.* FROM product ") ;
         StringBuilder where = new StringBuilder(" WHERE 1=1 ");
         String groupby = " GROUP BY product.product_id";
-        queryJoin(sql,params);
-        queryWhereNormal(where, params);
-        queryWhereSpecial(where,params);
+        queryJoin(sql,productSearchRequestDTO);
+        queryWhereNormal(where, productSearchRequestDTO);
+        queryWhereSpecial(where,productSearchRequestDTO);
         sql.append(where);
         sql.append(groupby);
         System.out.println(sql.toString());

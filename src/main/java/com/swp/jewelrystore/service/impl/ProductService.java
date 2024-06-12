@@ -4,6 +4,7 @@ package com.swp.jewelrystore.service.impl;
 import com.swp.jewelrystore.converter.ProductConverter;
 import com.swp.jewelrystore.entity.*;
 import com.swp.jewelrystore.model.dto.ProductDTO;
+import com.swp.jewelrystore.model.request.ProductSearchRequestDTO;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
 import com.swp.jewelrystore.repository.*;
 import com.swp.jewelrystore.service.IProductService;
@@ -61,8 +62,8 @@ public class ProductService implements IProductService {
     private PurchaseOrderDetailRepository purchaseOrderDetailRepository;
 
     @Override
-    public List<ProductResponseDTO> getAllProduct(Map<String, String > params) {
-        List<ProductEntity> productEntities = productRepository.getAllProduct(params);
+    public List<ProductResponseDTO> getAllProduct(ProductSearchRequestDTO productSearchRequestDTO) {
+        List<ProductEntity> productEntities = productRepository.getAllProduct(productSearchRequestDTO);
         ProductResponseDTO productResponseDTO = new ProductResponseDTO();
         List<ProductResponseDTO> productResponseDTOs = new ArrayList<>();
         for (ProductEntity productEntity : productEntities) {

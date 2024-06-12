@@ -51,6 +51,7 @@ public class SellOrderService implements ISellOrderService {
             CustomerEntity newCustomer = new CustomerEntity();
             newCustomer.setFullName(invoiceDTO.getFullName());
             newCustomer.setPhoneNumber(invoiceDTO.getPhoneNumber());
+            newCustomer.setGender("Chưa có thông tin");
             customerRepository.save(newCustomer);
             SellOrderEntity sellOrder = new SellOrderEntity();
             sellOrder.setUser(userRepository.findById(invoiceDTO.getUserId()).get());
