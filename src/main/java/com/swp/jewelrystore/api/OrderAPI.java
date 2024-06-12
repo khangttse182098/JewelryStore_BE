@@ -57,11 +57,11 @@ public class OrderAPI {
         return invoiceList;
     }
 
-//    @GetMapping("/cashier-page")
-//    public List<InvoiceResponseDTO> getPaidAndReceivedPurchaseOrder(){
-//        List<InvoiceResponseDTO> invoiceList = orderService.getPaidAndReceivedPurchaseOrder();
-//        return invoiceList;
-//    }
+    @GetMapping("/cashier-page")
+    public List<InvoiceResponseDTO> getPaidAndReceivedPurchaseOrder(){
+        List<InvoiceResponseDTO> invoiceList = orderService.getPaidAndReceivedPurchaseOrder();
+        return invoiceList;
+    }
 
     @PostMapping("/status/paid")
     public String changeStatusToPaid(@RequestBody StatusDTO statusDTO){

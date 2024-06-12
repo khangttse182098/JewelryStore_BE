@@ -18,12 +18,12 @@ public class OrderController {
     @Autowired
     private IOrderService orderService;
 
-    @MessageMapping("/order/cashier-page")
+    @MessageMapping("order/cashier-page")
     @SendTo("/topic/orders")
     public List<InvoiceResponseDTO> getPaidAndReceivedPurchaseOrder() throws Exception {
         logger.info("Received request for /order/cashier-page");
         List<InvoiceResponseDTO> invoiceList = orderService.getPaidAndReceivedPurchaseOrder();
-        Thread.sleep(1000); // Simulate delay
+        Thread.sleep(1000);
         logger.info("Returning invoice list");
         return invoiceList;
     }
