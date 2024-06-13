@@ -18,7 +18,7 @@ public class ProductResponseDTO {
     private Double gemCost;
     private Double productionCost;
     private Double priceRate;
-    private Date createdDate;
+    private String createdDate;
     private String materialName;
     private String gemName;
     private String categoryName;

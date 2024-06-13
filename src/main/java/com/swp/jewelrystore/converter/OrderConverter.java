@@ -26,13 +26,17 @@ public class OrderConverter {
     private DiamondCriteriaConverter diamondCriteriaConverter;
     @Autowired
     private MaterialConverter materialConverter;
+    @Autowired
+    private DateTimeConverter dateTimeConverter;
 
     public InvoiceResponseDTO toInvoiceResponseDTO(SellOrderEntity sellOrderEntity) {
         InvoiceResponseDTO invoiceResponseDTO = modelMapper.map(sellOrderEntity, InvoiceResponseDTO.class);
         invoiceResponseDTO.setInvoiceCode(sellOrderEntity.getSellOrderCode());
         invoiceResponseDTO.setInvoiceType(SystemConstant.SELL);
-        invoiceResponseDTO.setDiscountValue(sellOrderEntity.getDiscount().getValue());
-        invoiceResponseDTO.setDiscountCode(sellOrderEntity.getDiscount().getCode());
+        if(sellOrderEntity.getDiscount() != null){
+            invoiceResponseDTO.setDiscountValue(sellOrderEntity.getDiscount().getValue());
+            invoiceResponseDTO.setDiscountCode(sellOrderEntity.getDiscount().getCode());
+        }
         if(sellOrderEntity.getCustomer() != null) {
             invoiceResponseDTO.setCustomerName(sellOrderEntity.getCustomer().getFullName());
             invoiceResponseDTO.setCustomerId(sellOrderEntity.getCustomer().getId());
@@ -73,6 +77,7 @@ public class OrderConverter {
             if(purchaseOrderDetailEntity.getProduct() != null){
                 ProductResponseDTO productResponseDTO = productConverter.toProductResponseDTO(purchaseOrderDetailEntity.getProduct());
                 productResponseDTO.setPrice(purchaseOrderDetailEntity.getPrice());
+                productResponseDTO.setCreatedDate(dateTimeConverter.convertToDateTimeResponse(purchaseOrderDetailEntity.getProduct().getCreatedDate()));
                 productResponseDTOList.add(productResponseDTO);
             }else if(purchaseOrderDetailEntity.getOrigin() != null){
                 DiamondCriteriaResponseDTO diamondCriteriaResponseDTO = diamondCriteriaConverter.toDiamondCriteriaResponseDTO(purchaseOrderDetailEntity);
