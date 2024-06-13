@@ -31,6 +31,8 @@ public class OrderConverter {
         InvoiceResponseDTO invoiceResponseDTO = modelMapper.map(sellOrderEntity, InvoiceResponseDTO.class);
         invoiceResponseDTO.setInvoiceCode(sellOrderEntity.getSellOrderCode());
         invoiceResponseDTO.setInvoiceType(SystemConstant.SELL);
+        invoiceResponseDTO.setDiscountValue(sellOrderEntity.getDiscount().getValue());
+        invoiceResponseDTO.setDiscountCode(sellOrderEntity.getDiscount().getCode());
         if(sellOrderEntity.getCustomer() != null) {
             invoiceResponseDTO.setCustomerName(sellOrderEntity.getCustomer().getFullName());
             invoiceResponseDTO.setCustomerId(sellOrderEntity.getCustomer().getId());

@@ -19,7 +19,7 @@ public class DiscountEntity {
     private Long id;
 
     @Column(name = "value")
-    private String value;
+    private Long value;
 
     @Column(name = "code")
     private String code;

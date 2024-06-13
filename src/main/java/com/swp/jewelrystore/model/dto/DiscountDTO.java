@@ -10,7 +10,7 @@ public class DiscountDTO {
     @ApiModelProperty(example = "xem model",  value = "sửa id thành \"\" nếu muốn thêm discount, sửa id thành \"3\" nếu muốn update discount có id = 3")
     private Long id;
     @ApiModelProperty(example = "30")
-    private String value;
+    private Long value;
     @ApiModelProperty(example = "DISCOUNT30")
     private String code;
     @ApiModelProperty(example = "20:10:00 07/06/2024")
