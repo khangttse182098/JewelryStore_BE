@@ -16,4 +16,9 @@ public class SystemConstant {
     public static final String JEWELRY = "Trang sức";
     public static final String ON_STATUS = "Đang làm việc";
     public static final String OFF_STATUS = "Đang tạm nghỉ";
+    public static final String IN_PROGRESS = "Đang xử lí";
+    public static final String DONE_PROGRESS = "Đã xử lí";
+    public static final String PAY_IN_CASH = "Tiền mặt";
+    public static final String PAY_BY_TRANSFER = "Chuyển khoản";
+    public static final String PAY_BY_CREDIT_CARD = "Thẻ tín dụng";
 }
