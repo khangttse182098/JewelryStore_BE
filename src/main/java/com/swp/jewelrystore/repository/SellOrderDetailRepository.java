@@ -13,4 +13,5 @@ public interface SellOrderDetailRepository extends JpaRepository<SellOrderDetail
     void deleteByProductIn(List <ProductEntity> productEntities);
     List<SellOrderDetailEntity> findAllBySellOrderIn(List<SellOrderEntity> sellDetailEntityList);
     List<SellOrderDetailEntity> findBySellOrderId(Long id);
+    SellOrderDetailEntity findByProductId(Long productId);
 }

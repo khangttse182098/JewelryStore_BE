@@ -28,6 +28,12 @@ public class PurchaseOrderEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
+    @Column(name = "discount")
+    private Long discount;
+
     @Column(name= "purchase_order_code")
     private String purchaseOrderCode;
 

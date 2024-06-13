@@ -79,7 +79,9 @@ public class ProductService implements IProductService {
         List<SellOrderDetailEntity> sellOrderDetailEntities = sellOrderEntity.getSellOrderDetailEntities();
         List<ProductEntity> productEntities = new ArrayList<>();
         for (SellOrderDetailEntity sellOrderDetailEntity : sellOrderDetailEntities) {
-            productEntities.add(sellOrderDetailEntity.getProduct());
+            if(sellOrderDetailEntity.getProduct().getPurchaseOrderDetailEntities().isEmpty()){
+                productEntities.add(sellOrderDetailEntity.getProduct());
+            }
         }
         List<ProductResponseDTO> productResponseDTOList = new ArrayList<>();
         for (ProductEntity productEntity : productEntities) {

@@ -12,5 +12,6 @@ import java.util.Map;
 public interface ProductRepositoryCustom {
     double calculateSellPrice(ProductEntity productEntity);
     double calculateBuyPrice(ProductEntity productEntity);
+    double calculatePurchaseDiscountPrice(ProductEntity productEntity);
     List<ProductEntity> getAllProduct(ProductSearchRequestDTO productSearchRequestDTO);
 }

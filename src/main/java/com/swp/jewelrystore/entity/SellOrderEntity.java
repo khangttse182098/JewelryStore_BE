@@ -26,11 +26,18 @@ public class SellOrderEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "discount_id")
+    private DiscountEntity discount;
+
     @OneToMany(mappedBy = "sellOrder", fetch = FetchType.LAZY)
     private List<SellOrderDetailEntity> sellOrderDetailEntities = new ArrayList<>();
 
     @Column(name = "created_date")
     private Date createdDate;
+
+    @Column(name = "payment_method")
+    private String paymentMethod;
 
     @Column(name = "sell_order_code")
     private String sellOrderCode;

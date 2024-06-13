@@ -11,7 +11,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(name = "gemprice")
-public class GemPriceEntity {
+public class    GemPriceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "gem_price_id", nullable = false)
@@ -26,8 +26,11 @@ public class GemPriceEntity {
     @Column(name = "clarity", nullable = false)
     private String clarity;
 
-    @Column(name = "carat_weight", nullable = false)
-    private Double caratWeight;
+    @Column(name = "carat_weight_from", nullable = false)
+    private Double caratWeightFrom;
+
+    @Column(name = "carat_weight_to", nullable = false)
+    private Double caratWeightTo;
 
     @Column(name = "cut", nullable = false)
     private String cut;

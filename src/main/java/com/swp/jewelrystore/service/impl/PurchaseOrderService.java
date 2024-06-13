@@ -65,6 +65,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             PurchasePriceResponseDTO purchasePriceResponseDTO = new PurchasePriceResponseDTO();
             purchasePriceResponseDTO.setProductId(productId);
             purchasePriceResponseDTO.setPurchasePrice(productRepository.calculateBuyPrice(productEntity));
+            purchasePriceResponseDTO.setDiscountPrice(productRepository.calculatePurchaseDiscountPrice(productEntity));
             purchasePriceResponseDTOList.add(purchasePriceResponseDTO);
         }
         return purchasePriceResponseDTOList;
@@ -115,7 +116,6 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             newCustomer.setFullName(purchaseOrderDTO.getFullName());
             newCustomer.setPhoneNumber(purchaseOrderDTO.getPhoneNumber());
             newCustomer.setAddress(purchaseOrderDTO.getAddress());
-            newCustomer.setGender("Chưa có thông tin");
             customerRepository.save(newCustomer);
             PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
             purchaseOrderEntity.setCustomer(newCustomer);

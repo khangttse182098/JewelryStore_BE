@@ -1,9 +1,6 @@
 package com.swp.jewelrystore.service.impl;
 
-import com.swp.jewelrystore.entity.CustomerEntity;
-import com.swp.jewelrystore.entity.ProductEntity;
-import com.swp.jewelrystore.entity.SellOrderDetailEntity;
-import com.swp.jewelrystore.entity.SellOrderEntity;
+import com.swp.jewelrystore.entity.*;
 import com.swp.jewelrystore.model.dto.InvoiceDTO;
 import com.swp.jewelrystore.repository.*;
 import com.swp.jewelrystore.service.ISellOrderService;
@@ -22,6 +19,7 @@ public class SellOrderService implements ISellOrderService {
     private final UserRepository userRepository;
     private final SellOrderRepository sellOrderRepository;
     private final SellOrderDetailRepository sellOrderDetailRepository;
+    private final DiscountRepository discountRepository;
 
 
     @Override
@@ -34,6 +32,8 @@ public class SellOrderService implements ISellOrderService {
             SellOrderEntity sellOrder = new SellOrderEntity();
             sellOrder.setUser(userRepository.findById(invoiceDTO.getUserId()).get());
             sellOrder.setCustomer(checkCustomer);
+            DiscountEntity discountEntity = discountRepository.findById(invoiceDTO.getDiscountId()).get();
+            sellOrder.setDiscount(discountEntity);
             sellOrder.setSellOrderCode(sellOrderRepository.generateSellOrderCode());
             sellOrder.setStatus(invoiceDTO.getSellOrderStatus());
             sellOrderRepository.save(sellOrder);
@@ -51,11 +51,13 @@ public class SellOrderService implements ISellOrderService {
             CustomerEntity newCustomer = new CustomerEntity();
             newCustomer.setFullName(invoiceDTO.getFullName());
             newCustomer.setPhoneNumber(invoiceDTO.getPhoneNumber());
-            newCustomer.setGender("Chưa có thông tin");
+            newCustomer.setAddress(invoiceDTO.getAddress());
             customerRepository.save(newCustomer);
             SellOrderEntity sellOrder = new SellOrderEntity();
             sellOrder.setUser(userRepository.findById(invoiceDTO.getUserId()).get());
             sellOrder.setCustomer(newCustomer);
+            DiscountEntity discountEntity = discountRepository.findById(invoiceDTO.getDiscountId()).get();
+            sellOrder.setDiscount(discountEntity);
             sellOrder.setSellOrderCode(sellOrderRepository.generateSellOrderCode());
             sellOrder.setStatus(invoiceDTO.getSellOrderStatus());
             sellOrderRepository.save(sellOrder);

@@ -51,7 +51,7 @@ public class OrderAPI {
         List<InvoiceResponseDTO> invoiceList = orderService.getAllOrder(params);
         return invoiceList;
     }
-    @GetMapping("/seller-page")
+    @GetMapping ("/seller-page")
     public List<InvoiceResponseDTO> getPaidAndDeliveredSellOrder(){
         List<InvoiceResponseDTO> invoiceList = orderService.getPaidAndDeliveredSellOrder();
         return invoiceList;
@@ -59,7 +59,7 @@ public class OrderAPI {
 
     @GetMapping("/cashier-page")
     public List<InvoiceResponseDTO> getPaidAndReceivedPurchaseOrder(){
-        List<InvoiceResponseDTO> invoiceList = orderService.getPaidAndReceivedPurchaseOrder();
+            List<InvoiceResponseDTO> invoiceList = orderService.getPaidAndReceivedPurchaseOrder();
         return invoiceList;
     }
 

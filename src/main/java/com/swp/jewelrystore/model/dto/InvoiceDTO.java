@@ -19,6 +19,9 @@ public class InvoiceDTO {
     @ApiModelProperty(example = "0686888990")
     private String phoneNumber;
 
+    @ApiModelProperty(example = "tim em")
+    private String address;
+
     @ApiModelProperty(example = "1")
     private Long userId;
 
@@ -27,4 +30,8 @@ public class InvoiceDTO {
 
     @ApiModelProperty(example = "[92714, 89660]")
     private List<Double> price;
+
+    @ApiModelProperty(example = "1")
+    private Long discountId;
+
 }

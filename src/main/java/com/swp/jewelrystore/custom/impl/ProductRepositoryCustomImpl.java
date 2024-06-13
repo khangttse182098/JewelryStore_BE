@@ -1,14 +1,14 @@
 package com.swp.jewelrystore.custom.impl;
 
 import com.swp.jewelrystore.custom.ProductRepositoryCustom;
-import com.swp.jewelrystore.entity.MaterialPriceEntity;
-import com.swp.jewelrystore.entity.ProductEntity;
-import com.swp.jewelrystore.entity.ProductGemEntity;
-import com.swp.jewelrystore.entity.ProductMaterialEntity;
+import com.swp.jewelrystore.entity.*;
+import com.swp.jewelrystore.enums.PurchaseDiscountRate;
 import com.swp.jewelrystore.model.request.ProductSearchRequestDTO;
 import com.swp.jewelrystore.model.response.PurchasePriceResponseDTO;
 import com.swp.jewelrystore.repository.GemPriceRepository;
 import com.swp.jewelrystore.repository.MaterialPriceRepository;
+import com.swp.jewelrystore.repository.SellOrderDetailRepository;
+import com.swp.jewelrystore.repository.SellOrderRepository;
 import com.swp.jewelrystore.utils.NumberUtils;
 import com.swp.jewelrystore.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,9 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
     @Autowired
     private GemPriceRepository gemPriceRepository;
+
+    @Autowired
+    private SellOrderDetailRepository sellOrderDetailRepository;
 
     @Override
     public double calculateSellPrice(ProductEntity productEntity) {
@@ -77,8 +80,34 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                 buyPrice += gemPriceRepository.findLatestGemPrice(productGemEntity.getGem()).getBuyPrice();
             }
         }
-        return Math.ceil((buyPrice * 1.2) / 10.0) * 10;  // uu dai 20%);
+        SellOrderDetailEntity sellOrderDetailEntity = sellOrderDetailRepository.findByProductId(productEntity.getId());
+        double discountPrice =  (sellOrderDetailEntity.getPrice() - buyPrice) * PurchaseDiscountRate.PURCHASE_DISCOUNT_RATE.getValue();
+
+        return Math.ceil((buyPrice + discountPrice) / 10.0) * 10;
     }
+
+    @Override
+    public double calculatePurchaseDiscountPrice(ProductEntity productEntity) {
+        double buyPrice = 0;
+        // tinh tien material neu co
+        if(!productEntity.getProductMaterialEntities().isEmpty()){
+            List<ProductMaterialEntity> productMaterialEntities = productEntity.getProductMaterialEntities();
+            for(ProductMaterialEntity productMaterialEntity : productMaterialEntities){
+                buyPrice += (productMaterialEntity.getWeight() * 0.267 * materialPriceRepository.findLatestGoldPrice(productMaterialEntity.getMaterial()).getBuyPrice());
+            }
+        }
+        // tinh tien kim cuong neu co
+        if(!productEntity.getProductGemEntities().isEmpty()){
+            List<ProductGemEntity> productGemEntities = productEntity.getProductGemEntities();
+            for(ProductGemEntity productGemEntity : productGemEntities) {
+                buyPrice += gemPriceRepository.findLatestGemPrice(productGemEntity.getGem()).getBuyPrice();
+            }
+        }
+        SellOrderDetailEntity sellOrderDetailEntity = sellOrderDetailRepository.findByProductId(productEntity.getId());
+        double discountPrice =  (sellOrderDetailEntity.getPrice() - buyPrice) * PurchaseDiscountRate.PURCHASE_DISCOUNT_RATE.getValue();
+        return discountPrice;
+    }
+
     // getProduct
     public void queryWhereNormal(StringBuilder where, ProductSearchRequestDTO productSearchRequestDTO) {
         try {
