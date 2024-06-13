@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RequestMapping("/api/diamond-criteria")
 @RequiredArgsConstructor
-public class git DiamondCriteriaAPI {
+public class DiamondCriteriaAPI {
 
     private final IDiamondCriteriaService iDiamondCriteriaService;
     @GetMapping
