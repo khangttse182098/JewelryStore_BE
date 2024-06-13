@@ -1,5 +1,7 @@
 package com.swp.jewelrystore.service.impl;
 
+
+import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.converter.CustomerConverter;
 import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.entity.CustomerEntity;
@@ -17,9 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ import java.util.Map;
 @Transactional
 @RequiredArgsConstructor
 public class CustomerService implements ICustomerService {
+
 
     private final CustomerRepository customerRepository;
     private final ModelMapper modelMapper;
@@ -58,7 +61,7 @@ public class CustomerService implements ICustomerService {
         CustomerDetailDTO customer = modelMapper.map(customerRepository.findById(id).get(), CustomerDetailDTO.class);
         // invoice of customer
         List<SellOrderEntity> listPaidSellOrder = sellOrderRepository.
-                findByCustomer_IdAndStatusNot(id, "Chưa thanh toán");
+                findByCustomer_IdAndStatusNot(id, SystemConstant.UNPAID);
         List<CustomerInvoiceDTO> customerInvoice = new ArrayList<>();
         customer.setQuantityOrder(listPaidSellOrder.size());
         double expense = 0;

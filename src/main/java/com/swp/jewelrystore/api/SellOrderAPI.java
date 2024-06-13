@@ -4,6 +4,7 @@ import com.swp.jewelrystore.model.dto.InvoiceDTO;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
 import com.swp.jewelrystore.service.IProductService;
 import com.swp.jewelrystore.service.ISellOrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +14,11 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/sell-order")
 @CrossOrigin
-
+@RequiredArgsConstructor
 public class SellOrderAPI {
-    @Autowired
-    private IProductService productService;
 
-    @Autowired
-    private ISellOrderService sellOrderService;
+    private final IProductService productService;
+    private final ISellOrderService sellOrderService;
 
 
     @GetMapping

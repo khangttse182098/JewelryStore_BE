@@ -9,4 +9,5 @@ import java.util.List;
 public interface PurchaseOrderRepository extends JpaRepository <PurchaseOrderEntity, Long>, PurchaseOrderRepositoryCustom {
     PurchaseOrderEntity findByPurchaseOrderCode(String code);
     List<PurchaseOrderEntity> findPurchaseOrderEntitiesByStatusIsIn(List<String> statusList);
+    List<PurchaseOrderEntity> findByUserIdAndStatusNot(Long customerId,String status);
 }

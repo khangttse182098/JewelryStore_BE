@@ -10,6 +10,6 @@ public class UserResponseDTO {
     private String fullName;
     private String role;
     private String phone;
-    private Long status;
+    private String status;
     private Double personalIncome;
 }

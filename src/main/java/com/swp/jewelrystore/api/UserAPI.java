@@ -47,4 +47,10 @@ public class UserAPI {
         return "Add or update new member successfully";
     }
 
+    @DeleteMapping("/delete-{id}")
+    public String deleteUser(@PathVariable List<Long> id) {
+        userService.softDeleteUser(id);
+        return "Delete member(s) successfully";
+    }
+
 }
