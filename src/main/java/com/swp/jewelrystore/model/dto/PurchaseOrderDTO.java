@@ -23,6 +23,4 @@ public class PurchaseOrderDTO {
 
     private CriteriaResponseDTO criteria;
 
-    @ApiModelProperty(example = "Chưa thanh toán")
-    private String purchaseOrderStatus;
 }
