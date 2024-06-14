@@ -9,6 +9,8 @@ import com.swp.jewelrystore.service.IPurchaseOrderService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -66,10 +68,12 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return purchasePriceResponseDTOList;
     }
     @Override
-    public CriteriaResponseDTO showMaterialInvoice(CriteriaDTO criteriaDTO) {
+    public ResponseEntity<CriteriaResponseDTO> showMaterialInvoice(CriteriaDTO criteriaDTO) {
         CriteriaResponseDTO listMaterial = new CriteriaResponseDTO();
         List<GoldCriteriaResponseDTO> listGold = new ArrayList<>();
         List<DiamondCriteriaResponseDTO> listDiamond = new ArrayList<>();
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("material-gem-price", "material-gem-price-value");
         // gold criteria (done)
         for (GoldCriteriaDTO goldCriteria : criteriaDTO.getListGoldCriteria()){
             GoldCriteriaResponseDTO gold = new GoldCriteriaResponseDTO();
@@ -83,22 +87,27 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             // add to list gold
             listGold.add(gold);
         }
-        // diamond criteria (done)
+        listMaterial.setGoldCriteriaResponseDTO(listGold);
+
+        // diamond criteria
+        // nếu tìm 4C + 1O ko có -> nhả lỗi -> how to
+
         for (DiamondCriteriaDTO diamondCriteria : criteriaDTO.getListDiamondCriteria()){
-            GemEntity gem = gemRepository.findByOriginAndColorAndClarityAndCaratWeightAndCut(
-    diamondCriteria.getOrigin(), diamondCriteria.getColor(), diamondCriteria.getClarity(), diamondCriteria.getCaratWeight(),
-                     diamondCriteria.getCut());
-            DiamondCriteriaResponseDTO diamond = modelMapper.map(gem, DiamondCriteriaResponseDTO.class);
+            GemPriceEntity gemExisted = gemPriceRepository.checkGemCaratInRange(diamondCriteria);
+            if (gemExisted == null){
+                System.out.println("The gem criteria does not have price");
+                responseHeaders.set("Gem Information", "Gem does not have price");
+                return new ResponseEntity<>(listMaterial, responseHeaders, 404);
+            }
+            DiamondCriteriaResponseDTO diamond = modelMapper.map(diamondCriteria, DiamondCriteriaResponseDTO.class);
             // set price
-            GemPriceEntity gemPriceEntity = gemPriceRepository.findLatestGemPrice(gem);
-            double price = gemPriceEntity.getBuyPrice();
+            double price = gemExisted.getBuyPrice();
             diamond.setPrice(price);
             // add to listDiamond
             listDiamond.add(diamond);
         }
-        listMaterial.setGoldCriteriaResponseDTO(listGold);
         listMaterial.setDiamondCriteriaResponseDTO(listDiamond);
-        return listMaterial;
+        return new ResponseEntity<>(listMaterial, responseHeaders, 200);
     }
 
 
@@ -116,7 +125,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             purchaseOrderEntity.setCustomer(newCustomer);
             purchaseOrderEntity.setUser(user);
             purchaseOrderEntity.setPurchaseOrderCode(purchaseOrderRepository.generatePurchaseOrderCode());
-            purchaseOrderEntity.setStatus(purchaseOrderDTO.getPurchaseOrderStatus());
+            purchaseOrderEntity.setStatus(SystemConstant.UNPAID);
             purchaseOrderRepository.save(purchaseOrderEntity);
             splitGoldOrGem(purchaseOrderDTO.getCriteria(), purchaseOrderEntity);
         } else {
@@ -124,7 +133,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             purchaseOrderEntity.setCustomer(customer);
             purchaseOrderEntity.setUser(user);
             purchaseOrderEntity.setPurchaseOrderCode(purchaseOrderRepository.generatePurchaseOrderCode());
-            purchaseOrderEntity.setStatus(purchaseOrderDTO.getPurchaseOrderStatus());
+            purchaseOrderEntity.setStatus(SystemConstant.UNPAID);
             purchaseOrderRepository.save(purchaseOrderEntity);
             splitGoldOrGem(purchaseOrderDTO.getCriteria(), purchaseOrderEntity);
         }
@@ -143,16 +152,13 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         }
         // save information when purchase diamond
         for (DiamondCriteriaResponseDTO item: criteriaResponseDTO.getDiamondCriteriaResponseDTO()){
-                GemEntity gemEntity = gemRepository.findByOriginAndColorAndClarityAndCaratWeightAndCut(
-                        item.getOrigin(), item.getColor(), item.getClarity(), item.getCaratWeight(), item.getCut()
-                );
                 PurchaseOrderDetailEntity purchaseOrderDetailEntity = new PurchaseOrderDetailEntity();
-                purchaseOrderDetailEntity.setOrigin(gemEntity.getOrigin());
-                purchaseOrderDetailEntity.setColor(gemEntity.getColor());
-                purchaseOrderDetailEntity.setCut(gemEntity.getCut());
-                purchaseOrderDetailEntity.setCaratWeight(gemEntity.getCaratWeight());
-                purchaseOrderDetailEntity.setClarity(gemEntity.getClarity());
+                purchaseOrderDetailEntity.setClarity(item.getClarity());
+                purchaseOrderDetailEntity.setCut(item.getCut());
+                purchaseOrderDetailEntity.setOrigin(item.getOrigin());
+                purchaseOrderDetailEntity.setColor(item.getColor());
                 purchaseOrderDetailEntity.setPrice(item.getPrice());
+                purchaseOrderDetailEntity.setCaratWeight(item.getCaratWeight());
                 purchaseOrderDetailEntity.setPurchaseOrder(purchaseOrderEntity);
                 purchaseOrderDetailRepository.save(purchaseOrderDetailEntity);
         }

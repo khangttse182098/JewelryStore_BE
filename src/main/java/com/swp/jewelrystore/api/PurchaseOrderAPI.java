@@ -9,6 +9,7 @@ import com.swp.jewelrystore.repository.ProductRepository;
 import com.swp.jewelrystore.service.IPurchaseOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -34,8 +35,8 @@ public class PurchaseOrderAPI {
         return "Add product successfully!";
     }
     @PostMapping("/material-gem-price")
-    public CriteriaResponseDTO showMaterialGemPrice(@RequestBody CriteriaDTO criteriaDTO){
-        return purchaseOrderService.showMaterialInvoice(criteriaDTO);
+    public ResponseEntity<CriteriaResponseDTO> showMaterialGemPrice(@RequestBody CriteriaDTO criteriaDTO){
+         return purchaseOrderService.showMaterialInvoice(criteriaDTO);
     }
     @PostMapping("/no-invoice")
     public String addPurchaseInvoiceNoInvoice(@RequestBody PurchaseOrderDTO purchaseOrderDTO){
