@@ -27,7 +27,7 @@ public class DiscountAPI {
             @ApiImplicitParam(name = "startDate", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "endDate", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "code", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "currentDate", dataType = "string", paramType = "query")
+            @ApiImplicitParam(name = "isAvailable", dataType = "string", paramType = "query")
     })
     @GetMapping
     public List<DiscountResponseDTO> getDiscountInformation(@RequestParam Map<String, String> filter){
