@@ -26,18 +26,20 @@ public class DiscountAPI {
             @ApiImplicitParam(name = "time", dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "startDate", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "endDate", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "code", dataType = "string", paramType = "query")
+            @ApiImplicitParam(name = "code", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "currentDate", dataType = "string", paramType = "query")
     })
     @GetMapping
     public List<DiscountResponseDTO> getDiscountInformation(@RequestParam Map<String, String> filter){
         return discountService.getDiscountInformation(filter);
     }
-
     @PostMapping()
     public String addOrUpdateDiscountInformation(@RequestBody DiscountDTO discountDTO){
         discountService.addOrUpdateDiscountInformation(discountDTO);
         return "Add or update discount information successfully";
     }
+
+
 
 
 

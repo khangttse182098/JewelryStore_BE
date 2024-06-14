@@ -33,7 +33,10 @@ public class DiscountRepositoryImpl implements DiscountRepositoryCustom {
         String currentDate = currentDateTime.format(formatter);
         LocalDateTime current = LocalDateTime.parse(currentDate, formatter);
         for(Map.Entry<String, String> param : filter.entrySet()){
-             if (param.getKey().contains("time")){
+             if (param.getKey().equals("isAvailable")){
+                where.append(" AND now() BETWEEN start_date AND end_date");
+             }
+             else if (param.getKey().contains("time")){
                  if (param.getValue().contains("Hôm nay")){
                      StringTokenizer st = new StringTokenizer(currentDate, " ");
                      where.append(" AND SUBSTRING_INDEX(start_date, ' ', 1) IN ('" + st.nextToken() + "') ");

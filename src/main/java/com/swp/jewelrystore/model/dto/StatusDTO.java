@@ -9,4 +9,9 @@ import lombok.Setter;
 public class StatusDTO {
     @ApiModelProperty(example = "PURC1")
     private String invoiceCode;
+
+    @ApiModelProperty(example = "Tiền mặt")
+    private String paymentMethod;
+
+
 }

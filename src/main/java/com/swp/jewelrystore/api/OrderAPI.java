@@ -63,8 +63,10 @@ public class OrderAPI {
         SellOrderEntity sellOrderEntity = sellOrderRepository.findBySellOrderCodeIs(statusDTO.getInvoiceCode());
         if(sellOrderEntity != null){
             sellOrderEntity.setStatus("Đã thanh toán");
+            sellOrderEntity.setPaymentMethod(statusDTO.getPaymentMethod());
             sellOrderRepository.save(sellOrderEntity);
         }
+
         return "Change to Paid successfully";
     }
     @PostMapping("/status/delivered")

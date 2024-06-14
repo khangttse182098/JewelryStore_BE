@@ -1,9 +1,12 @@
 package com.swp.jewelrystore.converter;
 
+import com.swp.jewelrystore.entity.DiscountEntity;
 import com.swp.jewelrystore.entity.ProductEntity;
 import com.swp.jewelrystore.entity.ProductMaterialEntity;
 import com.swp.jewelrystore.entity.ProductGemEntity;
+import com.swp.jewelrystore.enums.PurchaseDiscountRate;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
+import com.swp.jewelrystore.repository.DiscountRepository;
 import com.swp.jewelrystore.repository.ProductGemRepository;
 import com.swp.jewelrystore.repository.ProductMaterialRepository;
 import com.swp.jewelrystore.repository.ProductRepository;
@@ -16,7 +19,9 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class ProductConverter {
@@ -35,6 +40,8 @@ public class ProductConverter {
 
     @Autowired
     private IStorageService storageService;
+    @Autowired
+    private DiscountRepository discountRepository;
 
     public ProductResponseDTO toProductResponseDTO(ProductEntity productEntity) {
         ProductResponseDTO productResponseDTO = modelMapper.map(productEntity, ProductResponseDTO.class);
@@ -57,7 +64,13 @@ public class ProductConverter {
         // category name
         productResponseDTO.setCategoryName(productEntity.getProductCategory().getCategoryName());
         //price
-        productResponseDTO.setPrice(productRepository.calculateSellPrice(productEntity));
+        double price = productRepository.calculateSellPrice(productEntity);
+        productResponseDTO.setPrice(price);
+        // discountPrice
+        Map<String, String> filter = new HashMap<>();
+        filter.put("isAvailable", "true");
+        DiscountEntity discountEntity = discountRepository.searchWithRequired(filter).get(0);
+        productResponseDTO.setDiscountPrice(price * discountEntity.getValue() / 100);
         // counterNo
         productResponseDTO.setCounterNo(productEntity.getCounter().getCounterNo());
         // image
