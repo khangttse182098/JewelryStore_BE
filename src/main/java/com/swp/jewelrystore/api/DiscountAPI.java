@@ -1,6 +1,7 @@
 package com.swp.jewelrystore.api;
 
 
+import com.swp.jewelrystore.enums.PurchaseDiscountRate;
 import com.swp.jewelrystore.model.dto.DiscountDTO;
 import com.swp.jewelrystore.model.response.DiscountResponseDTO;
 import com.swp.jewelrystore.service.IDiscountService;
@@ -37,6 +38,13 @@ public class DiscountAPI {
     public String addOrUpdateDiscountInformation(@RequestBody DiscountDTO discountDTO){
         discountService.addOrUpdateDiscountInformation(discountDTO);
         return "Add or update discount information successfully";
+    }
+    @GetMapping("/purchase-discount")
+    public DiscountResponseDTO purchaseDiscount(){
+        DiscountResponseDTO discountResponseDTO = new DiscountResponseDTO();
+        double value = PurchaseDiscountRate.PURCHASE_DISCOUNT_RATE.getValue();
+        discountResponseDTO.setValue(String.valueOf(value));
+        return discountResponseDTO;
     }
 
 
