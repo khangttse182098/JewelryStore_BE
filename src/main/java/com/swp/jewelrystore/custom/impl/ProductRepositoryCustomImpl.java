@@ -80,31 +80,13 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                 buyPrice += gemPriceRepository.findLatestGemPrice(productGemEntity.getGem()).getBuyPrice();
             }
         }
-        SellOrderDetailEntity sellOrderDetailEntity = sellOrderDetailRepository.findByProductId(productEntity.getId());
-        double discountPrice =  (sellOrderDetailEntity.getPrice() - buyPrice) * PurchaseDiscountRate.PURCHASE_DISCOUNT_RATE.getValue();
-
-        return Math.ceil((buyPrice + discountPrice) / 10.0) * 10;
+        return Math.ceil(buyPrice / 10.0) * 10;
     }
 
     @Override
     public double calculatePurchaseDiscountPrice(ProductEntity productEntity) {
-        double buyPrice = 0;
-        // tinh tien material neu co
-        if(!productEntity.getProductMaterialEntities().isEmpty()){
-            List<ProductMaterialEntity> productMaterialEntities = productEntity.getProductMaterialEntities();
-            for(ProductMaterialEntity productMaterialEntity : productMaterialEntities){
-                buyPrice += (productMaterialEntity.getWeight() * 0.267 * materialPriceRepository.findLatestGoldPrice(productMaterialEntity.getMaterial()).getBuyPrice());
-            }
-        }
-        // tinh tien kim cuong neu co
-        if(!productEntity.getProductGemEntities().isEmpty()){
-            List<ProductGemEntity> productGemEntities = productEntity.getProductGemEntities();
-            for(ProductGemEntity productGemEntity : productGemEntities) {
-                buyPrice += gemPriceRepository.findLatestGemPrice(productGemEntity.getGem()).getBuyPrice();
-            }
-        }
         SellOrderDetailEntity sellOrderDetailEntity = sellOrderDetailRepository.findByProductId(productEntity.getId());
-        double discountPrice =  (sellOrderDetailEntity.getPrice() - buyPrice) * PurchaseDiscountRate.PURCHASE_DISCOUNT_RATE.getValue();
+        double discountPrice =  (sellOrderDetailEntity.getPrice() - calculateBuyPrice(productEntity)) * PurchaseDiscountRate.PURCHASE_DISCOUNT_RATE.getValue();
         return discountPrice;
     }
 
