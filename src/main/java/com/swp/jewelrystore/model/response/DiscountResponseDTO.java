@@ -8,6 +8,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class DiscountResponseDTO {
+
     private Long id;
     private String status;
     private String value;

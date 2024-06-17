@@ -9,6 +9,7 @@ import com.swp.jewelrystore.model.response.DiamondCriteriaResponseDTO;
 import com.swp.jewelrystore.model.response.InvoiceResponseDTO;
 import com.swp.jewelrystore.model.response.MaterialResponseDTO;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,17 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class OrderConverter {
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private ProductConverter productConverter;
-    @Autowired
-    private DiamondCriteriaConverter diamondCriteriaConverter;
-    @Autowired
-    private MaterialConverter materialConverter;
-    @Autowired
-    private DateTimeConverter dateTimeConverter;
+
+    private final ModelMapper modelMapper;
+    private final ProductConverter productConverter;
+    private final DiamondCriteriaConverter diamondCriteriaConverter;
+    private final MaterialConverter materialConverter;
+    private final DateTimeConverter dateTimeConverter;
 
     public InvoiceResponseDTO toInvoiceResponseDTO(SellOrderEntity sellOrderEntity) {
         InvoiceResponseDTO invoiceResponseDTO = modelMapper.map(sellOrderEntity, InvoiceResponseDTO.class);

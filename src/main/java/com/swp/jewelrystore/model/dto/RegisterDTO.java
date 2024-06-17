@@ -12,6 +12,8 @@ import javax.validation.constraints.NotNull;
 @Valid
 public class RegisterDTO {
 
+    private Long id;
+
     @NotNull(message="Role id is required")
     private Long role;
 

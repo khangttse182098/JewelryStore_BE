@@ -11,6 +11,7 @@ public class GoldCriteriaDTO {
     @ApiModelProperty(example = "1")
     private Long id;
 
+
     @ApiModelProperty(example = "Vàng miếng SJC 999.9")
     private String name;
 

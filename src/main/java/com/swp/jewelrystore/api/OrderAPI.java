@@ -1,5 +1,6 @@
 package com.swp.jewelrystore.api;
 
+import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.entity.PurchaseOrderEntity;
 import com.swp.jewelrystore.entity.SellOrderEntity;
 import com.swp.jewelrystore.model.dto.StatusDTO;
@@ -72,7 +73,7 @@ public class OrderAPI {
     public String changeStatusToDelivered(@RequestBody StatusDTO statusDTO){
         SellOrderEntity sellOrderEntity = sellOrderRepository.findBySellOrderCodeIs(statusDTO.getInvoiceCode());
         if(sellOrderEntity != null){
-            sellOrderEntity.setStatus("Đã giao hàng");
+            sellOrderEntity.setStatus(SystemConstant.DELIVERED);
             sellOrderRepository.save(sellOrderEntity);
             return "Change to Delivered successfully";
         }
