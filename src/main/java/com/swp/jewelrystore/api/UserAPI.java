@@ -1,18 +1,24 @@
 package com.swp.jewelrystore.api;
 
+import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.model.dto.RegisterDTO;
 import com.swp.jewelrystore.model.dto.UserDTO;
 import com.swp.jewelrystore.model.response.LoginResponseDTO;
+import com.swp.jewelrystore.model.response.ResponseDTO;
 import com.swp.jewelrystore.model.response.UserResponseDTO;
 import com.swp.jewelrystore.service.IUserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping( "/api/user")
@@ -42,15 +48,23 @@ public class UserAPI {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterDTO registerDTO) {
-        userService.registerMember(registerDTO);
-        return "Add or update new member successfully";
+    public ResponseEntity<ResponseDTO> register(@RequestBody @Valid RegisterDTO registerDTO) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            userService.registerMember(registerDTO);
+            responseDTO.setMessage(SystemConstant.REGISTER_SUCCESSFULLY);
+            responseDTO.setData(registerDTO);
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e){
+            responseDTO.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
     }
 
     @DeleteMapping("/delete-{id}")
     public String deleteUser(@PathVariable List<Long> id) {
         userService.softDeleteUser(id);
-        return "Delete member(s) successfully";
+        return SystemConstant.DELETE_USER;
     }
 
 }

@@ -13,6 +13,7 @@ import com.swp.jewelrystore.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +64,9 @@ public class UserService implements IUserService {
     @Override
     public void registerMember(RegisterDTO registerDTO) {
         BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
+        if (userRepository.findByPhone(registerDTO.getPhone()) != null){
+            throw new DataIntegrityViolationException("Phone number is already existed");
+        }
         UserEntity userEntity = modelMapper.map(registerDTO, UserEntity.class);
         userEntity.setRole(roleRepository.findById(registerDTO.getRole()).get());
         userEntity.setPassword(bCrypt.encode(registerDTO.getPassword()));
@@ -77,6 +81,5 @@ public class UserService implements IUserService {
              item.setStatus(0L);
          }
     }
-
 
 }

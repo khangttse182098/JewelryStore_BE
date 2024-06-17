@@ -1,19 +1,23 @@
 package com.swp.jewelrystore.api;
 
+import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.model.dto.CriteriaDTO;
 import com.swp.jewelrystore.model.dto.PurchaseInvoiceDTO;
 import com.swp.jewelrystore.model.dto.PurchaseOrderDTO;
 import com.swp.jewelrystore.model.response.CriteriaResponseDTO;
 import com.swp.jewelrystore.model.response.PurchasePriceResponseDTO;
-import com.swp.jewelrystore.repository.ProductRepository;
+import com.swp.jewelrystore.model.response.ResponseDTO;
 import com.swp.jewelrystore.service.IPurchaseOrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @RestController
@@ -39,10 +43,17 @@ public class PurchaseOrderAPI {
          return purchaseOrderService.showMaterialInvoice(criteriaDTO);
     }
     @PostMapping("/no-invoice")
-    public String addPurchaseInvoiceNoInvoice(@RequestBody PurchaseOrderDTO purchaseOrderDTO){
-        purchaseOrderService.addPurchaseInvoiceInformation(purchaseOrderDTO);
-        return "Add successfully";
+    public ResponseEntity<ResponseDTO> addPurchaseInvoiceNoInvoice(@RequestBody @Valid PurchaseOrderDTO purchaseOrderDTO){
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            purchaseOrderService.addPurchaseInvoiceInformation(purchaseOrderDTO);
+            responseDTO.setMessage(SystemConstant.ADD_SELL_ORDER_NO_INVOICE);
+            responseDTO.setData(purchaseOrderDTO);
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e){
+            responseDTO.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+
     }
-
-
 }
