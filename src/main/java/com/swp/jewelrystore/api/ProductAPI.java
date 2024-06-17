@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.Map;
 import java.util.List;
 
@@ -33,8 +35,13 @@ public class ProductAPI {
     }
 
     @PostMapping
-    public String addOrUpdateProduct(@RequestBody ProductDTO productDTO){
-        productService.addOrUpdateProduct(productDTO);
+    public String addOrUpdateProduct(@Valid @RequestBody ProductDTO productDTO){
+        try{
+            productService.addOrUpdateProduct(productDTO);
+        }catch (Exception e){
+
+        }
+
         if(productDTO.getId() == null) return "Add product successfully";
         return "Update product successfully";
     }

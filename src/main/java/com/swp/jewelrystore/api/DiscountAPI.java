@@ -44,8 +44,7 @@ public class DiscountAPI {
     }
 
     @PostMapping("/information")
-    public ResponseEntity<ResponseDTO> addOrUpdateDiscountInformation(@RequestBody @Valid DiscountDTO discountDTO
-                                                ){
+    public ResponseEntity<ResponseDTO> addOrUpdateDiscountInformation(@RequestBody @Valid DiscountDTO discountDTO){
         ResponseDTO responseDTO = new ResponseDTO();
         try {
             discountService.addOrUpdateDiscountInformation(discountDTO);

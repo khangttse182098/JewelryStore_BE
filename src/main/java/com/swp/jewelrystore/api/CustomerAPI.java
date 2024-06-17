@@ -17,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +52,7 @@ public class CustomerAPI {
         return customerResponseDTO;
     }
     @PostMapping
-    public String addOrUpdateCustomer(@RequestBody CustomerDTO customerDTO){
+    public String addOrUpdateCustomer(@Valid @RequestBody CustomerDTO customerDTO){
         CustomerEntity customerEntity = modelMapper.map(customerDTO, CustomerEntity.class);
         customerRepository.save(customerEntity);
         if(customerDTO.getId() == null) return "Add customer successfully";

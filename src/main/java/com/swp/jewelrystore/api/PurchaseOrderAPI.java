@@ -34,7 +34,7 @@ public class PurchaseOrderAPI {
         return result;
     }
     @PostMapping("/have-invoice")
-    public String addPurchaseOrderHavingInvoice(@RequestBody PurchaseInvoiceDTO purchaseInvoiceDTO ){
+    public String addPurchaseOrderHavingInvoice(@Valid @RequestBody PurchaseInvoiceDTO purchaseInvoiceDTO ){
         purchaseOrderService.addProductPurchaseOrder(purchaseInvoiceDTO);
         return "Add product successfully!";
     }

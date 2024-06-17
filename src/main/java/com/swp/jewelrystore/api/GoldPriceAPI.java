@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +53,9 @@ public class GoldPriceAPI {
     }
 
     @PostMapping
-    public String addOrUpdateGoldPrice(@RequestBody MaterialPriceDTO materialPriceDTO){
+    public String addOrUpdateGoldPrice(@Valid @RequestBody MaterialPriceDTO materialPriceDTO){
         materialPriceService.addOrUpdateMaterialPrice(materialPriceDTO);
+        if(materialPriceDTO.getMaterialId() != null) return "Update material price successfully";
         return  "Add marterial price successfully";
     }
 }
