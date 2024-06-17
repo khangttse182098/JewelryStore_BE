@@ -66,7 +66,6 @@ public class OrderAPI {
             sellOrderEntity.setPaymentMethod(statusDTO.getPaymentMethod());
             sellOrderRepository.save(sellOrderEntity);
         }
-
         return "Change to Paid successfully";
     }
     @PostMapping("/status/delivered")
