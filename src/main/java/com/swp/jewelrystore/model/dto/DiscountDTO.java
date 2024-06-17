@@ -1,20 +1,35 @@
 package com.swp.jewelrystore.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
+@Valid
 public class DiscountDTO {
-    @ApiModelProperty(example = "xem model",  value = "sửa id thành \"\" nếu muốn thêm discount, sửa id thành \"3\" nếu muốn update discount có id = 3")
+
+    @JsonProperty("id")
     private Long id;
-    @ApiModelProperty(example = "30")
+
+    @NotNull(message="Value of discount is required")
+    @JsonProperty("value")
     private Long value;
-    @ApiModelProperty(example = "DISCOUNT30")
+
+    @NotEmpty(message="Code is required")
+    @JsonProperty("code")
     private String code;
-    @ApiModelProperty(example = "20:10:00 07/06/2024")
+
+    @NotEmpty(message="Start date of discount is required")
+    @JsonProperty("startDate")
     private String startDateDTO;
-    @ApiModelProperty(example = "20:10:00 07/12/2024")
+
+    @NotEmpty(message="End date of discount is required")
+    @JsonProperty("endDate")
     private String endDateDTO;
 }

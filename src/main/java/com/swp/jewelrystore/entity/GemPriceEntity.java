@@ -11,7 +11,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(name = "gemprice")
-public class    GemPriceEntity {
+public class GemPriceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "gem_price_id", nullable = false)

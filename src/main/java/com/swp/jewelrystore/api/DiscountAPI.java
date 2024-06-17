@@ -13,11 +13,15 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/discount")
@@ -38,9 +42,10 @@ public class DiscountAPI {
     public List<DiscountResponseDTO> getDiscountInformation(@RequestParam Map<String, String> filter){
         return discountService.getDiscountInformation(filter);
     }
+
     @PostMapping("/information")
     public ResponseEntity<ResponseDTO> addOrUpdateDiscountInformation(@RequestBody @Valid DiscountDTO discountDTO
-    ){
+                                                ){
         ResponseDTO responseDTO = new ResponseDTO();
         try {
             discountService.addOrUpdateDiscountInformation(discountDTO);

@@ -1,5 +1,6 @@
 package com.swp.jewelrystore.service.impl;
 
+import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.entity.*;
 import com.swp.jewelrystore.model.dto.InvoiceDTO;
 import com.swp.jewelrystore.repository.*;
@@ -34,7 +35,7 @@ public class SellOrderService implements ISellOrderService {
             DiscountEntity discountEntity = discountRepository.findById(invoiceDTO.getDiscountId()).get();
             sellOrder.setDiscount(discountEntity);
             sellOrder.setSellOrderCode(sellOrderRepository.generateSellOrderCode());
-            sellOrder.setStatus(invoiceDTO.getSellOrderStatus());
+            sellOrder.setStatus(SystemConstant.UNPAID);
             sellOrderRepository.save(sellOrder);
             int i = 0;
             for (ProductEntity item : listProduct) {
@@ -58,7 +59,7 @@ public class SellOrderService implements ISellOrderService {
             DiscountEntity discountEntity = discountRepository.findById(invoiceDTO.getDiscountId()).get();
             sellOrder.setDiscount(discountEntity);
             sellOrder.setSellOrderCode(sellOrderRepository.generateSellOrderCode());
-            sellOrder.setStatus(invoiceDTO.getSellOrderStatus());
+            sellOrder.setStatus(SystemConstant.UNPAID);
             sellOrderRepository.save(sellOrder);
             int i = 0;
             for (ProductEntity item : listProduct) {

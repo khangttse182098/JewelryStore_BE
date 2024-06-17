@@ -20,20 +20,18 @@ public class DateTimeConverter {
                 splitTimeResponse[0] + ":" + splitTimeResponse[1] + ":" + splitTimeResponse[2];
     }
 
+
     public Date convertToDateTimeDTO(String date) {
-        StringTokenizer token = new StringTokenizer(date, " ");
-        String timeResponse = token.nextToken();
-        String dateResponse = token.nextToken();
-        String[] splitDateResponse = dateResponse.split("/");
-        String[] splitTimeResponse = timeResponse.split(":");
-        String inputDate = splitDateResponse[2] + "/" + splitDateResponse[1] + "/" + splitDateResponse[0] + " " +
-                splitTimeResponse[0] + ":" + splitTimeResponse[1] + ":" + splitTimeResponse[2];
-        System.out.println(inputDate);
-        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
             // Parse the input string to a Date object using the input format
-            Date dateDTO = outputFormat.parse(inputDate);
+            Date parsedDate = inputFormat.parse(date);
+            // Format the parsed Date object to the desired output format
+            String formattedDate = outputFormat.format(parsedDate);
+            // Parse the formatted date string back to a Date object
+            Date dateDTO = outputFormat.parse(formattedDate);
             return dateDTO;
         } catch (ParseException e) {
             e.printStackTrace();

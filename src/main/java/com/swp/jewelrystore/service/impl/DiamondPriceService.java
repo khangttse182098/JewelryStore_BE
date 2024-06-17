@@ -3,6 +3,7 @@ package com.swp.jewelrystore.service.impl;
 import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.entity.GemEntity;
 import com.swp.jewelrystore.entity.GemPriceEntity;
+import com.swp.jewelrystore.model.dto.DiamondDTO;
 import com.swp.jewelrystore.model.response.DiamondResponseDTO;
 import com.swp.jewelrystore.repository.GemPriceRepository;
 import com.swp.jewelrystore.repository.GemRepository;
@@ -38,5 +39,12 @@ public class DiamondPriceService implements IDiamondPriceService {
             result.add(diamond);
         }
         return result;
+    }
+
+    @Override
+    public void addOrUpdateDiamondPrice(DiamondDTO diamondDTO) {
+         GemPriceEntity gemPrice = modelMapper.map(diamondDTO, GemPriceEntity.class);
+         gemPrice.setEffectDate(dateTimeConverter.convertToDateTimeDTO(diamondDTO.getEffecttDate()));
+         gemPriceRepository.save(gemPrice);
     }
 }
