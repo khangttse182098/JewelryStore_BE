@@ -71,17 +71,12 @@ public class OrderAPI {
     }
     @PostMapping("/status/delivered")
     public String changeStatusToDelivered(@RequestBody StatusDTO statusDTO){
-        PurchaseOrderEntity purchaseOrderEntity = purchaseOrderRepository.findByPurchaseOrderCode(statusDTO.getInvoiceCode());
-        if(purchaseOrderEntity != null){
-            purchaseOrderEntity.setStatus("Đã nhận hàng");
-            purchaseOrderRepository.save(purchaseOrderEntity);
-            return "Change to Delivered successfully";
-        }
         SellOrderEntity sellOrderEntity = sellOrderRepository.findBySellOrderCodeIs(statusDTO.getInvoiceCode());
         if(sellOrderEntity != null){
             sellOrderEntity.setStatus("Đã giao hàng");
             sellOrderRepository.save(sellOrderEntity);
+            return "Change to Delivered successfully";
         }
-        return "Change to Delivered successfully";
+        return "Sell order code not found!";
     }
 }
