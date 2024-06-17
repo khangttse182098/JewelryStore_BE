@@ -47,12 +47,12 @@ public class UserAPI {
         return userResponseDTOS;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<ResponseDTO> register(@RequestBody @Valid RegisterDTO registerDTO) {
+    @PostMapping
+    public ResponseEntity<ResponseDTO> addOrUpdateUser(@RequestBody @Valid RegisterDTO registerDTO) {
         ResponseDTO responseDTO = new ResponseDTO();
         try {
-            userService.registerMember(registerDTO);
-            responseDTO.setMessage(SystemConstant.REGISTER_SUCCESSFULLY);
+            userService.addOrUpdateUser(registerDTO);
+            responseDTO.setMessage(SystemConstant.ADD_USER_SUCCESSFULLY);
             responseDTO.setData(registerDTO);
             return ResponseEntity.ok().body(responseDTO);
         } catch (Exception e){

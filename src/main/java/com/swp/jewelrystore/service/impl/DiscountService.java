@@ -2,6 +2,7 @@ package com.swp.jewelrystore.service.impl;
 
 import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.converter.DateTimeConverter;
+import com.swp.jewelrystore.customexception.DateException;
 import com.swp.jewelrystore.entity.DiscountEntity;
 import com.swp.jewelrystore.model.dto.DiscountDTO;
 import com.swp.jewelrystore.model.response.DiscountResponseDTO;
@@ -15,6 +16,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,8 +46,10 @@ public class DiscountService implements IDiscountService {
              System.out.println("End date: " + endDate);
              if (startDate.compareTo(currentDate) < 0 && endDate.compareTo(currentDate) > 0) {
                  responseDTO.setStatus(SystemConstant.APPLYING);
-             } else {
+             } else if (startDate.compareTo(currentDate) > 0) {
                  responseDTO.setStatus(SystemConstant.NOT_APPLY_YET);
+             } else if (endDate.compareTo(currentDate) < 0) {
+                 responseDTO.setStatus(SystemConstant.STOP_APPLY);
              }
              responseDTO.setStartDate(dateTimeConverter.convertToDateTimeResponse(item.getStartDate()));
              responseDTO.setEndDate(dateTimeConverter.convertToDateTimeResponse(item.getEndDate()));
@@ -60,6 +64,11 @@ public class DiscountService implements IDiscountService {
          discountEntity.setId(discountDTO.getId());
          discountEntity.setCode(discountDTO.getCode());
          discountEntity.setValue(discountDTO.getValue());
+         Date startDate = dateTimeConverter.convertToDateTimeDTO(discountDTO.getStartDateDTO());
+         Date endDate = dateTimeConverter.convertToDateTimeDTO(discountDTO.getEndDateDTO());
+         if (!endDate.after(startDate)){
+             throw new DateException("End date must be after start date");
+         }
          discountEntity.setStartDate(dateTimeConverter.convertToDateTimeDTO(discountDTO.getStartDateDTO()));
          discountEntity.setEndDate(dateTimeConverter.convertToDateTimeDTO(discountDTO.getEndDateDTO()));
          discountRepository.save(discountEntity);

@@ -23,7 +23,6 @@ import java.util.List;
 @Transactional
 public class PurchaseOrderService implements IPurchaseOrderService {
 
-    private final GemRepository gemRepository;
     private final MaterialPriceRepository materialPriceRepository;
     private final GemPriceRepository gemPriceRepository;
     private final MaterialRepository materialRepository;

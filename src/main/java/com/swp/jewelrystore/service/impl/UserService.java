@@ -62,16 +62,25 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void registerMember(RegisterDTO registerDTO) {
+    public void addOrUpdateUser(RegisterDTO registerDTO) {
         BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
-        if (userRepository.findByPhone(registerDTO.getPhone()) != null){
-            throw new DataIntegrityViolationException("Phone number is already existed");
+        // registerDTO do not have id
+        if ( registerDTO.getId() != null){
+            UserEntity userEntity = modelMapper.map(registerDTO, UserEntity.class);
+            userEntity.setRole(roleRepository.findById(registerDTO.getRole()).get());
+            userEntity.setPassword(bCrypt.encode(registerDTO.getPassword()));
+            userEntity.setStatus(1L);
+            userRepository.save(userEntity);
+        } else {
+            if (userRepository.findByPhone(registerDTO.getPhone()) != null){
+                throw new DataIntegrityViolationException("Phone number is already existed");
+            }
+            UserEntity userEntity = modelMapper.map(registerDTO, UserEntity.class);
+            userEntity.setRole(roleRepository.findById(registerDTO.getRole()).get());
+            userEntity.setPassword(bCrypt.encode(registerDTO.getPassword()));
+            userEntity.setStatus(1L);
+            userRepository.save(userEntity);
         }
-        UserEntity userEntity = modelMapper.map(registerDTO, UserEntity.class);
-        userEntity.setRole(roleRepository.findById(registerDTO.getRole()).get());
-        userEntity.setPassword(bCrypt.encode(registerDTO.getPassword()));
-        userEntity.setStatus(1L);
-        userRepository.save(userEntity);
     }
 
     @Override

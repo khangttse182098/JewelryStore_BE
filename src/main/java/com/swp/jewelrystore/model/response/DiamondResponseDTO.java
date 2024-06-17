@@ -8,6 +8,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class DiamondResponseDTO {
+    private Long id;
     private String name;
     private Double buyPrice;
     private Double sellPrice;

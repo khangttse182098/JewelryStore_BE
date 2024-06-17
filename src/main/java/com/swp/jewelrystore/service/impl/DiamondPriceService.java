@@ -34,6 +34,7 @@ public class DiamondPriceService implements IDiamondPriceService {
         for (GemEntity gem : listGem) {
             GemPriceEntity gemPrice = gemPriceRepository.findLatestGemPrice(gem);
             DiamondResponseDTO diamond = modelMapper.map(gemPrice, DiamondResponseDTO.class);
+            diamond.setId(gem.getId());
             diamond.setName(gem.getGemName());
             diamond.setEffectDate(dateTimeConverter.convertToDateTimeResponse(gemPrice.getEffectDate()));
             result.add(diamond);
