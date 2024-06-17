@@ -21,4 +21,10 @@ public class SystemConstant {
     public static final String PAY_IN_CASH = "Tiền mặt";
     public static final String PAY_BY_TRANSFER = "Chuyển khoản";
     public static final String PAY_BY_CREDIT_CARD = "Thẻ tín dụng";
+    public static final String ADD_SELL_ORDER_SUCCESSFULLY = "Thêm hóa đơn bán thành công";
+    public static final String ADD_SELL_ORDER_NO_INVOICE = "Mua lại nguyên liệu thành công";
+    public static final String REGISTER_SUCCESSFULLY = "Đăng kí tài khoản thành công";
+    public static final String DELETE_USER = "Xóa người dùng thành công";
+    public static final String ADD_OR_UPDATE_DIAMOND_SUCCESSFULLY = "Thêm hoặc sửa thông tin giá đá thành công";
+    public static final String ADD_OR_UPDATE_DISCOUNT_SUCCESSFULLY = "Thêm hoặc sửa thông tin mã giảm giá thành công";
 }

@@ -1,17 +1,21 @@
 package com.swp.jewelrystore.api;
 
 
+import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.enums.PurchaseDiscountRate;
 import com.swp.jewelrystore.model.dto.DiscountDTO;
 import com.swp.jewelrystore.model.response.DiscountResponseDTO;
+import com.swp.jewelrystore.model.response.ResponseDTO;
 import com.swp.jewelrystore.service.IDiscountService;
 
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -34,10 +38,19 @@ public class DiscountAPI {
     public List<DiscountResponseDTO> getDiscountInformation(@RequestParam Map<String, String> filter){
         return discountService.getDiscountInformation(filter);
     }
-    @PostMapping()
-    public String addOrUpdateDiscountInformation(@RequestBody DiscountDTO discountDTO){
-        discountService.addOrUpdateDiscountInformation(discountDTO);
-        return "Add or update discount information successfully";
+    @PostMapping("/information")
+    public ResponseEntity<ResponseDTO> addOrUpdateDiscountInformation(@RequestBody @Valid DiscountDTO discountDTO
+    ){
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            discountService.addOrUpdateDiscountInformation(discountDTO);
+            responseDTO.setMessage(SystemConstant.ADD_OR_UPDATE_DISCOUNT_SUCCESSFULLY);
+            responseDTO.setData(discountDTO);
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e){
+            responseDTO.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
     }
     @GetMapping("/purchase-discount")
     public DiscountResponseDTO purchaseDiscount(){
