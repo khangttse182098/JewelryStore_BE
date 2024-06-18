@@ -63,6 +63,10 @@ public class ProductConverter {
         productResponseDTO.setGemName(gemName);
         // category name
         productResponseDTO.setCategoryName(productEntity.getProductCategory().getCategoryName());
+        // subcategorytype
+        if(productEntity.getProductCategory().getCategoryName().equals("Trang sức")){
+            productResponseDTO.setSubCategoryType(productEntity.getProductCategory().getSubCategoryType());
+        }
         //price
         double price = productRepository.calculateSellPrice(productEntity);
         productResponseDTO.setPrice(price);
