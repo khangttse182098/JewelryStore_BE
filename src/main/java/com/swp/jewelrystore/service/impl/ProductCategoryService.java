@@ -27,4 +27,16 @@ public class ProductCategoryService implements IProductCategoryService {
         }
         return productCategoryResponseDTOS;
     }
+
+    @Override
+    public List<String> getCategoryName() {
+        List<ProductCategoryEntity> productCategoryEntities = productCategoryRepository.findAll();
+        List<String> categoryNames = new ArrayList<>();
+        for (ProductCategoryEntity productCategoryEntity : productCategoryEntities) {
+            if(!categoryNames.contains(productCategoryEntity.getCategoryName())) {
+                categoryNames.add(productCategoryEntity.getCategoryName());
+            }
+        }
+        return categoryNames;
+    }
 }

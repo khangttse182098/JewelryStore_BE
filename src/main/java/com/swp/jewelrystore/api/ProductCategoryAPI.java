@@ -12,15 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/sub-category-type")
+@RequestMapping("/api/product-category")
 @CrossOrigin
 public class ProductCategoryAPI {
     @Autowired
     private IProductCategoryService productCategoryService;
 
-    @GetMapping
-    public List<ProductCategoryResponseDTO> getCategoryType() {
+    @GetMapping("/sub-category-type")
+    public List<ProductCategoryResponseDTO> getSubCategoryType() {
         List<ProductCategoryResponseDTO> productCategoryResponseDTOS = productCategoryService.findByCategoryName("Trang sức");
         return productCategoryResponseDTOS;
+    }
+    @GetMapping("/category-name")
+    public List<String> getProductCategoryName() {
+        List<String> result = productCategoryService.getCategoryName();
+        return result;
     }
 }
