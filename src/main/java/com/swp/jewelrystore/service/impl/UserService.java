@@ -2,6 +2,7 @@ package com.swp.jewelrystore.service.impl;
 
 import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.converter.UserConverter;
+import com.swp.jewelrystore.converter.UserRoleConverter;
 import com.swp.jewelrystore.entity.UserEntity;
 import com.swp.jewelrystore.model.dto.RegisterDTO;
 import com.swp.jewelrystore.model.dto.UserDTO;
@@ -55,7 +56,6 @@ public class UserService implements IUserService {
         List<UserEntity> userEntities = userRepository.getAllUsers(params);
         List<UserResponseDTO> userResponseDTOS = new ArrayList<>();
         for(UserEntity userEntity : userEntities) {
-
             userResponseDTOS.add(userConverter.toUserResponseDTO(userEntity));
         }
         return userResponseDTOS;
@@ -67,7 +67,8 @@ public class UserService implements IUserService {
         // registerDTO do not have id
         if ( registerDTO.getId() != null){
             UserEntity userEntity = modelMapper.map(registerDTO, UserEntity.class);
-            userEntity.setRole(roleRepository.findById(registerDTO.getRole()).get());
+
+            userEntity.setRole(roleRepository.findById(UserRoleConverter.convertRoleFromTextToNumber(registerDTO.getRole())).get());
             userEntity.setPassword(bCrypt.encode(registerDTO.getPassword()));
             userEntity.setStatus(1L);
             userRepository.save(userEntity);
@@ -76,7 +77,7 @@ public class UserService implements IUserService {
                 throw new DataIntegrityViolationException("Phone number is already existed");
             }
             UserEntity userEntity = modelMapper.map(registerDTO, UserEntity.class);
-            userEntity.setRole(roleRepository.findById(registerDTO.getRole()).get());
+            userEntity.setRole(roleRepository.findById(UserRoleConverter.convertRoleFromTextToNumber(registerDTO.getRole())).get());
             userEntity.setPassword(bCrypt.encode(registerDTO.getPassword()));
             userEntity.setStatus(1L);
             userRepository.save(userEntity);

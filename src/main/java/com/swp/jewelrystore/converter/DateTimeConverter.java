@@ -22,12 +22,12 @@ public class DateTimeConverter {
 
 
     public Date convertToDateTimeDTO(String date) {
+        // String date truyền vào theo dạng dd/MM/yyyy HH:mm
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
         try {
             // Parse the input string to a Date object using the input format
-            Date parsedDate = inputFormat.parse(date);
+            Date parsedDate = inputFormat.parse(date + ":00");
             // Format the parsed Date object to the desired output format
             String formattedDate = outputFormat.format(parsedDate);
             // Parse the formatted date string back to a Date object
@@ -38,6 +38,8 @@ public class DateTimeConverter {
         }
         return null;
     }
+
+
 
     public String convertToDateCompareToDB(String date) {
         StringTokenizer token = new StringTokenizer(date, "/");

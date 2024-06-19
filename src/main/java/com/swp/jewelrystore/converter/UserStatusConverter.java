@@ -16,4 +16,5 @@ public class UserStatusConverter {
         }
         return 0L;
     }
+
 }

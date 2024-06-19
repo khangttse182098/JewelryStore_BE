@@ -73,4 +73,10 @@ public class DiscountService implements IDiscountService {
          discountEntity.setEndDate(dateTimeConverter.convertToDateTimeDTO(discountDTO.getEndDateDTO()));
          discountRepository.save(discountEntity);
     }
+
+    @Override
+    public void deleteDiscountById(List<Long> ids) {
+        List<DiscountEntity> listDiscount = discountRepository.findAllById(ids);
+        discountRepository.deleteAll(listDiscount);
+    }
 }

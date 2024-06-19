@@ -28,4 +28,5 @@ public class SystemConstant {
     public static final String DELETE_USER = "Xóa người dùng thành công";
     public static final String ADD_OR_UPDATE_DIAMOND_SUCCESSFULLY = "Thêm hoặc sửa thông tin giá đá thành công";
     public static final String ADD_OR_UPDATE_DISCOUNT_SUCCESSFULLY = "Thêm hoặc sửa thông tin mã giảm giá thành công";
+    public static final String DELETE_DISCOUNT = "Xóa mã giảm giá thành công";
 }
