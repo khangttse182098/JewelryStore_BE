@@ -51,8 +51,8 @@ public class ProductAPI {
         return "Update product successfully";
     }
 
-    @DeleteMapping("/{ids}")
-    public String deleteProduct(@PathVariable List<Long> ids){
+    @DeleteMapping()
+    public String deleteProduct(@RequestBody List<Long> ids){
         List<ProductEntity> productEntities = productRepository.findByIdIsIn(ids);
         if(purchaseOrderDetailRepository.findPurchaseOrderDetailEntitiesByProductIsIn(productEntities).isEmpty() && sellOrderDetailRepository.findSellOrderDetailEntitiesByProductIsIn(productEntities).isEmpty()){
             productService.deleteByIdsIn(ids);

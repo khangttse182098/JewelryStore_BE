@@ -89,29 +89,32 @@ public class ProductService implements IProductService {
         // Counter
         CounterEntity counterEntity = counterRepository.findCounterEntityById(productDTO.getCounterId());
         productEntity.setCounter(counterEntity);
-        // Material
-        MaterialEntity materialEntity = materialRepository.findMaterialEntityById(productDTO.getMaterialId());
         // Product Image
         productEntity.setProductImage(productDTO.getProductImage());
         // Save product
         productRepository.save(productEntity);
-        // Product Material
-        if(materialEntity != null && productEntity != null){
-            ProductMaterialEntity productMaterialEntity = new ProductMaterialEntity();
-            productMaterialEntity.setMaterial(materialEntity);
-            productMaterialEntity.setProduct(productEntity);
-            productMaterialEntity.setWeight(productDTO.getMaterialWeight());
-            productMaterialRepository.save(productMaterialEntity);
+        // Material
+        if(productDTO.getMaterialId() != null){
+            MaterialEntity materialEntity = materialRepository.findMaterialEntityById(productDTO.getMaterialId());
+            // Product Material
+            if(materialEntity != null && productEntity != null){
+                ProductMaterialEntity productMaterialEntity = new ProductMaterialEntity();
+                productMaterialEntity.setMaterial(materialEntity);
+                productMaterialEntity.setProduct(productEntity);
+                productMaterialEntity.setWeight(productDTO.getMaterialWeight());
+                productMaterialRepository.save(productMaterialEntity);
+            }
         }
-
         // Gem
-        GemEntity gemEntity = gemRepository.findGemEntityById(productDTO.getGemId());
-        // ProductGem
-        if(materialEntity != null && productEntity != null){
-            ProductGemEntity productGemEntity = new ProductGemEntity();
-            productGemEntity.setGem(gemEntity);
-            productGemEntity.setProduct(productEntity);
-            productGemRepository.save(productGemEntity);
+        if(productDTO.getGemId() != null){
+            GemEntity gemEntity = gemRepository.findGemEntityById(productDTO.getGemId());
+            // ProductGem
+            if(gemEntity != null && productEntity != null){
+                ProductGemEntity productGemEntity = new ProductGemEntity();
+                productGemEntity.setGem(gemEntity);
+                productGemEntity.setProduct(productEntity);
+                productGemRepository.save(productGemEntity);
+            }
         }
     }
 

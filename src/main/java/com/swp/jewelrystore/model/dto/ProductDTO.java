@@ -32,7 +32,7 @@ public class ProductDTO {
 
      @ApiModelProperty(example = "8")
      private Long materialId;
-
+     @NotNull(message = "Material weight is required")
      @ApiModelProperty(example = "5.3")
      private Double materialWeight;
 

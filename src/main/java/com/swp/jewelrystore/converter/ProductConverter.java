@@ -59,16 +59,21 @@ public class ProductConverter {
         }
         // type of gem
         List<ProductGemEntity> listProductGem = productGemRepository.findAllByProductId(productEntity.getId());
-        List<String> gemNameList = new ArrayList<>();
-        for (ProductGemEntity productGemEntity : listProductGem) {
-            gemNameList.add(productGemEntity.getGem().getGemName());
+        if(!listProductGem.isEmpty()){
+            List<String> gemNameList = new ArrayList<>();
+            for (ProductGemEntity productGemEntity : listProductGem) {
+                gemNameList.add(productGemEntity.getGem().getGemName());
+            }
+            String gemName = String.join(",", gemNameList);
+            productResponseDTO.setGemName(gemName);
         }
-        String gemName = String.join(",", gemNameList);
-        productResponseDTO.setGemName(gemName);
         // category name
-        productResponseDTO.setCategoryName(productEntity.getProductCategory().getCategoryName());
+        if(productEntity.getProductCategory().getCategoryName() != null && !productEntity.getProductCategory().getCategoryName().isEmpty()){
+            productResponseDTO.setCategoryName(productEntity.getProductCategory().getCategoryName());
+        }
+
         // subcategorytype
-        if(productEntity.getProductCategory().getCategoryName().equals("Trang sức")){
+        if(productEntity.getProductCategory().getCategoryName().equals("Trang sức") && productEntity.getProductCategory().getSubCategoryType() != null){
             productResponseDTO.setSubCategoryType(productEntity.getProductCategory().getSubCategoryType());
         }
         //price
