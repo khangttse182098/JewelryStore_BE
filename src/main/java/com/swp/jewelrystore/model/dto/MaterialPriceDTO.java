@@ -24,6 +24,6 @@ public class MaterialPriceDTO {
     private Double sellPrice;
 
     @NotEmpty(message = "Effect date is required")
-    @ApiModelProperty(example = "06/06/2024 00:00:00")
+    @ApiModelProperty(example = "06/06/2024 00:00")
     private String effectDate;
 }

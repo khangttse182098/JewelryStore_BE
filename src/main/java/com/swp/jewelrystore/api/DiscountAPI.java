@@ -12,6 +12,7 @@ import com.swp.jewelrystore.service.IDiscountService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -64,8 +65,15 @@ public class DiscountAPI {
         return discountResponseDTO;
     }
 
-
-
+    @DeleteMapping("/delete-{ids}")
+    public ResponseEntity<String> deleteDiscount(@PathVariable List<Long> ids){
+        try {
+            discountService.deleteDiscountById(ids);
+            return new ResponseEntity<>(SystemConstant.DELETE_DISCOUNT, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
 }

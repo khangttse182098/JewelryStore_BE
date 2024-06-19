@@ -14,8 +14,8 @@ public class RegisterDTO {
 
     private Long id;
 
-    @NotNull(message="Role id is required")
-    private Long role;
+    @NotEmpty(message="Role name is required")
+    private String role;
 
     @NotEmpty(message="Full name of user is required")
     private String fullName;
