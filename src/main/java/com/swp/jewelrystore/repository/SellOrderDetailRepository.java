@@ -11,7 +11,9 @@ import java.util.List;
 public interface SellOrderDetailRepository extends JpaRepository<SellOrderDetailEntity, Long> {
     List<SellOrderDetailEntity> findBySellOrder(SellOrderEntity sellDetailEntity);
     void deleteByProductIn(List <ProductEntity> productEntities);
+    List<SellOrderDetailEntity> findSellOrderDetailEntitiesByProductIsIn(List <ProductEntity> productEntities);
     List<SellOrderDetailEntity> findAllBySellOrderIn(List<SellOrderEntity> sellDetailEntityList);
     List<SellOrderDetailEntity> findBySellOrderId(Long id);
     SellOrderDetailEntity findByProductId(Long productId);
+
 }

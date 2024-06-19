@@ -10,5 +10,6 @@ import java.util.List;
 
 public interface PurchaseOrderDetailRepository extends JpaRepository<PurchaseOrderDetailEntity, Long> {
     void deleteByProductIn(List<ProductEntity> products);
+    List<PurchaseOrderDetailEntity> findPurchaseOrderDetailEntitiesByProductIsIn(List<ProductEntity> products);
     List<PurchaseOrderDetailEntity> findByPurchaseOrderIn(List<PurchaseOrderEntity> purchaseOrderEntityList);
 }

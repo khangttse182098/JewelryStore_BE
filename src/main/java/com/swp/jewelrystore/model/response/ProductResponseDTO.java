@@ -15,6 +15,7 @@ public class ProductResponseDTO {
     private String productCode;
     private String productImage;
     private Double materialCost;
+    private Double materialWeight;
     private Double gemCost;
     private Double productionCost;
     private Double priceRate;

@@ -1,9 +1,13 @@
 package com.swp.jewelrystore.api;
 
 
+import com.swp.jewelrystore.entity.ProductEntity;
 import com.swp.jewelrystore.model.dto.ProductDTO;
 import com.swp.jewelrystore.model.request.ProductSearchRequestDTO;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
+import com.swp.jewelrystore.repository.ProductRepository;
+import com.swp.jewelrystore.repository.PurchaseOrderDetailRepository;
+import com.swp.jewelrystore.repository.SellOrderDetailRepository;
 import com.swp.jewelrystore.service.IProductService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -21,6 +25,12 @@ import java.util.List;
 public class ProductAPI {
     @Autowired
     private IProductService productService;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private PurchaseOrderDetailRepository purchaseOrderDetailRepository;
+    @Autowired
+    private SellOrderDetailRepository sellOrderDetailRepository;
 //    @ApiImplicitParams({
 //            @ApiImplicitParam(name = "counter_id", value = "1", dataType = "Long", paramType = "query"),
 //            @ApiImplicitParam(name = "category_name", value = "Trang sức", dataType = "string", paramType = "query"),
@@ -48,8 +58,12 @@ public class ProductAPI {
 
     @DeleteMapping("/{ids}")
     public String deleteProduct(@PathVariable List<Long> ids){
-        productService.deleteByIdsIn(ids);
-        return "Delete product successfully";
+        List<ProductEntity> productEntities = productRepository.findByIdIsIn(ids);
+        if(purchaseOrderDetailRepository.findPurchaseOrderDetailEntitiesByProductIsIn(productEntities).isEmpty() && sellOrderDetailRepository.findSellOrderDetailEntitiesByProductIsIn(productEntities).isEmpty()){
+            productService.deleteByIdsIn(ids);
+            return "Delete product successfully";
+        }
+        return "Cannot delete product already existed in invoices!";
     }
 
 }

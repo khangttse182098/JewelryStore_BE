@@ -112,11 +112,7 @@ public class ProductService implements IProductService {
     public void deleteByIdsIn(List<Long> ids) {
         productMaterialRepository.deleteAllByProductIdIn(ids);
         productGemRepository.deleteAllByProductIdIn(ids);
-        List<ProductEntity> productEntities = productRepository.findByIdIsIn(ids);
-        purchaseOrderDetailRepository.deleteByProductIn(productEntities);
-        sellOrderDetailRepository.deleteByProductIn(productEntities);
         productRepository.deleteByIdIn(ids);
     }
-
 
 }

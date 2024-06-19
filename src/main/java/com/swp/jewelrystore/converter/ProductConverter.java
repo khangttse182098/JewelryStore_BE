@@ -50,6 +50,7 @@ public class ProductConverter {
         List<String> materialNameList = new ArrayList<>();
         for (ProductMaterialEntity productMaterialEntity : listProductMaterial) {
             materialNameList.add(productMaterialEntity.getMaterial().getName());
+            productResponseDTO.setMaterialWeight(productMaterialEntity.getWeight());
         }
         String materialName = String.join(",", materialNameList);
         productResponseDTO.setMaterialName(materialName);
