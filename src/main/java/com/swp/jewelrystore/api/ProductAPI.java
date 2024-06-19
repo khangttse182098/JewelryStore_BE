@@ -46,12 +46,7 @@ public class ProductAPI {
 
     @PostMapping
     public String addOrUpdateProduct(@Valid @RequestBody ProductDTO productDTO){
-        try{
-            productService.addOrUpdateProduct(productDTO);
-        }catch (Exception e){
-
-        }
-
+        productService.addOrUpdateProduct(productDTO);
         if(productDTO.getId() == null) return "Add product successfully";
         return "Update product successfully";
     }

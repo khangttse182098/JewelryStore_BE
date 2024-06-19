@@ -96,16 +96,23 @@ public class ProductService implements IProductService {
         // Save product
         productRepository.save(productEntity);
         // Product Material
-        ProductMaterialEntity productMaterialEntity = new ProductMaterialEntity();
-        productMaterialEntity.setMaterial(materialEntity);
-        productMaterialEntity.setProduct(productEntity);
+        if(materialEntity != null && productEntity != null){
+            ProductMaterialEntity productMaterialEntity = new ProductMaterialEntity();
+            productMaterialEntity.setMaterial(materialEntity);
+            productMaterialEntity.setProduct(productEntity);
+            productMaterialEntity.setWeight(productDTO.getMaterialWeight());
+            productMaterialRepository.save(productMaterialEntity);
+        }
+
         // Gem
         GemEntity gemEntity = gemRepository.findGemEntityById(productDTO.getGemId());
         // ProductGem
-        ProductGemEntity productGemEntity = new ProductGemEntity();
-        productGemEntity.setGem(gemEntity);
-        productGemEntity.setProduct(productEntity);
-        productGemRepository.save(productGemEntity);
+        if(materialEntity != null && productEntity != null){
+            ProductGemEntity productGemEntity = new ProductGemEntity();
+            productGemEntity.setGem(gemEntity);
+            productGemEntity.setProduct(productEntity);
+            productGemRepository.save(productGemEntity);
+        }
     }
 
     @Override

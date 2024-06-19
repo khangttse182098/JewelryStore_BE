@@ -21,6 +21,7 @@ public class ProductResponseDTO {
     private Double priceRate;
     private String createdDate;
     private String materialName;
+    private Long materialId;
     private String gemName;
     private String categoryName;
     private Double price;

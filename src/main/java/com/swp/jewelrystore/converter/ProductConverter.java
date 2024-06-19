@@ -47,13 +47,16 @@ public class ProductConverter {
         ProductResponseDTO productResponseDTO = modelMapper.map(productEntity, ProductResponseDTO.class);
         // type of material
         List<ProductMaterialEntity> listProductMaterial = productMaterialRepository.findAllByProductId(productEntity.getId());
-        List<String> materialNameList = new ArrayList<>();
-        for (ProductMaterialEntity productMaterialEntity : listProductMaterial) {
-            materialNameList.add(productMaterialEntity.getMaterial().getName());
-            productResponseDTO.setMaterialWeight(productMaterialEntity.getWeight());
+        if(!listProductMaterial.isEmpty()){
+            List<String> materialNameList = new ArrayList<>();
+            for (ProductMaterialEntity productMaterialEntity : listProductMaterial) {
+                materialNameList.add(productMaterialEntity.getMaterial().getName());
+                productResponseDTO.setMaterialWeight(productMaterialEntity.getWeight());
+                productResponseDTO.setMaterialId(productMaterialEntity.getMaterial().getId());
+            }
+            String materialName = String.join(",", materialNameList);
+            productResponseDTO.setMaterialName(materialName);
         }
-        String materialName = String.join(",", materialNameList);
-        productResponseDTO.setMaterialName(materialName);
         // type of gem
         List<ProductGemEntity> listProductGem = productGemRepository.findAllByProductId(productEntity.getId());
         List<String> gemNameList = new ArrayList<>();
