@@ -34,7 +34,8 @@ public class OrderAPI {
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "code", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "status", dataType = "string", paramType = "query")
+            @ApiImplicitParam(name = "status", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "user_id", dataType = "long", paramType = "query")
     })
     @GetMapping
     public List<InvoiceResponseDTO> getAllOrder(@RequestParam Map<String, String> params){

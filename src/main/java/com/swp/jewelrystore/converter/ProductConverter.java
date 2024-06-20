@@ -1,9 +1,7 @@
 package com.swp.jewelrystore.converter;
 
-import com.swp.jewelrystore.entity.DiscountEntity;
-import com.swp.jewelrystore.entity.ProductEntity;
-import com.swp.jewelrystore.entity.ProductMaterialEntity;
-import com.swp.jewelrystore.entity.ProductGemEntity;
+import com.swp.jewelrystore.constant.SystemConstant;
+import com.swp.jewelrystore.entity.*;
 import com.swp.jewelrystore.enums.PurchaseDiscountRate;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
 import com.swp.jewelrystore.repository.DiscountRepository;
@@ -71,19 +69,35 @@ public class ProductConverter {
         if(productEntity.getProductCategory().getCategoryName() != null && !productEntity.getProductCategory().getCategoryName().isEmpty()){
             productResponseDTO.setCategoryName(productEntity.getProductCategory().getCategoryName());
         }
-
         // subcategorytype
-        if(productEntity.getProductCategory().getCategoryName().equals("Trang sức") && productEntity.getProductCategory().getSubCategoryType() != null){
+        if(productEntity.getProductCategory().getCategoryName().equals(SystemConstant.JEWELRY) && productEntity.getProductCategory().getSubCategoryType() != null){
             productResponseDTO.setSubCategoryType(productEntity.getProductCategory().getSubCategoryType());
         }
         //price
-        double price = productRepository.calculateSellPrice(productEntity);
-        productResponseDTO.setPrice(price);
-        // discountPrice
-        Map<String, String> filter = new HashMap<>();
-        filter.put("isAvailable", "true");
-        DiscountEntity discountEntity = discountRepository.searchWithRequired(filter).get(0);
-        productResponseDTO.setDiscountPrice(price * discountEntity.getValue() / 100);
+        double price = 0;
+        if(productEntity.getPurchaseOrderDetailEntities().isEmpty() && productEntity.getSellOrderDetailEntities().isEmpty()){
+            price = productRepository.calculateSellPrice(productEntity);
+            productResponseDTO.setPrice(price);
+            // discountPrice
+            Map<String, String> filter = new HashMap<>();
+            filter.put("isAvailable", "true");
+            DiscountEntity discountEntity = discountRepository.searchWithRequired(filter).get(0);
+            if (discountEntity != null) {
+                productResponseDTO.setDiscountPrice(price * discountEntity.getValue() / 100);
+            }
+        }else{
+            List<SellOrderDetailEntity> sellOrderDetailEntities = productEntity.getSellOrderDetailEntities();
+            SellOrderDetailEntity sellOrderDetailEntity = sellOrderDetailEntities.get(0);
+            price = sellOrderDetailEntity.getPrice();
+            productResponseDTO.setPrice(price);
+            // discountPrice
+            SellOrderEntity sellOrderEntity = sellOrderDetailEntity.getSellOrder();
+            if(sellOrderEntity.getDiscount() != null){
+                DiscountEntity discountEntity = sellOrderEntity.getDiscount();
+                productResponseDTO.setDiscountPrice(price * discountEntity.getValue() / 100);
+            }
+        }
+
         // counterNo
         productResponseDTO.setCounterNo(productEntity.getCounter().getCounterNo());
         // image
