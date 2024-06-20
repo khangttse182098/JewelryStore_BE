@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 @Valid
 public class RegisterDTO {
 
+
     private Long id;
 
     @NotEmpty(message="Role name is required")

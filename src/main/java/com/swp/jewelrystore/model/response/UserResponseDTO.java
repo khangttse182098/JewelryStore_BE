@@ -12,4 +12,5 @@ public class UserResponseDTO {
     private String phone;
     private String status;
     private Double personalIncome;
+    private int sellOrderQuantity;
 }

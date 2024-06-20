@@ -10,4 +10,5 @@ public interface SellOrderRepository extends JpaRepository<SellOrderEntity, Long
     SellOrderEntity findBySellOrderCodeIs(String sellOrderCode);
     List<SellOrderEntity> findByCustomer_IdAndStatusNot(Long id, String status);
     List<SellOrderEntity> findSellOrderEntitiesByStatusIsIn(List<String> status);
+    List<SellOrderEntity> findByUser_IdAndStatusNot(Long id, String status);
 }
