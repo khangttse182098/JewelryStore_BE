@@ -30,6 +30,7 @@ public class GoldPriceService implements IGoldPriceService {
         for (MaterialEntity item : listMaterial) {
             MaterialPriceEntity materialPrice = materialPriceRepository.findLatestGoldPrice(item);
             GoldResponseDTO goldResponseDTO = modelMapper.map(materialPrice, GoldResponseDTO.class);
+            goldResponseDTO.setId(item.getId());
             goldResponseDTO.setGoldName(item.getName());
             goldResponseDTO.setEffectDate(dateTimeConverter.convertToDateTimeResponse(materialPrice.getEffectDate()));
             result.add(goldResponseDTO);

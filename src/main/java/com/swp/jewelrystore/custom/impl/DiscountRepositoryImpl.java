@@ -78,4 +78,11 @@ public class DiscountRepositoryImpl implements DiscountRepositoryCustom {
         Query query = entityManager.createNativeQuery(sql.toString(), DiscountEntity.class);
         return query.getResultList();
     }
+
+    @Override
+    public DiscountEntity findApplyingDiscount() {
+        String sql = "SELECT * FROM discount WHERE now() BETWEEN start_date AND end_date";
+        Query query = entityManager.createNativeQuery(sql, DiscountEntity.class);
+        return (DiscountEntity)query.getResultList().get(0);
+    }
 }
