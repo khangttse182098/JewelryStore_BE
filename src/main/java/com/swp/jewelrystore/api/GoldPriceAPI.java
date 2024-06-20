@@ -6,12 +6,14 @@ import com.swp.jewelrystore.entity.MaterialEntity;
 import com.swp.jewelrystore.entity.MaterialPriceEntity;
 import com.swp.jewelrystore.model.dto.MaterialPriceDTO;
 import com.swp.jewelrystore.model.response.GoldResponseDTO;
+import com.swp.jewelrystore.model.response.ResponseDTO;
 import com.swp.jewelrystore.repository.MaterialRepository;
 import com.swp.jewelrystore.service.IGoldPriceService;
 import com.swp.jewelrystore.service.impl.MaterialPriceService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -53,9 +55,14 @@ public class GoldPriceAPI {
     }
 
     @PostMapping
-    public String addOrUpdateGoldPrice(@Valid @RequestBody MaterialPriceDTO materialPriceDTO){
+    public ResponseEntity<ResponseDTO> addOrUpdateGoldPrice(@Valid @RequestBody MaterialPriceDTO materialPriceDTO){
+        ResponseDTO responseDTO = new ResponseDTO();
         materialPriceService.addOrUpdateMaterialPrice(materialPriceDTO);
-        if(materialPriceDTO.getMaterialId() != null) return "Update material price successfully";
-        return  "Add marterial price successfully";
+        if(materialPriceDTO.getMaterialId() != null){
+            responseDTO.setMessage("Update material price successfully");
+            return ResponseEntity.ok(responseDTO);
+        }
+        responseDTO.setMessage("Add marterial price successfully");
+        return ResponseEntity.ok(responseDTO);
     }
 }

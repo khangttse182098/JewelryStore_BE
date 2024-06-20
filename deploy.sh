@@ -8,7 +8,9 @@ echo " ";
 echo -e "\033[94m Building WAR file...\033[0m"
 ./mvnw clean package
 echo -e "\033[94m Shut down tomcat...\033[0m"
+#ssh root@64.227.1.44 /opt/tomcat/bin/shutdown.sh
 ssh root@64.227.1.44 /opt/tomcat/bin/shutdown.sh
+
 echo -e "\033[94m Delete old file in webapps folder...\033[0m"
 ssh root@64.227.1.44 rm -rf /opt/tomcat/webapps/*.war
 echo -e "\033[94m Deploy WAR file to webapps folder...\033[0m"

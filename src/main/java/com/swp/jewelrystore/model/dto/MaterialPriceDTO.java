@@ -12,6 +12,7 @@ import java.util.Date;
 @Setter
 @Valid
 public class MaterialPriceDTO {
+
     @ApiModelProperty(example = "1")
     private Long materialId;
 

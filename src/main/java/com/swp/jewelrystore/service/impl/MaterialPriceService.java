@@ -23,7 +23,9 @@ public class MaterialPriceService implements IMaterialPriceService {
     public void addOrUpdateMaterialPrice(MaterialPriceDTO materialPriceDTO) {
         MaterialEntity materialEntity = materialRepository.findMaterialEntityById(materialPriceDTO.getMaterialId());
         MaterialPriceEntity materialPriceEntity = new MaterialPriceEntity();
-        materialPriceEntity.setMaterial(materialEntity);
+        if(materialEntity != null){
+            materialPriceEntity.setMaterial(materialEntity);
+        }
         materialPriceEntity.setBuyPrice(materialPriceDTO.getBuyPrice());
         materialPriceEntity.setSellPrice(materialPriceDTO.getSellPrice());
         materialPriceEntity.setEffectDate(dateTimeConverter.convertToDateTimeDTO(materialPriceDTO.getEffectDate()));

@@ -30,6 +30,7 @@ public class OrderConverter {
     public InvoiceResponseDTO toInvoiceResponseDTO(SellOrderEntity sellOrderEntity) {
         InvoiceResponseDTO invoiceResponseDTO = modelMapper.map(sellOrderEntity, InvoiceResponseDTO.class);
         invoiceResponseDTO.setInvoiceCode(sellOrderEntity.getSellOrderCode());
+        invoiceResponseDTO.setCreatedDate(dateTimeConverter.convertToDateTimeResponse(sellOrderEntity.getCreatedDate()));
         invoiceResponseDTO.setInvoiceType(SystemConstant.SELL);
         if(sellOrderEntity.getDiscount() != null){
             invoiceResponseDTO.setDiscountValue(sellOrderEntity.getDiscount().getValue());
@@ -58,6 +59,7 @@ public class OrderConverter {
         InvoiceResponseDTO invoiceResponseDTO = modelMapper.map(purchaseOrderEntity, InvoiceResponseDTO.class);
         invoiceResponseDTO.setInvoiceCode(purchaseOrderEntity.getPurchaseOrderCode());
         invoiceResponseDTO.setInvoiceType(SystemConstant.REPURCHASE);
+        invoiceResponseDTO.setCreatedDate(dateTimeConverter.convertToDateTimeResponse(purchaseOrderEntity.getCreatedDate()));
         if(purchaseOrderEntity.getCustomer() != null) {
             invoiceResponseDTO.setCustomerName(purchaseOrderEntity.getCustomer().getFullName());
             invoiceResponseDTO.setCustomerId(purchaseOrderEntity.getCustomer().getId());

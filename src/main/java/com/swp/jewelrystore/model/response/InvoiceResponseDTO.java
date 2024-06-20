@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 public class InvoiceResponseDTO {
     private String invoiceCode;
-    private Date createdDate;
+    private String createdDate;
     private String customerName;
     private String invoiceType;
     private String staffName;

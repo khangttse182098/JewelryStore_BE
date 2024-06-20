@@ -63,15 +63,18 @@ public class DiscountService implements IDiscountService {
     public void addOrUpdateDiscountInformation(DiscountDTO discountDTO) {
          DiscountEntity discountEntity = new DiscountEntity();
          discountEntity.setId(discountDTO.getId());
+         if(discountRepository.findByCode(discountDTO.getCode()) != null){
+             throw new DiscountException(discountDTO.getCode() + " đã tồn tại!");
+         }
          discountEntity.setCode(discountDTO.getCode());
          discountEntity.setValue(discountDTO.getValue());
          Date startDate = dateTimeConverter.convertToDateTimeDTO(discountDTO.getStartDateDTO());
          Date endDate = dateTimeConverter.convertToDateTimeDTO(discountDTO.getEndDateDTO());
          DiscountEntity applyingDiscount = discountRepository.findApplyingDiscount();
          if (!endDate.after(startDate)){
-             throw new DateException("End date must be after start date");
+             throw new DateException("Ngày kết thúc phải lớn hơn ngày bắt đầu!");
          } else if (!startDate.after(applyingDiscount.getEndDate())) {
-             throw new DiscountException("There are discount codes available during this period ! Please choose another date");
+             throw new DiscountException("Chương trình khuyến mãi hiện tại có hiệu lực đến ngày " + dateTimeConverter.convertToDateTimeResponse(applyingDiscount.getEndDate()) +" !");
          }
          discountEntity.setStartDate(dateTimeConverter.convertToDateTimeDTO(discountDTO.getStartDateDTO()));
          discountEntity.setEndDate(dateTimeConverter.convertToDateTimeDTO(discountDTO.getEndDateDTO()));
