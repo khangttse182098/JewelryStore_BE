@@ -7,4 +7,5 @@ import java.util.Map;
 
 public interface DiscountRepositoryCustom {
     List<DiscountEntity>  searchWithRequired(Map<String, String> filter);
+    DiscountEntity findApplyingDiscount();
 }

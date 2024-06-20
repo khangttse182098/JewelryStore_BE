@@ -3,6 +3,7 @@ package com.swp.jewelrystore.service.impl;
 import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.customexception.DateException;
+import com.swp.jewelrystore.customexception.DiscountException;
 import com.swp.jewelrystore.entity.DiscountEntity;
 import com.swp.jewelrystore.model.dto.DiscountDTO;
 import com.swp.jewelrystore.model.response.DiscountResponseDTO;
@@ -66,8 +67,11 @@ public class DiscountService implements IDiscountService {
          discountEntity.setValue(discountDTO.getValue());
          Date startDate = dateTimeConverter.convertToDateTimeDTO(discountDTO.getStartDateDTO());
          Date endDate = dateTimeConverter.convertToDateTimeDTO(discountDTO.getEndDateDTO());
+         DiscountEntity applyingDiscount = discountRepository.findApplyingDiscount();
          if (!endDate.after(startDate)){
              throw new DateException("End date must be after start date");
+         } else if (!startDate.after(applyingDiscount.getEndDate())) {
+             throw new DiscountException("There are discount codes available during this period ! Please choose another date");
          }
          discountEntity.setStartDate(dateTimeConverter.convertToDateTimeDTO(discountDTO.getStartDateDTO()));
          discountEntity.setEndDate(dateTimeConverter.convertToDateTimeDTO(discountDTO.getEndDateDTO()));
@@ -79,4 +83,6 @@ public class DiscountService implements IDiscountService {
         List<DiscountEntity> listDiscount = discountRepository.findAllById(ids);
         discountRepository.deleteAll(listDiscount);
     }
+
+
 }
