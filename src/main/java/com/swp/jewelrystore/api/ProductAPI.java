@@ -5,6 +5,7 @@ import com.swp.jewelrystore.entity.ProductEntity;
 import com.swp.jewelrystore.model.dto.ProductDTO;
 import com.swp.jewelrystore.model.request.ProductSearchRequestDTO;
 import com.swp.jewelrystore.model.response.ProductResponseDTO;
+import com.swp.jewelrystore.model.response.ResponseDTO;
 import com.swp.jewelrystore.repository.ProductRepository;
 import com.swp.jewelrystore.repository.PurchaseOrderDetailRepository;
 import com.swp.jewelrystore.repository.SellOrderDetailRepository;
@@ -13,6 +14,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -52,13 +54,16 @@ public class ProductAPI {
     }
 
     @DeleteMapping()
-    public String deleteProduct(@RequestBody List<Long> ids){
+    public ResponseEntity<ResponseDTO> deleteProduct(@RequestBody List<Long> ids){
+        ResponseDTO responseDTO = new ResponseDTO();
         List<ProductEntity> productEntities = productRepository.findByIdIsIn(ids);
         if(purchaseOrderDetailRepository.findPurchaseOrderDetailEntitiesByProductIsIn(productEntities).isEmpty() && sellOrderDetailRepository.findSellOrderDetailEntitiesByProductIsIn(productEntities).isEmpty()){
             productService.deleteByIdsIn(ids);
-            return "Delete product successfully";
+            responseDTO.setMessage("Delete product successfully");
+            return ResponseEntity.ok(responseDTO);
         }
-        return "Cannot delete product already existed in invoices!";
+        responseDTO.setMessage("Cannot delete product already existed in invoices!");
+        return ResponseEntity.badRequest().body(responseDTO);
     }
 
 }

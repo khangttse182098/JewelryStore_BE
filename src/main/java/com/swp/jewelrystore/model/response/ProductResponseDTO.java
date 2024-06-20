@@ -28,4 +28,5 @@ public class ProductResponseDTO {
     private String counterNo;
     private Double discountPrice;
     private String subCategoryType;
+    private Long isSold;
 }

@@ -76,6 +76,8 @@ public class ProductConverter {
         //price
         double price = 0;
         if(productEntity.getPurchaseOrderDetailEntities().isEmpty() && productEntity.getSellOrderDetailEntities().isEmpty()){
+            //isSold
+            productResponseDTO.setIsSold(0L);
             price = productRepository.calculateSellPrice(productEntity);
             productResponseDTO.setPrice(price);
             // discountPrice
@@ -86,6 +88,8 @@ public class ProductConverter {
                 productResponseDTO.setDiscountPrice(price * discountEntity.getValue() / 100);
             }
         }else{
+            //isSold
+            productResponseDTO.setIsSold(1L);
             List<SellOrderDetailEntity> sellOrderDetailEntities = productEntity.getSellOrderDetailEntities();
             SellOrderDetailEntity sellOrderDetailEntity = sellOrderDetailEntities.get(0);
             price = sellOrderDetailEntity.getPrice();
