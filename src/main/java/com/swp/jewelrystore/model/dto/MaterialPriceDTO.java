@@ -27,4 +27,6 @@ public class MaterialPriceDTO {
     @NotEmpty(message = "Effect date is required")
     @ApiModelProperty(example = "06/06/2024 00:00")
     private String effectDate;
+    @ApiModelProperty(example = "Vàng đầu khấc")
+    private String goldName;
 }

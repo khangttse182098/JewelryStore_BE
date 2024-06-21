@@ -15,18 +15,18 @@ public class RegisterDTO {
 
     private Long id;
 
-    @NotEmpty(message="Role name is required")
+    @NotEmpty(message="Vai trò phải được cung cấp")
     private String role;
 
-    @NotEmpty(message="Full name of user is required")
+    @NotEmpty(message="Tên đầy đủ của người dùng không được để trống")
     private String fullName;
 
-    @NotEmpty(message="Username can not empty")
+    @NotEmpty(message="Tên đăng nhập không thể trống")
     private String userName;
 
-    @NotEmpty(message="Password can not empty")
+    @NotEmpty(message="Mật khẩu không thể trống")
     private String password;
 
-    @NotEmpty(message="Phone number can not empty")
+    @NotEmpty(message="Số điện thoại không được trống")
     private String phone;
 }
