@@ -20,15 +20,15 @@ public class PurchaseOrderDTO {
     @ApiModelProperty(example = "123 Lý Thuong Kiet")
     private String address;
 
-    @NotEmpty(message="Phone number is required")
+    @NotEmpty(message="Số điện thoại không được để trống")
     @ApiModelProperty(example = "0955926424")
     private String phoneNumber;
 
-    @NotNull(message="User id can not empty or null")
+    @NotNull(message="Id của user không được để trống")
     @ApiModelProperty(example = "4")
     private Long userId;
 
-    @NotNull(message="Material or gem criteria are required")
+    @NotNull(message="Tiêu chí về vàng hoặc đá phải có")
     private CriteriaResponseDTO criteria;
 
 }

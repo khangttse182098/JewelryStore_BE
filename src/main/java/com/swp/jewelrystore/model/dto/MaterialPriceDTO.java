@@ -16,4 +16,6 @@ public class MaterialPriceDTO {
     private Double sellPrice;
     @ApiModelProperty(example = "06/06/2024 00:00")
     private String effectDate;
+    @ApiModelProperty(example = "Vàng đầu khấc")
+    private String goldName;
 }

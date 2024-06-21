@@ -16,30 +16,30 @@ import java.util.List;
 @Valid
 public class InvoiceDTO {
 
-    @NotNull(message="Product id are required")
+    @NotNull(message="Danh sách id của sản phẩm không được trống")
     @ApiModelProperty(example = "[1, 2]")
     private List<Long> productId;
 
-    @NotBlank(message="Customer name can not contain blank")
+    @NotBlank(message="Tên khách hàng không được để trống")
     @ApiModelProperty(example = "Dương Quốc Hoàng")
     private String fullName;
 
-    @NotNull(message="Phone number can not null")
+    @NotNull(message="Số điện thoại không được để trống")
     @ApiModelProperty(example = "0686888990")
     private String phoneNumber;
 
     @ApiModelProperty(example = "tim em")
     private String address;
 
-    @NotNull(message="User id is required")
+    @NotNull(message="Id của user không được để trống")
     @ApiModelProperty(example = "1")
     private Long userId;
 
-    @NotNull(message="Price of products can not null or empty and must be in order")
+    @NotNull(message="Danh sách giá sản phẩm không được để trống và phải theo thứ tự")
     @ApiModelProperty(example = "[92714, 89660]")
     private List<Double> price;
 
-    @NotNull(message="Discount id can not empty or null")
+    @NotNull(message="Id của mã giảm giá không được để trống")
     @ApiModelProperty(example = "1")
     private Long discountId;
 

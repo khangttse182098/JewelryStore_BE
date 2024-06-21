@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -18,48 +19,52 @@ public class DiamondDTO {
     @ApiModelProperty(example="")
     private Long id;
 
-    @NotEmpty(message="Origin can not empty or null")
+    @NotEmpty(message="Nguồn gốc không được để trống")
     @JsonProperty("origin")
     @ApiModelProperty(example="Nhân tạo")
     private String origin;
 
-    @NotEmpty(message="Color is required")
+    @NotEmpty(message="Màu sắc không được để trống")
     @JsonProperty("color")
     @ApiModelProperty(example="H")
     private String color;
 
-    @NotEmpty(message="Clarity is required")
+    @NotEmpty(message="Độ tinh khiết không được để trống")
     @JsonProperty("clarity")
     @ApiModelProperty(example="VVS1")
     private String clarity;
 
-    @NotNull(message="Carat weight from can not null or empty and bigger than 0")
+    @NotNull(message="Khoảng đầu của trọng lượng carat không được để trống")
     @JsonProperty("caratWeightFrom")
     @ApiModelProperty(example="2.3")
+    @Min(value = 0, message="Giá trị trọng lượng phải lớn hơn 0")
     private Double caratWeightFrom;
 
-    @NotNull(message="Carat weight to can not null or empty")
+    @NotNull(message="Khoảng cuối của trọng lượng carat không được để trống")
     @JsonProperty("caratWeightTo")
     @ApiModelProperty(example="2.65")
+    @Min(value = 0, message="Giá trị trọng lượng phải lớn hơn 0")
     private Double caratWeightTo;
 
-    @NotEmpty(message="Cut is required")
+    @NotEmpty(message="Giác cắt không được để trống")
     @JsonProperty("cut")
     @ApiModelProperty(example="PR")
     private String cut;
 
-    @NotNull(message="Buy price can not null or empty")
+    @NotNull(message="Giá mua không thể để trống")
     @JsonProperty("buyPrice")
     @ApiModelProperty(example="25000000")
+    @Min(value = 0, message="Giá mua phải lớn hơn 0")
     private Double buyPrice;
 
-    @NotNull(message="Sell price can not null or empty")
+    @NotNull(message="Giá bán không thể để trống")
     @JsonProperty("sellPrice")
     @ApiModelProperty(example="27250000")
+    @Min(value = 0, message="Giá bán phải lớn hơn 0")
     private Double sellPrice;
 
-    @NotEmpty(message="Effect date is required")
+    @NotEmpty(message="Ngày hiệu lực không được để trống")
     @JsonProperty("effectDate")
-    @ApiModelProperty(example="20/06/2024 12:00:00")
+    @ApiModelProperty(example="20/06/2024 12:00")
     private String effecttDate;
 }
