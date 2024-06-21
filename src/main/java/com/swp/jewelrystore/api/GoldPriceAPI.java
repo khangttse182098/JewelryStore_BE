@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -51,6 +52,7 @@ public class GoldPriceAPI {
               goldResponseDTO.setEffectDate(dateTimeConverter.convertToDateTimeResponse(materialPriceEntity.getEffectDate()));
               goldResponseDTOList.add(goldResponseDTO);
           }
+          Collections.reverse(goldResponseDTOList);
           return goldResponseDTOList;
     }
 
