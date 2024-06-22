@@ -25,6 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/order/cashier-page").permitAll()
+                .antMatchers("/api/file/upload").permitAll()
                 .anyRequest().permitAll();
     }
 

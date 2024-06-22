@@ -13,11 +13,11 @@ import org.springframework.context.annotation.Bean;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductSearchRequestDTO {
-    private String product_name;
-    private String product_code;
-    private Long counter_id;
-    private String category_name;
-    private String is_available;
+        private String product_name;
+        private String product_code;
+        private Long counter_id;
+        private String category_name;
+        private String is_available;
     private Double price_rate_from;
     private Double price_rate_to;
     private String created_date_from;

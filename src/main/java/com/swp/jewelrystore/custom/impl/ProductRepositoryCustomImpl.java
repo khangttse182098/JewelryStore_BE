@@ -86,7 +86,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     @Override
     public double calculatePurchaseDiscountPrice(ProductEntity productEntity) {
         SellOrderDetailEntity sellOrderDetailEntity = sellOrderDetailRepository.findByProductId(productEntity.getId());
-        double discountPrice =  (sellOrderDetailEntity.getPrice() - calculateBuyPrice(productEntity)) * (PurchaseDiscountRate.PURCHASE_DISCOUNT_RATE.getValue() / 10.0);
+        double discountPrice =  (sellOrderDetailEntity.getPrice() - calculateBuyPrice(productEntity)) * (PurchaseDiscountRate.PURCHASE_DISCOUNT_RATE.getValue() / 100.0);
         return discountPrice;
     }
 
