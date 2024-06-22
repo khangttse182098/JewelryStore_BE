@@ -30,10 +30,7 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
         String sql = buildQueryForCheckGem(diamondCriteriaDTO);
         Query query = entityManager.createNativeQuery(sql,GemPriceEntity.class);
         List<GemPriceEntity> gemPriceEntities = query.getResultList();
-        if (gemPriceEntities.size() > 0) {
-            return gemPriceEntities.get(0);
-        }
-        return null;
+        return gemPriceEntities.get(0);
     }
 
     private String buildQueryForCheckGem(DiamondCriteriaDTO diamondCriteriaDTO){
@@ -43,7 +40,7 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
                 + diamondCriteriaDTO.getClarity() + "' and ( carat_weight_from <= "
                 + diamondCriteriaDTO.getCaratWeight()+ " and "
                 + diamondCriteriaDTO.getCaratWeight() + " <= carat_weight_to ) and cut = '" +
-                diamondCriteriaDTO.getCut()+ "'";
+                diamondCriteriaDTO.getCut()+ "'" + "' and effect_date <= now() order by effect_date DESC, gem_price_id DESC limit 1";
         System.out.println(sql);
         return sql;
     }

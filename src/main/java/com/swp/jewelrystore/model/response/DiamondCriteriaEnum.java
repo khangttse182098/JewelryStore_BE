@@ -13,4 +13,8 @@ public class DiamondCriteriaEnum {
       List<String> color;
       List<String> cut;
       List<String> origin;
+      List<String> proportion;
+      List<String> symmetry;
+      List<String> polish;
+      List<String> fluorescence;
 }
