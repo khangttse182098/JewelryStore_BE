@@ -21,6 +21,7 @@ import java.util.List;
 public class GemAPI {
 
     private final IGemService iGemService;
+    
 
     @GetMapping
     public List<GemResponseDTO> getGem() {

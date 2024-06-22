@@ -32,18 +32,13 @@ public class RevenueDashboardAPI {
             @ApiImplicitParam(name = "endDate", dataType = "string", paramType = "query")
     })
     @GetMapping
-    public ResponseEntity<ResponseDTO> getTotalRevenueByTime(@RequestParam Map<String, String> params) {
+    public ResponseEntity<ResponseDTO> getRevenueByTime(@RequestParam Map<String, String> params) {
         ResponseDTO responseDTO = new ResponseDTO();
         RevenueResponseDTO revenueResponseDTO = revenueDashboardService.getTotalRevenueByTime(params);
         responseDTO.setData(revenueResponseDTO);
         responseDTO.setMessage("Data retrieved successfully");
         return ResponseEntity.ok(responseDTO);
     }
-
-//    @GetMapping
-//    public ResponseEntity<ResponseDTO> getEachDateRevenueByTime(@RequestParam Map<String, String> params) {
-//
-//    }
 
 
 }

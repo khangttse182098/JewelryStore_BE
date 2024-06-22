@@ -1,7 +1,7 @@
 package com.swp.jewelrystore.enums;
 
 public enum PurchaseDiscountRate {
-    PURCHASE_DISCOUNT_RATE(1);
+    PURCHASE_DISCOUNT_RATE(10);
     private double value;
     PurchaseDiscountRate(double value) {
         this.value = value;

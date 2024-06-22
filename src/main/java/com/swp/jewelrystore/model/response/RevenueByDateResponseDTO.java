@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RevenueByDateResponseDTO {
-    private int totalPrice;
+    private Double totalPrice;
     private String createdDate;
 }

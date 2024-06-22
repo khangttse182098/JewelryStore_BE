@@ -11,4 +11,7 @@ import java.util.Map;
 public class RevenueResponseDTO {
     private Double totalSellRevenue;
     private Double totalPurchaseRevenue;
+    List<RevenueByDateResponseDTO> sellRevenueByDate;
+    List<RevenueByDateResponseDTO> purchaseRevenueByDate;
+
 }
