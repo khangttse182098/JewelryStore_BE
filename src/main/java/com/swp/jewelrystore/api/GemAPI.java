@@ -4,6 +4,7 @@ package com.swp.jewelrystore.api;
 import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.model.dto.GemWithPriceDTO;
 import com.swp.jewelrystore.model.response.GemDetailResponseDTO;
+import com.swp.jewelrystore.model.response.GemForProductResponseDTO;
 import com.swp.jewelrystore.model.response.GemResponseDTO;
 import com.swp.jewelrystore.model.response.ResponseDTO;
 import com.swp.jewelrystore.service.IGemService;
@@ -23,8 +24,8 @@ public class GemAPI {
     private final IGemService iGemService;
     
     @GetMapping("/product")
-    public List<GemResponseDTO> getGemForProduct() {
-        return iGemService.getAllGem();
+    public List<GemForProductResponseDTO> getGemForProduct() {
+        return iGemService.getAllGemForProduct();
     }
 
     @GetMapping
