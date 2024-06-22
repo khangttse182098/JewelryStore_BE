@@ -59,7 +59,7 @@ public class SellOrderRepositoryCustomImpl implements SellOrderRepositoryCustom 
 
     @Override
     public SellOrderEntity findByCreatedDateCustom(String createdDate) {
-        String sql = "SELECT * FROM sellorder WHERE created_date = '" + createdDate + "'";
+        String sql = "SELECT * FROM sellorder WHERE DATE (created_date) = '" + createdDate + "'";
         Query query = entityManager.createNativeQuery(sql.toString(), SellOrderEntity.class);
         if(query.getResultList().size() > 0){
             return (SellOrderEntity) query.getResultList().get(0);

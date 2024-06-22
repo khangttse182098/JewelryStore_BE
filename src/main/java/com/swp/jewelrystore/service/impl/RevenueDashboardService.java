@@ -61,20 +61,20 @@ public class RevenueDashboardService implements IRevenueDashboardService {
                         for (int i = 0; i < 7; i++) {
                             sellRevenueByDate.add(revenueByDateConverter.toSellRevenueByDateResponseDTO(i));
                         }
-                        break;
+                        return sellRevenueByDate;
                     case "30days" :
                         for (int i = 0; i < 30; i++) {
                             sellRevenueByDate.add(revenueByDateConverter.toSellRevenueByDateResponseDTO(i));
                         }
-                        break;
+                        return sellRevenueByDate;
                     case "12months" :
                         LocalDate currentDate = LocalDate.now();
                         LocalDate date12MonthsAgo = currentDate.minusMonths(12);
-                        long dateIn12Months = ChronoUnit.DAYS.between(date12MonthsAgo, currentDate);
+                        int dateIn12Months = (int) ChronoUnit.DAYS.between(date12MonthsAgo, currentDate);
                         for (int i = 0; i < dateIn12Months; i++) {
                             sellRevenueByDate.add(revenueByDateConverter.toSellRevenueByDateResponseDTO(i));
                         }
-                        break;
+                        return sellRevenueByDate;
                     case "alltime":
                         break;
                 }

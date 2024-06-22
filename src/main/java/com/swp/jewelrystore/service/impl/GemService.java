@@ -44,7 +44,13 @@ public class GemService implements IGemService {
 
     @Override
     public List<GemForProductResponseDTO> getAllGemForProduct() {
-        return Collections.emptyList();
+        List<GemForProductResponseDTO> gemForProductResponseDTOS = new ArrayList<>();
+        List<GemEntity> gemEntities = gemRepository.findGemEntityByActive(1L);
+        for (GemEntity gemEntity : gemEntities) {
+            GemForProductResponseDTO gemForProductResponseDTO = modelMapper.map(gemEntity, GemForProductResponseDTO.class);
+            gemForProductResponseDTOS.add(gemForProductResponseDTO);
+        }
+        return gemForProductResponseDTOS;
     }
 
     @Override

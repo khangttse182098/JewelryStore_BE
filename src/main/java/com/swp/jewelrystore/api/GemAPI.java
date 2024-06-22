@@ -22,7 +22,7 @@ public class GemAPI {
 
     private final IGemService iGemService;
     
-    @GetMapping
+    @GetMapping("/product")
     public List<GemResponseDTO> getGemForProduct() {
         return iGemService.getAllGem();
     }
