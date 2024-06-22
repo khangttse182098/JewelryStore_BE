@@ -22,6 +22,10 @@ public class GemAPI {
 
     private final IGemService iGemService;
     
+    @GetMapping
+    public List<GemResponseDTO> getGemForProduct() {
+        return iGemService.getAllGem();
+    }
 
     @GetMapping
     public List<GemResponseDTO> getGem() {

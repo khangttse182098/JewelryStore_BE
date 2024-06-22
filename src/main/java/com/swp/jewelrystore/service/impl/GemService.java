@@ -6,6 +6,7 @@ import com.swp.jewelrystore.entity.GemPriceEntity;
 import com.swp.jewelrystore.model.dto.DiamondCriteriaDTO;
 import com.swp.jewelrystore.model.dto.GemWithPriceDTO;
 import com.swp.jewelrystore.model.response.GemDetailResponseDTO;
+import com.swp.jewelrystore.model.response.GemForProductResponseDTO;
 import com.swp.jewelrystore.model.response.GemResponseDTO;
 import com.swp.jewelrystore.repository.GemPriceRepository;
 import com.swp.jewelrystore.repository.GemRepository;
@@ -16,6 +17,7 @@ import org.modelmapper.PropertyMap;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
@@ -38,6 +40,11 @@ public class GemService implements IGemService {
             gemResponseDTOS.add(gemResponseDTO);
         }
         return gemResponseDTOS;
+    }
+
+    @Override
+    public List<GemForProductResponseDTO> getAllGemForProduct() {
+        return Collections.emptyList();
     }
 
     @Override
