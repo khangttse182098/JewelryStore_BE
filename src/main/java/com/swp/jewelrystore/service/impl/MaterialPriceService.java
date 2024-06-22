@@ -25,6 +25,8 @@ public class MaterialPriceService implements IMaterialPriceService {
         // có id
         if (materialPriceDTO.getMaterialId() != null) {
             MaterialEntity materialEntity = materialRepository.findMaterialEntityById(materialPriceDTO.getMaterialId());
+            materialEntity.setName(materialPriceDTO.getGoldName());
+            materialRepository.save(materialEntity);
             MaterialPriceEntity materialPriceEntity = new MaterialPriceEntity();
             materialPriceEntity.setMaterial(materialEntity);
             materialPriceEntity.setBuyPrice(materialPriceDTO.getBuyPrice());
