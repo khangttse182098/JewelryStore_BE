@@ -9,6 +9,7 @@ import com.swp.jewelrystore.repository.SellOrderDetailRepository;
 import com.swp.jewelrystore.repository.SellOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerConverter {
     private final ModelMapper modelMapper;
-    private final SellOrderRepository sellOrderRepository;
+    @Autowired
+    private SellOrderRepository sellOrderRepository;
     private final SellOrderDetailRepository sellOrderDetailRepository;
 
     public List<CustomerResponseDTO> convertCustomerToCustomerResponseDTO(List<CustomerEntity> listCustomer){

@@ -3,6 +3,8 @@ package com.swp.jewelrystore.service.impl;
 import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.converter.RevenueByDateConverter;
+import com.swp.jewelrystore.entity.SellOrderDetailEntity;
+import com.swp.jewelrystore.entity.SellOrderEntity;
 import com.swp.jewelrystore.model.response.InvoiceResponseDTO;
 import com.swp.jewelrystore.model.response.RevenueByDateResponseDTO;
 import com.swp.jewelrystore.model.response.RevenueResponseDTO;
@@ -21,8 +23,6 @@ import java.util.*;
 public class RevenueDashboardService implements IRevenueDashboardService {
     @Autowired
     private IOrderService orderService;
-    @Autowired
-    private DateTimeConverter dateTimeConverter;
     @Autowired
     private SellOrderRepository sellOrderRepository;
 
@@ -94,11 +94,21 @@ public class RevenueDashboardService implements IRevenueDashboardService {
                         return tmpRevenueResponseDTO;
                     case "12months" :
                         LocalDate currentDate = LocalDate.now();
-                        LocalDate date12MonthsAgo = currentDate.minusMonths(12);
-                        int dateIn12Months = (int) ChronoUnit.DAYS.between(date12MonthsAgo, currentDate);
-                        for (int i = 0; i < dateIn12Months; i++) {
-//                            tmpRevenueResponseDTO.add(revenueByDateConverter.toSellRevenueByDateResponseDTO(i));
+                        for (int i = 0; i < 12; i++) {
+                            double totalRevenue = 0;
+                            LocalDate dateLastMonths = currentDate.minusMonths(i);
+                            List<SellOrderEntity> sellOrderEntities = sellOrderRepository.findByCreatedDateMonth(dateLastMonths.getMonthValue(), dateLastMonths.getYear());
+                            if(!sellOrderEntities.isEmpty() && sellOrderEntities != null){
+                                for (SellOrderEntity sellOrderEntity : sellOrderEntities) {
+                                   totalRevenue += sellOrderRepository.getTotalRevenue(sellOrderEntity);
+                                }
+                            }
+                            String createdDate = dateLastMonths.format(DateTimeFormatter.ofPattern("MM-yyyy"));
+                            sellCreatedDateList.add(createdDate);
+                            sellTotalPriceList.add(totalRevenue);
                         }
+                        tmpRevenueResponseDTO.setSellCreatedDateList(sellCreatedDateList);
+                        tmpRevenueResponseDTO.setSellTotalPriceList(sellTotalPriceList);
                         return tmpRevenueResponseDTO;
                     case "alltime":
                         break;
@@ -107,7 +117,4 @@ public class RevenueDashboardService implements IRevenueDashboardService {
         }
         return tmpRevenueResponseDTO;
     }
-
-
-
 }

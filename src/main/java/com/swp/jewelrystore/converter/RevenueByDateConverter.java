@@ -33,12 +33,7 @@ public class RevenueByDateConverter {
         double totalPrice = 0;
         if(!sellOrderEntities.isEmpty() && sellOrderEntities != null) {
             for (SellOrderEntity sellOrderEntity : sellOrderEntities) {
-                if(!sellOrderEntity.getStatus().equals(SystemConstant.UNPAID)){
-                    List<SellOrderDetailEntity> sellOrderDetailEntityList = sellOrderEntity.getSellOrderDetailEntities();
-                    for (SellOrderDetailEntity sellOrderDetailEntity : sellOrderDetailEntityList) {
-                        totalPrice += sellOrderDetailEntity.getPrice();
-                    }
-                }
+                totalPrice += sellOrderRepository.getTotalRevenue(sellOrderEntity);
             }
         }
         sellRevenueByDateResponseDTO.setTotalPrice(totalPrice);

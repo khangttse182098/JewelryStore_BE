@@ -1,8 +1,10 @@
 package com.swp.jewelrystore.custom.impl;
 
+import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.custom.SellOrderRepositoryCustom;
 import com.swp.jewelrystore.entity.PurchaseOrderEntity;
+import com.swp.jewelrystore.entity.SellOrderDetailEntity;
 import com.swp.jewelrystore.entity.SellOrderEntity;
 import com.swp.jewelrystore.utils.NumberUtils;
 import com.swp.jewelrystore.utils.SearchOrderUtils;
@@ -62,5 +64,24 @@ public class SellOrderRepositoryCustomImpl implements SellOrderRepositoryCustom 
         String sql = "SELECT * FROM sellorder WHERE DATE (created_date) = '" + createdDate + "'";
         Query query = entityManager.createNativeQuery(sql.toString(), SellOrderEntity.class);
         return query.getResultList();
+    }
+
+    @Override
+    public double getTotalPrice(SellOrderEntity sellOrderEntity) {
+        double totalPrice = 0;
+        for(SellOrderDetailEntity sellOrderDetailEntity : sellOrderEntity.getSellOrderDetailEntities()){
+            totalPrice += sellOrderDetailEntity.getPrice();
+        }
+        return totalPrice;
+    }
+    @Override
+    public double getTotalRevenue(SellOrderEntity sellOrderEntity) {
+        double totalPrice = 0;
+        if(!sellOrderEntity.getStatus().equals(SystemConstant.UNPAID)){
+            for(SellOrderDetailEntity sellOrderDetailEntity : sellOrderEntity.getSellOrderDetailEntities()){
+                totalPrice += sellOrderDetailEntity.getPrice();
+            }
+        }
+        return totalPrice;
     }
 }

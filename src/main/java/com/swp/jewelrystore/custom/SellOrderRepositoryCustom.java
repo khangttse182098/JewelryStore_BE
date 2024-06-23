@@ -11,4 +11,6 @@ public interface SellOrderRepositoryCustom {
     String generateSellOrderCode();
     List<SellOrderEntity> findAllSellOrder(Map<String, String> params);
     List<SellOrderEntity> findByCreatedDateCustom(String createdDate);
+    double getTotalPrice(SellOrderEntity sellOrderEntity);
+    double getTotalRevenue(SellOrderEntity sellOrderEntity);
 }
