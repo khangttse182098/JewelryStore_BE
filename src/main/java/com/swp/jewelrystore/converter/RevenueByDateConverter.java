@@ -1,5 +1,6 @@
 package com.swp.jewelrystore.converter;
 
+import com.swp.jewelrystore.constant.SystemConstant;
 import com.swp.jewelrystore.entity.SellOrderDetailEntity;
 import com.swp.jewelrystore.entity.SellOrderEntity;
 import com.swp.jewelrystore.model.response.RevenueByDateResponseDTO;
@@ -28,12 +29,16 @@ public class RevenueByDateConverter {
         sellRevenueByDateResponseDTO.setCreatedDate(formattedDate);
         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String searchFormattedDate = date.format(formatter);
-        SellOrderEntity sellOrderEntity = sellOrderRepository.findByCreatedDateCustom(searchFormattedDate);
+        List<SellOrderEntity> sellOrderEntities = sellOrderRepository.findByCreatedDateCustom(searchFormattedDate);
         double totalPrice = 0;
-        if(sellOrderEntity != null) {
-            List<SellOrderDetailEntity> sellOrderDetailEntityList = sellOrderEntity.getSellOrderDetailEntities();
-            for (SellOrderDetailEntity sellOrderDetailEntity : sellOrderDetailEntityList) {
-                totalPrice += sellOrderDetailEntity.getPrice();
+        if(!sellOrderEntities.isEmpty() && sellOrderEntities != null) {
+            for (SellOrderEntity sellOrderEntity : sellOrderEntities) {
+                if(!sellOrderEntity.getStatus().equals(SystemConstant.UNPAID)){
+                    List<SellOrderDetailEntity> sellOrderDetailEntityList = sellOrderEntity.getSellOrderDetailEntities();
+                    for (SellOrderDetailEntity sellOrderDetailEntity : sellOrderDetailEntityList) {
+                        totalPrice += sellOrderDetailEntity.getPrice();
+                    }
+                }
             }
         }
         sellRevenueByDateResponseDTO.setTotalPrice(totalPrice);
