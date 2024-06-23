@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -80,5 +81,23 @@ public class DiamondPriceService implements IDiamondPriceService {
         gemDetail.setBuyPrice(gemPrice.getBuyPrice());
         gemDetail.setSellPrice(gemPrice.getSellPrice());
         return gemDetail;
+    }
+
+    @Override
+    public List<DiamondResponseDTO> getHistoryGemPrice(Long id) {
+        List<DiamondResponseDTO> result = new ArrayList<>();
+        GemEntity gemEntity = gemRepository.findGemEntityById(id);
+        DiamondCriteriaDTO diamondCriteria = modelMapper.map(gemEntity, DiamondCriteriaDTO.class);
+        List<GemPriceEntity> listGemPrice = gemPriceRepository.findAllGemPriceHistory(diamondCriteria);
+        for (GemPriceEntity item: listGemPrice){
+            DiamondResponseDTO diamondResponseDTO = new DiamondResponseDTO();
+            diamondResponseDTO.setId(id);
+            diamondResponseDTO.setName(gemEntity.getGemName());
+            diamondResponseDTO.setSellPrice(item.getSellPrice());
+            diamondResponseDTO.setBuyPrice(item.getBuyPrice());
+            diamondResponseDTO.setEffectDate(dateTimeConverter.convertToDateTimeResponse(item.getEffectDate()));
+            result.add(diamondResponseDTO);
+        }
+        return result;
     }
 }

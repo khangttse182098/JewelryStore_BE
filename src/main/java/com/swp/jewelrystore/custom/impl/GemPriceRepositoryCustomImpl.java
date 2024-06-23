@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -33,6 +34,13 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
         return gemPriceEntities.get(0);
     }
 
+    @Override
+    public List<GemPriceEntity> findAllGemPriceHistory(DiamondCriteriaDTO diamondCriteriaDTO) {
+        String sql = buildQueryForGetAllGemPrice(diamondCriteriaDTO);
+        Query query = entityManager.createNativeQuery(sql,GemPriceEntity.class);
+        return query.getResultList();
+    }
+
     private String buildQueryForCheckGem(DiamondCriteriaDTO diamondCriteriaDTO){
         String sql = "select gemprice.* from gemprice where origin = '"
                 + diamondCriteriaDTO.getOrigin() +"' and color = '"
@@ -41,6 +49,18 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
                 + diamondCriteriaDTO.getCaratWeight()+ " and "
                 + diamondCriteriaDTO.getCaratWeight() + " <= carat_weight_to ) and cut = '" +
                 diamondCriteriaDTO.getCut()+ "'" + " and effect_date <= now() order by effect_date DESC, gem_price_id DESC limit 1";
+        System.out.println(sql);
+        return sql;
+    }
+
+    private String buildQueryForGetAllGemPrice(DiamondCriteriaDTO diamondCriteriaDTO){
+        String sql = "select gemprice.* from gemprice where origin = '"
+                + diamondCriteriaDTO.getOrigin() +"' and color = '"
+                + diamondCriteriaDTO.getColor()+ "' and clarity = '"
+                + diamondCriteriaDTO.getClarity() + "' and ( carat_weight_from <= "
+                + diamondCriteriaDTO.getCaratWeight()+ " and "
+                + diamondCriteriaDTO.getCaratWeight() + " <= carat_weight_to ) and cut = '" +
+                diamondCriteriaDTO.getCut()+ "'";
         System.out.println(sql);
         return sql;
     }

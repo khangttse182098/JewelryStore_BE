@@ -44,4 +44,9 @@ public class DiamondPriceAPI {
              return ResponseEntity.badRequest().body(responseDTO);
          }
      }
+
+    @GetMapping("/history-{id}")
+    public List<DiamondResponseDTO> getHistoryGemPrice(@PathVariable Long id) {
+        return diamondPriceService.getHistoryGemPrice(id);
+    }
 }
