@@ -40,7 +40,7 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
                 + diamondCriteriaDTO.getClarity() + "' and ( carat_weight_from <= "
                 + diamondCriteriaDTO.getCaratWeight()+ " and "
                 + diamondCriteriaDTO.getCaratWeight() + " <= carat_weight_to ) and cut = '" +
-                diamondCriteriaDTO.getCut()+ "'" + "' and effect_date <= now() order by effect_date DESC, gem_price_id DESC limit 1";
+                diamondCriteriaDTO.getCut()+ "'" + " and effect_date <= now() order by effect_date DESC, gem_price_id DESC limit 1";
         System.out.println(sql);
         return sql;
     }
