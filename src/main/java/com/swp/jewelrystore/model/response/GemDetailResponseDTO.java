@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GemDetailResponseDTO extends GemResponseDTO{
+public class GemDetailResponseDTO {
     private Long id;
     private String gemCode;
     private String gemName;
@@ -19,4 +19,7 @@ public class GemDetailResponseDTO extends GemResponseDTO{
     private String polish;
     private String symmetry;
     private String fluorescence;
+    private Double buyPrice;
+    private Double sellPrice;
+    private String effectDate;
 }

@@ -6,9 +6,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GemResponseDTO {
-    private Long id;
+    private Long gemId;
+    private String gemCode;
     private String gemName;
-    private Double buyPrice;
-    private Double sellPrice;
-    private String effectDate;
+    private String origin;
+    private String color;
+    private String clarity;
+    private Double caratWeight;
+    private String cut;
+    private String proportions;
+    private String polish;
+    private String symmetry;
+    private String fluorescence;
 }
