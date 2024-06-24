@@ -31,12 +31,18 @@ public class RevenueByDateConverter {
         String searchFormattedDate = date.format(formatter);
         List<SellOrderEntity> sellOrderEntities = sellOrderRepository.findByCreatedDateCustom(searchFormattedDate);
         double totalPrice = 0;
+        Long numberOfOrder = 0L;
         if(!sellOrderEntities.isEmpty() && sellOrderEntities != null) {
             for (SellOrderEntity sellOrderEntity : sellOrderEntities) {
                 totalPrice += sellOrderRepository.getTotalRevenue(sellOrderEntity);
+                if(!sellOrderEntity.getStatus().equals(SystemConstant.UNPAID)){
+                    numberOfOrder++;
+                }
             }
         }
         sellRevenueByDateResponseDTO.setTotalPrice(totalPrice);
+        sellRevenueByDateResponseDTO.setNumberOfOrder(numberOfOrder);
+        numberOfOrder = 0L;
         return sellRevenueByDateResponseDTO;
     }
 }
