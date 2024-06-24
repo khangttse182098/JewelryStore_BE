@@ -63,12 +63,15 @@ public class GoldPriceAPI {
             materialPriceService.addOrUpdateMaterialPrice(materialPriceDTO);
             if(materialPriceDTO.getMaterialId() != null){
                 responseDTO.setMessage("Update material price successfully");
+                return ResponseEntity.ok(responseDTO);
             }
             responseDTO.setMessage("Add marterial price successfully");
+            responseDTO.setData(materialPriceDTO);
             return ResponseEntity.ok(responseDTO);
         } catch (Exception e){
-            responseDTO.setMessage(e.toString());
+            responseDTO.setMessage(e.getMessage());
             return ResponseEntity.badRequest().body(responseDTO);
         }
+
     }
 }
