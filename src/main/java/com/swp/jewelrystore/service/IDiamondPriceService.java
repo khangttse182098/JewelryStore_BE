@@ -1,6 +1,7 @@
 package com.swp.jewelrystore.service;
 
 
+import com.swp.jewelrystore.model.dto.DiamondDTO;
 import com.swp.jewelrystore.model.dto.GemWithPriceDTO;
 import com.swp.jewelrystore.model.response.DiamondResponseDTO;
 import com.swp.jewelrystore.model.response.GemDetailResponseDTO;
@@ -12,4 +13,5 @@ public interface IDiamondPriceService {
     void addOrUpdateDiamondPrice(GemWithPriceDTO gem);
     GemDetailResponseDTO getGemDetail(Long id);
     List<DiamondResponseDTO> getHistoryGemPrice(Long id);
+    void addOrUpdateDiamondEntity(DiamondDTO diamondDTO);
 }

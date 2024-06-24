@@ -1,6 +1,8 @@
 package com.swp.jewelrystore.config;
 
+import com.swp.jewelrystore.entity.GemPriceEntity;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -11,5 +13,18 @@ public class ModelMapperConfig {
     @Bean
     public ModelMapper modelMapper(){
         return new ModelMapper();
+    }
+
+    @Bean
+    public ModelMapper modelMapperIgnoreId() {
+        ModelMapper modelMapper = new ModelMapper();
+        // Define the mapping to skip the id field
+        PropertyMap<GemPriceEntity, GemPriceEntity> gemPriceMap = new PropertyMap<GemPriceEntity, GemPriceEntity>() {
+            protected void configure() {
+                skip(destination.getId());
+            }
+        };
+        modelMapper.addMappings(gemPriceMap);
+        return modelMapper;
     }
 }
