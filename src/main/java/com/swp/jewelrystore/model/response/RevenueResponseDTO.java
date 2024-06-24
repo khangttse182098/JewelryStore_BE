@@ -13,12 +13,15 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RevenueResponseDTO {
+    // totalRevenue
     private Double totalSellRevenue;
     private Double totalPurchaseRevenue;
-    List<String> sellCreatedDateList;
+    // sellRevenue
+    List<String> createdDateList;
     List<Long> numberOfSellOrderList;
     List<Double> sellTotalPriceList;
-    List<String> purchaseCreatedDateList;
+    // purchaseRevenue
+    List<Long> numberOfPurchaseOrderList;
     List<Double> purchaseTotalPriceList;
 
 }

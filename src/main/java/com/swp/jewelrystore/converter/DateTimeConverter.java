@@ -21,7 +21,7 @@ public class DateTimeConverter {
     }
 
 
-    public Date convertToDateTimeDTO(String date) {
+    public static Date convertToDateTimeDTO(String date) {
         // String date truyền vào theo dạng dd/MM/yyyy HH:mm
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

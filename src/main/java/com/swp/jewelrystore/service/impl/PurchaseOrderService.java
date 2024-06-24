@@ -58,8 +58,12 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         List<PurchasePriceResponseDTO> purchasePriceResponseDTOList = new ArrayList<>();
         for (Long productId : productIds) {
             ProductEntity productEntity = productRepository.findByIdIs(productId);
+            List<SellOrderDetailEntity> sellOrderDetailEntities = productEntity.getSellOrderDetailEntities();
             PurchasePriceResponseDTO purchasePriceResponseDTO = new PurchasePriceResponseDTO();
             purchasePriceResponseDTO.setProductId(productId);
+            if(sellOrderDetailEntities != null && !sellOrderDetailEntities.isEmpty()) {
+                purchasePriceResponseDTO.setSoldPrice(sellOrderDetailEntities.get(0).getPrice());
+            }
             purchasePriceResponseDTO.setPurchasePrice(productRepository.calculateBuyPrice(productEntity));
             purchasePriceResponseDTO.setDiscountPrice(productRepository.calculatePurchaseDiscountPrice(productEntity));
             purchasePriceResponseDTOList.add(purchasePriceResponseDTO);

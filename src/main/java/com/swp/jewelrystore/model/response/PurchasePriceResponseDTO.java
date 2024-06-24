@@ -9,4 +9,5 @@ public class PurchasePriceResponseDTO {
     private double purchasePrice;
     private Long productId;
     private double discountPrice;
+    private double soldPrice;
 }
