@@ -59,12 +59,16 @@ public class GoldPriceAPI {
     @PostMapping
     public ResponseEntity<ResponseDTO> addOrUpdateGoldPrice(@Valid @RequestBody MaterialPriceDTO materialPriceDTO){
         ResponseDTO responseDTO = new ResponseDTO();
-        materialPriceService.addOrUpdateMaterialPrice(materialPriceDTO);
-        if(materialPriceDTO.getMaterialId() != null){
-            responseDTO.setMessage("Update material price successfully");
+        try {
+            materialPriceService.addOrUpdateMaterialPrice(materialPriceDTO);
+            if(materialPriceDTO.getMaterialId() != null){
+                responseDTO.setMessage("Update material price successfully");
+            }
+            responseDTO.setMessage("Add marterial price successfully");
             return ResponseEntity.ok(responseDTO);
+        } catch (Exception e){
+            responseDTO.setMessage(e.toString());
+            return ResponseEntity.badRequest().body(responseDTO);
         }
-        responseDTO.setMessage("Add marterial price successfully");
-        return ResponseEntity.ok(responseDTO);
     }
 }
