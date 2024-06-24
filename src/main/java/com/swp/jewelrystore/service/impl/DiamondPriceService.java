@@ -92,27 +92,22 @@ public class DiamondPriceService implements IDiamondPriceService {
     }
 
     @Override
-    public void addOrUpdateDiamondEntity(DiamondDTO diamondDTO) {
+    public String addDiamondEntity(DiamondDTO diamondDTO) {
           GemEntity existedGemEntity = gemRepository.findByGemName(diamondDTO.getGemName().trim());
-          List<GemPriceEntity> existedGemPriceEntity = gemPriceRepository.checkGemExisted(diamondDTO);
-          if (diamondDTO.getCaratWeightFrom() > diamondDTO.getCaratWeightTo()) {
-              throw new DiamondException("Khoảng đầu không được lớn hơn khoảng cuối");
-          } else if (diamondDTO.getCaratWeight() < diamondDTO.getCaratWeightFrom()
-          || diamondDTO.getCaratWeight() > diamondDTO.getCaratWeightTo()){
-              throw new DiamondException("Trọng lượng carat phải trong khoảng từ " + diamondDTO.getCaratWeightFrom() + " đến " + diamondDTO.getCaratWeightTo());
-          } else if (existedGemEntity != null){
+           if (existedGemEntity != null){
               throw new DiamondException("Tên kim cương đã tồn tại ! Vui lòng thử lại");
-          } else if (!existedGemPriceEntity.isEmpty()){
-              throw new DiamondException("Tiêu chí 4C + origin bị trùng ! Hãy thử lại");
           }
           // add information for gem
           GemEntity gemEntity = modelMapper.map(diamondDTO, GemEntity.class);
           gemEntity.setGemCode(gemPriceRepository.autoGenerateCode());
           gemEntity.setActive(1L);
           gemRepository.save(gemEntity);
-          // add information for gem price
-         GemPriceEntity gemPriceEntity = modelMapper.map(diamondDTO, GemPriceEntity.class);
-         gemPriceEntity.setEffectDate(dateTimeConverter.convertToDateTimeDTO(diamondDTO.getEffecttDate()));
-         gemPriceRepository.save(gemPriceEntity);
+          DiamondCriteriaDTO diamondCriteriaDTO = modelMapper.map(gemEntity, DiamondCriteriaDTO.class);
+          GemPriceEntity existedGemPriceEntity = gemPriceRepository.checkGemCaratInRange(diamondCriteriaDTO);
+          // existed
+          if (existedGemPriceEntity == null){
+               return "Kim cương chưa có giá !";
+          }
+          return "";
     }
 }

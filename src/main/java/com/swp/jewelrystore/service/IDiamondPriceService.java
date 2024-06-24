@@ -13,5 +13,5 @@ public interface IDiamondPriceService {
     void addOrUpdateDiamondPrice(GemWithPriceDTO gem);
     GemDetailResponseDTO getGemDetail(Long id);
     List<DiamondResponseDTO> getHistoryGemPrice(Long id);
-    void addOrUpdateDiamondEntity(DiamondDTO diamondDTO);
+    String addDiamondEntity(DiamondDTO diamondDTO);
 }

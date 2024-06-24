@@ -33,7 +33,10 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
         String sql = buildQueryForCheckGem(diamondCriteriaDTO);
         Query query = entityManager.createNativeQuery(sql,GemPriceEntity.class);
         List<GemPriceEntity> gemPriceEntities = query.getResultList();
-        return gemPriceEntities.get(0);
+        if (!gemPriceEntities.isEmpty()) {
+            return gemPriceEntities.get(0);
+        }
+        return null;
     }
 
     @Override
@@ -43,24 +46,6 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
         return query.getResultList();
     }
 
-    @Override
-    public List<GemPriceEntity> checkGemExisted(DiamondDTO diamondDTO) {
-        String sql = buildQueryForCheckGemExisted(diamondDTO);
-        Query query = entityManager.createNativeQuery(sql,GemPriceEntity.class);
-        return query.getResultList();
-    }
-
-    private String buildQueryForCheckGemExisted(DiamondDTO diamondDTO) {
-        String sql = "select gemprice.* from gemprice where origin = '"
-                + diamondDTO.getOrigin() +"' and color = '"
-                + diamondDTO.getColor()+ "' and clarity = '"
-                + diamondDTO.getClarity() + "' and carat_weight_from = '"
-                + diamondDTO.getCaratWeightFrom()+ "' and carat_weight_to = '"
-                + diamondDTO.getCaratWeightTo() + "' and cut = '" +
-                diamondDTO.getCut()+ "'";
-        System.out.println(sql);
-        return sql;
-    }
 
     private String buildQueryForCheckGem(DiamondCriteriaDTO diamondCriteriaDTO){
         String sql = "select gemprice.* from gemprice where origin = '"

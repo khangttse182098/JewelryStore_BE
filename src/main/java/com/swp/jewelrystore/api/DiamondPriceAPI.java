@@ -52,9 +52,14 @@ public class DiamondPriceAPI {
     public ResponseEntity<ResponseDTO> addOrUpdateDiamondEntity(@RequestBody @Valid DiamondDTO diamondDTO) {
         ResponseDTO responseDTO = new ResponseDTO();
         try {
-            diamondPriceService.addOrUpdateDiamondEntity(diamondDTO);
+            String result = diamondPriceService.addDiamondEntity(diamondDTO);
+            if (!result.equals("")){
+                responseDTO.setMessage(result);
+                responseDTO.setData(diamondDTO);
+                return ResponseEntity.ok().body(responseDTO);
+            }
             responseDTO.setData(diamondDTO);
-            responseDTO.setMessage(SystemConstant.ADD_OR_UPDATE_DIAMOND_SUCCESSFULLY);
+            responseDTO.setMessage("Thêm kim cương thành công");
             return ResponseEntity.ok().body(responseDTO);
         } catch (Exception e){
             responseDTO.setMessage(e.getMessage());
