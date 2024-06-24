@@ -1,6 +1,7 @@
 package com.swp.jewelrystore.api;
 
 import com.swp.jewelrystore.constant.SystemConstant;
+import com.swp.jewelrystore.model.dto.DiamondDTO;
 import com.swp.jewelrystore.model.dto.GemWithPriceDTO;
 import com.swp.jewelrystore.model.response.DiamondResponseDTO;
 import com.swp.jewelrystore.model.response.GemDetailResponseDTO;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -45,8 +48,26 @@ public class DiamondPriceAPI {
          }
      }
 
+    @PostMapping("/information/diamond")
+    public ResponseEntity<ResponseDTO> addOrUpdateDiamondEntity(@RequestBody @Valid DiamondDTO diamondDTO) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            diamondPriceService.addOrUpdateDiamondEntity(diamondDTO);
+            responseDTO.setData(diamondDTO);
+            responseDTO.setMessage(SystemConstant.ADD_OR_UPDATE_DIAMOND_SUCCESSFULLY);
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e){
+            responseDTO.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
+
+
+
     @GetMapping("/history-{id}")
     public List<DiamondResponseDTO> getHistoryGemPrice(@PathVariable Long id) {
-        return diamondPriceService.getHistoryGemPrice(id);
+         List<DiamondResponseDTO> listDiamond = diamondPriceService.getHistoryGemPrice(id);
+        Collections.reverse(listDiamond);
+        return listDiamond;
     }
 }

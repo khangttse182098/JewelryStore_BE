@@ -19,37 +19,63 @@ public class DiamondDTO {
     @ApiModelProperty(example="")
     private Long id;
 
-    @NotEmpty(message="Nguồn gốc không được để trống")
+    @NotEmpty(message="Tên kim cương không được để trống")
+    @JsonProperty("gemName")
+    @ApiModelProperty(example="")
+    private String gemName;
+
     @JsonProperty("origin")
     @ApiModelProperty(example="Nhân tạo")
     private String origin;
 
-    @NotEmpty(message="Màu sắc không được để trống")
+
     @JsonProperty("color")
-    @ApiModelProperty(example="H")
+    @ApiModelProperty(example="Z")
     private String color;
 
-    @NotEmpty(message="Độ tinh khiết không được để trống")
+
     @JsonProperty("clarity")
-    @ApiModelProperty(example="VVS1")
+    @ApiModelProperty(example="I1")
     private String clarity;
 
     @NotNull(message="Khoảng đầu của trọng lượng carat không được để trống")
     @JsonProperty("caratWeightFrom")
-    @ApiModelProperty(example="2.3")
+    @ApiModelProperty(example="2.1")
     @Min(value = 0, message="Giá trị trọng lượng phải lớn hơn 0")
     private Double caratWeightFrom;
 
+    @NotNull(message="Trọng lượng carat không được để trống")
+    @JsonProperty("caratWeight")
+    @ApiModelProperty(example="2.2")
+    @Min(value = 0, message="Giá trị trọng lượng phải lớn hơn 0")
+    private Double caratWeight;
+
     @NotNull(message="Khoảng cuối của trọng lượng carat không được để trống")
     @JsonProperty("caratWeightTo")
-    @ApiModelProperty(example="2.65")
+    @ApiModelProperty(example="2.4")
     @Min(value = 0, message="Giá trị trọng lượng phải lớn hơn 0")
     private Double caratWeightTo;
 
-    @NotEmpty(message="Giác cắt không được để trống")
+
     @JsonProperty("cut")
-    @ApiModelProperty(example="PR")
+    @ApiModelProperty(example="GD")
     private String cut;
+
+    @JsonProperty("proportions")
+    @ApiModelProperty(example="Đai mỏng")
+    private String proportions;
+
+    @JsonProperty("polish")
+    @ApiModelProperty(example="Khá")
+    private String polish;
+
+    @JsonProperty("symmetry")
+    @ApiModelProperty(example="Tốt")
+    private String symmetry;
+
+    @JsonProperty("fluorescence")
+    @ApiModelProperty(example="Mạnh")
+    private String fluorescence;
 
     @NotNull(message="Giá mua không thể để trống")
     @JsonProperty("buyPrice")
