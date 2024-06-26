@@ -6,6 +6,8 @@ import com.swp.jewelrystore.entity.GemPriceEntity;
 import com.swp.jewelrystore.entity.PurchaseOrderEntity;
 import com.swp.jewelrystore.model.dto.DiamondCriteriaDTO;
 import com.swp.jewelrystore.model.dto.DiamondDTO;
+import com.swp.jewelrystore.model.dto.GemKeyDTO;
+import com.swp.jewelrystore.model.response.GemPriceResponseDTO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -25,7 +27,10 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
         String sql = buildQueryFilter(gemEntity);
         Query query = entityManager.createNativeQuery(sql,GemPriceEntity.class);
         List<GemPriceEntity> gemPriceEntities = query.getResultList();
-        return gemPriceEntities.get(0);
+        if (!gemPriceEntities.isEmpty()) {
+            return gemPriceEntities.get(0);
+        }
+        return null;
     }
 
     @Override
@@ -40,8 +45,8 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
     }
 
     @Override
-    public List<GemPriceEntity> findAllGemPriceHistory(DiamondCriteriaDTO diamondCriteriaDTO) {
-        String sql = buildQueryForGetAllGemPrice(diamondCriteriaDTO);
+    public List<GemPriceEntity> findAllGemPriceHistory(GemKeyDTO gemKey) {
+        String sql = buildQueryForGetAllGemPrice(gemKey);
         Query query = entityManager.createNativeQuery(sql,GemPriceEntity.class);
         return query.getResultList();
     }
@@ -59,14 +64,14 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
         return sql;
     }
 
-    private String buildQueryForGetAllGemPrice(DiamondCriteriaDTO diamondCriteriaDTO){
+    private String buildQueryForGetAllGemPrice(GemKeyDTO gemKey){
         String sql = "select gemprice.* from gemprice where origin = '"
-                + diamondCriteriaDTO.getOrigin() +"' and color = '"
-                + diamondCriteriaDTO.getColor()+ "' and clarity = '"
-                + diamondCriteriaDTO.getClarity() + "' and ( carat_weight_from <= "
-                + diamondCriteriaDTO.getCaratWeight()+ " and "
-                + diamondCriteriaDTO.getCaratWeight() + " <= carat_weight_to ) and cut = '" +
-                diamondCriteriaDTO.getCut()+ "'";
+                + gemKey.getOrigin() +"' and color = '"
+                + gemKey.getColor()+ "' and clarity = '"
+                + gemKey.getClarity() + "' and carat_weight_from = '"
+                + gemKey.getCaratWeightFrom()+ "' and carat_weight_to = '"
+                + gemKey.getCaratWeightTo() + "' and cut = '" +
+                gemKey.getCut()+ "'";
         System.out.println(sql);
         return sql;
     }
@@ -83,6 +88,44 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
         diamondCode += String.valueOf(number);
         return diamondCode;
     }
+
+    @Override
+    public List<GemPriceResponseDTO> getGemDistinct() {
+        String sql = buildQueryForGetDistinctGem();
+        Query query = entityManager.createNativeQuery(sql,GemPriceResponseDTO.class);
+        List<GemPriceResponseDTO> result = query.getResultList();
+        System.out.println(result);
+        return result;
+    }
+
+    private String buildQueryForGetDistinctGem(){
+        String sql = "SELECT DISTINCT origin, color, clarity, carat_weight_from, carat_weight_to, cut FROM gemprice ";
+        return sql;
+    }
+
+    @Override
+    public GemPriceEntity getGemDistinctInformation(GemPriceResponseDTO gemPriceResponseDTO) {
+        String sql = buildQueryToGetDistinctInformation(gemPriceResponseDTO);
+        Query query = entityManager.createNativeQuery(sql,GemPriceEntity.class);
+        List<GemPriceEntity> gemPriceEntities = query.getResultList();
+        if (!gemPriceEntities.isEmpty()) {
+            return gemPriceEntities.get(0);
+        }
+        return null;
+    }
+
+    private String buildQueryToGetDistinctInformation(GemPriceResponseDTO gemPriceResponseDTO){
+        String sql = "select * from gemprice where origin = '"
+                + gemPriceResponseDTO.getId().getOrigin() +"' and color = '"
+                + gemPriceResponseDTO.getId().getColor()+ "' and clarity = '"
+                + gemPriceResponseDTO.getId().getClarity() + "' and carat_weight_from = '"
+                + gemPriceResponseDTO.getId().getCarat_weight_from()+ "' and carat_weight_to = '"
+                + gemPriceResponseDTO.getId().getCarat_weight_to() + "' and cut = '" +
+                gemPriceResponseDTO.getId().getCut()+ "' and effect_date <= now() order by effect_date DESC limit 1";
+        System.out.println(sql);
+        return sql;
+    }
+
 
 
     private int countTotalDiamond() {

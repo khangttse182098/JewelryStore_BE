@@ -1,15 +1,16 @@
 package com.swp.jewelrystore.entity;
 
+
+import com.swp.jewelrystore.model.response.GemPriceResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.Date;
 
+@Entity
 @Getter
 @Setter
-@Entity
 @Table(name = "gemprice")
 public class GemPriceEntity {
     @Id

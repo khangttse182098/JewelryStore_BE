@@ -9,8 +9,16 @@ import java.util.Date;
 @Setter
 public class DiamondResponseDTO {
     private Long id;
-    private String name;
-    private Double buyPrice;
+    private String gemCode;
+    private String gemName;
+    private String origin;
+    private String clarity;
+    private String cut;
+    private String caratWeight;
+    private String color;
     private Double sellPrice;
-    private String effectDate;
+    private String proportions;
+    private String polish;
+    private String symmetry;
+    private String fluorescence;
 }

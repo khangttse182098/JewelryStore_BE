@@ -19,7 +19,4 @@ public class GemDetailResponseDTO {
     private String polish;
     private String symmetry;
     private String fluorescence;
-    private Double buyPrice;
-    private Double sellPrice;
-    private String effectDate;
 }
