@@ -91,14 +91,16 @@ public class ProductConverter {
             //isSold
             productResponseDTO.setIsSold(1L);
             List<SellOrderDetailEntity> sellOrderDetailEntities = productEntity.getSellOrderDetailEntities();
-            SellOrderDetailEntity sellOrderDetailEntity = sellOrderDetailEntities.get(0);
-            price = sellOrderDetailEntity.getPrice();
-            productResponseDTO.setPrice(price);
-            // discountPrice
-            SellOrderEntity sellOrderEntity = sellOrderDetailEntity.getSellOrder();
-            if(sellOrderEntity.getDiscount() != null){
-                DiscountEntity discountEntity = sellOrderEntity.getDiscount();
-                productResponseDTO.setDiscountPrice(price * discountEntity.getValue() / 100);
+            if(sellOrderDetailEntities != null && !sellOrderDetailEntities.isEmpty()){
+                SellOrderDetailEntity sellOrderDetailEntity = sellOrderDetailEntities.get(0);
+                price = sellOrderDetailEntity.getPrice();
+                productResponseDTO.setPrice(price);
+                // discountPrice
+                SellOrderEntity sellOrderEntity = sellOrderDetailEntity.getSellOrder();
+                if(sellOrderEntity.getDiscount() != null){
+                    DiscountEntity discountEntity = sellOrderEntity.getDiscount();
+                    productResponseDTO.setDiscountPrice(price * discountEntity.getValue() / 100);
+                }
             }
         }
 

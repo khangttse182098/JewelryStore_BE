@@ -12,10 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,14 +27,27 @@ public class OrderService implements IOrderService {
     @Override
     public List<InvoiceResponseDTO> getAllOrder(Map<String, String> params) {
         List<InvoiceResponseDTO> invoiceResponseDTOs = new ArrayList<>();
-        List<PurchaseOrderEntity> purchaseOrderEntities = purchaseOrderRepository.findAllPurchaseOrder(params);
-        for(PurchaseOrderEntity purchaseOrderEntity : purchaseOrderEntities) {
-            invoiceResponseDTOs.add(orderConverter.toInvoiceResponseDTO(purchaseOrderEntity));
-        }
         List<SellOrderEntity> sellOrderEntities = sellOrderRepository.findAllSellOrder(params);
         for(SellOrderEntity sellOrderEntity : sellOrderEntities) {
             invoiceResponseDTOs.add(orderConverter.toInvoiceResponseDTO(sellOrderEntity));
         }
+        List<PurchaseOrderEntity> purchaseOrderEntities = purchaseOrderRepository.findAllPurchaseOrder(params);
+        for(PurchaseOrderEntity purchaseOrderEntity : purchaseOrderEntities) {
+            invoiceResponseDTOs.add(orderConverter.toInvoiceResponseDTO(purchaseOrderEntity));
+        }
+        Collections.sort(invoiceResponseDTOs, new Comparator<InvoiceResponseDTO>() {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.S");
+            @Override
+            public int compare(InvoiceResponseDTO i1, InvoiceResponseDTO i2) {
+                try {
+                    Date date1 = dateFormat.parse(i1.getCreatedDate());
+                    Date date2 = dateFormat.parse(i2.getCreatedDate());
+                    return date2.compareTo(date1);
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        });
         return invoiceResponseDTOs;
     }
 

@@ -53,13 +53,8 @@ public class DiamondPriceAPI {
         ResponseDTO responseDTO = new ResponseDTO();
         try {
             String result = diamondPriceService.addDiamondEntity(diamondDTO);
-            if (!result.equals("")){
-                responseDTO.setMessage(result);
-                responseDTO.setData(diamondDTO);
-                return ResponseEntity.ok().body(responseDTO);
-            }
+            responseDTO.setMessage(result);
             responseDTO.setData(diamondDTO);
-            responseDTO.setMessage("Thêm kim cương thành công");
             return ResponseEntity.ok().body(responseDTO);
         } catch (Exception e){
             responseDTO.setMessage(e.getMessage());
