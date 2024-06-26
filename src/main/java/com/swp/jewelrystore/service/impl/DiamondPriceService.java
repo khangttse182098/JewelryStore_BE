@@ -4,11 +4,11 @@ import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.customexception.DiamondException;
 import com.swp.jewelrystore.entity.GemEntity;
 import com.swp.jewelrystore.entity.GemPriceEntity;
-import com.swp.jewelrystore.model.dto.DiamondCriteriaDTO;
-import com.swp.jewelrystore.model.dto.DiamondDTO;
-import com.swp.jewelrystore.model.dto.GemWithPriceDTO;
+import com.swp.jewelrystore.model.dto.*;
 import com.swp.jewelrystore.model.response.DiamondResponseDTO;
 import com.swp.jewelrystore.model.response.GemDetailResponseDTO;
+import com.swp.jewelrystore.model.response.GemPriceDistinctResponseDTO;
+import com.swp.jewelrystore.model.response.GemPriceResponseDTO;
 import com.swp.jewelrystore.repository.GemPriceRepository;
 import com.swp.jewelrystore.repository.GemRepository;
 import com.swp.jewelrystore.service.IDiamondPriceService;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -31,17 +32,21 @@ public class DiamondPriceService implements IDiamondPriceService {
     private final ModelMapper modelMapper;
     private final DateTimeConverter dateTimeConverter;
     private final ModelMapper modelMapperIgnoreId;
+    private final ModelMapper modelMapperIgnoreEffectDate;
 
     @Override
-    public List<DiamondResponseDTO> getDiamondPrice() {
+    public List<DiamondResponseDTO> getDiamondInformation() {
         List<DiamondResponseDTO> result = new ArrayList<>();
         List<GemEntity> listGem = gemRepository.findAll();
         for (GemEntity gem : listGem) {
-            GemPriceEntity gemPrice = gemPriceRepository.findLatestGemPrice(gem);
-            DiamondResponseDTO diamond = modelMapper.map(gemPrice, DiamondResponseDTO.class);
-            diamond.setId(gem.getId());
-            diamond.setName(gem.getGemName());
-            diamond.setEffectDate(dateTimeConverter.convertToDateTimeResponse(gemPrice.getEffectDate()));
+            DiamondResponseDTO diamond = modelMapper.map(gem, DiamondResponseDTO.class);
+            DiamondCriteriaDTO diamondCriteria = modelMapper.map(diamond, DiamondCriteriaDTO.class);
+            GemPriceEntity gemPriceEntity = gemPriceRepository.checkGemCaratInRange(diamondCriteria);
+            if (gemPriceEntity == null){
+                diamond.setSellPrice(0.0);
+            } else {
+                diamond.setSellPrice(gemPriceEntity.getSellPrice());
+            }
             result.add(diamond);
         }
         return result;
@@ -63,30 +68,25 @@ public class DiamondPriceService implements IDiamondPriceService {
     }
 
     @Override
-    public GemDetailResponseDTO getGemDetail(Long id) {
+    public GemDetailResponseDTO getDiamondDetail(Long id) {
         GemEntity gemEntity = gemRepository.findGemEntityById(id);
         GemDetailResponseDTO gemDetail = modelMapper.map(gemEntity, GemDetailResponseDTO.class);
-        GemPriceEntity gemPrice = gemPriceRepository.findLatestGemPrice(gemEntity);
-        gemDetail.setEffectDate(dateTimeConverter.convertToDateTimeResponse(gemPrice.getEffectDate()));
-        gemDetail.setBuyPrice(gemPrice.getBuyPrice());
-        gemDetail.setSellPrice(gemPrice.getSellPrice());
         return gemDetail;
     }
 
     @Override
-    public List<DiamondResponseDTO> getHistoryGemPrice(Long id) {
-        List<DiamondResponseDTO> result = new ArrayList<>();
-        GemEntity gemEntity = gemRepository.findGemEntityById(id);
-        DiamondCriteriaDTO diamondCriteria = modelMapper.map(gemEntity, DiamondCriteriaDTO.class);
-        List<GemPriceEntity> listGemPrice = gemPriceRepository.findAllGemPriceHistory(diamondCriteria);
-        for (GemPriceEntity item: listGemPrice){
-            DiamondResponseDTO diamondResponseDTO = new DiamondResponseDTO();
-            diamondResponseDTO.setId(id);
-            diamondResponseDTO.setName(gemEntity.getGemName());
-            diamondResponseDTO.setSellPrice(item.getSellPrice());
-            diamondResponseDTO.setBuyPrice(item.getBuyPrice());
-            diamondResponseDTO.setEffectDate(dateTimeConverter.convertToDateTimeResponse(item.getEffectDate()));
-            result.add(diamondResponseDTO);
+    public List<GemPriceDistinctResponseDTO> getHistoryGemPrice() {
+        List<GemPriceResponseDTO> listDistinctGem = gemPriceRepository.getGemDistinct();
+        List<GemPriceDistinctResponseDTO> result = new ArrayList<>();
+        for (GemPriceResponseDTO gemPrice : listDistinctGem) {
+            GemPriceDistinctResponseDTO gemDistinct = modelMapper.map(gemPrice.getId(), GemPriceDistinctResponseDTO.class);
+            GemPriceEntity gemPriceEntity = gemPriceRepository.getGemDistinctInformation(gemPrice);
+            gemDistinct.setCaratWeightFrom(gemPriceEntity.getCaratWeightFrom());
+            gemDistinct.setCaratWeightTo(gemPriceEntity.getCaratWeightTo());
+            gemDistinct.setSellPrice(gemPriceEntity.getSellPrice());
+            gemDistinct.setBuyPrice(gemPriceEntity.getBuyPrice());
+            gemDistinct.setEffectDate(dateTimeConverter.convertToDateTimeResponse(gemPriceEntity.getEffectDate()));
+            result.add(gemDistinct);
         }
         return result;
     }
@@ -108,6 +108,26 @@ public class DiamondPriceService implements IDiamondPriceService {
           if (existedGemPriceEntity == null){
                return "Kim cương chưa có giá !";
           }
-          return "";
+          return "Thêm kim cương thành công";
+    }
+
+    @Override
+    public void addNewPriceForDiamondEntity(GemPriceDTO gemPriceDTO) {
+        GemPriceEntity gemPrice = modelMapperIgnoreEffectDate.map(gemPriceDTO, GemPriceEntity.class);
+        gemPrice.setEffectDate(dateTimeConverter.convertToDateTimeDTO(gemPriceDTO.getEffectDate()));
+        gemPriceRepository.save(gemPrice);
+    }
+
+    @Override
+    public List<GemPriceDistinctResponseDTO> getHistoryGemPriceDetail(GemKeyDTO gemKey) {
+        List<GemPriceEntity> listGemPrice = gemPriceRepository.findAllGemPriceHistory(gemKey);
+        List<GemPriceDistinctResponseDTO> result = new ArrayList<>();
+        for (GemPriceEntity gem : listGemPrice) {
+            GemPriceDistinctResponseDTO gemDistinct = modelMapper.map(gem, GemPriceDistinctResponseDTO.class);
+            gemDistinct.setEffectDate(dateTimeConverter.convertToDateTimeResponse(gem.getEffectDate()));
+            result.add(gemDistinct);
+        }
+        Collections.reverse(result);
+        return result;
     }
 }

@@ -45,7 +45,7 @@ public class UserAPI {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> addOrUpdateUser(@RequestBody @Valid RegisterDTO registerDTO) {
+    public ResponseEntity<ResponseDTO> addOrUpdateUser(@RequestBody RegisterDTO registerDTO) {
         ResponseDTO responseDTO = new ResponseDTO();
         try {
             userService.addOrUpdateUser(registerDTO);
