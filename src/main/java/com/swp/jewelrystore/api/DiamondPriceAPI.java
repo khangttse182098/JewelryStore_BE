@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import javax.validation.Valid;
 import java.util.List;
 
 
@@ -75,7 +74,7 @@ public class DiamondPriceAPI {
 
     // Chi tiết lịch sử giá vàng của từng loại
     @GetMapping("/history/details")
-    public List<GemPriceDistinctResponseDTO> getHistoryGemPriceDetail(@RequestBody GemKeyDTO gemKey) {
+    public List<GemPriceDistinctResponseDTO> getHistoryGemPriceDetail(@ModelAttribute GemKeyDTO gemKey) {
         return diamondPriceService.getHistoryGemPriceDetail(gemKey);
     }
 }
