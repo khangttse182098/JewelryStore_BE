@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -68,7 +69,7 @@ public class DiamondPriceAPI {
     }
 
     @PostMapping("/information/add")
-    public ResponseEntity<ResponseDTO> addDiamondEntity(@RequestBody DiamondDTO diamondDTO){
+    public ResponseEntity<ResponseDTO> addDiamondEntity(@Valid @RequestBody DiamondDTO diamondDTO){
         ResponseDTO responseDTO = new ResponseDTO();
         try {
             String result = diamondPriceService.addDiamondEntity(diamondDTO);
