@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -126,6 +127,7 @@ public class DiamondPriceService implements IDiamondPriceService {
             gemDistinct.setEffectDate(dateTimeConverter.convertToDateTimeResponse(gem.getEffectDate()));
             result.add(gemDistinct);
         }
+        Collections.reverse(result);
         return result;
     }
 }

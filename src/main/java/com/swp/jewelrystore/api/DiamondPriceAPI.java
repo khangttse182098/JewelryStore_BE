@@ -1,6 +1,7 @@
 package com.swp.jewelrystore.api;
 
 import com.swp.jewelrystore.constant.SystemConstant;
+import com.swp.jewelrystore.model.dto.DiamondDTO;
 import com.swp.jewelrystore.model.dto.GemKeyDTO;
 import com.swp.jewelrystore.model.dto.GemPriceDTO;
 import com.swp.jewelrystore.model.dto.GemWithPriceDTO;
@@ -65,6 +66,23 @@ public class DiamondPriceAPI {
         }
 
     }
+
+    @PostMapping("/information/add")
+    public ResponseEntity<ResponseDTO> addDiamondEntity(@RequestBody DiamondDTO diamondDTO){
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            String result = diamondPriceService.addDiamondEntity(diamondDTO);
+            responseDTO.setMessage(result);
+            responseDTO.setData(diamondDTO);
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e){
+            responseDTO.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+
+    }
+
+
 
     // Lịch sử giá vàng của từng loại đá
     @GetMapping("/history")
