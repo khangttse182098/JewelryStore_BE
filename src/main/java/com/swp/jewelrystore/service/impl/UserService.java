@@ -8,6 +8,7 @@ import com.swp.jewelrystore.model.dto.RegisterDTO;
 import com.swp.jewelrystore.model.dto.UserDTO;
 import com.swp.jewelrystore.model.response.LoginResponseDTO;
 import com.swp.jewelrystore.model.response.UserResponseDTO;
+import com.swp.jewelrystore.model.response.UserRevenueResponseDTO;
 import com.swp.jewelrystore.repository.RoleRepository;
 import com.swp.jewelrystore.repository.UserRepository;
 import com.swp.jewelrystore.service.IUserService;
@@ -90,6 +91,11 @@ public class UserService implements IUserService {
          for (UserEntity item: listUser){
              item.setStatus(0L);
          }
+    }
+
+    @Override
+    public List<UserRevenueResponseDTO> getUserRevenue(Map<String, String> params) {
+        return userRepository.getUserRevenue(params);
     }
 
 }
