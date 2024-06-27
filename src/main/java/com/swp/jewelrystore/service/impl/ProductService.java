@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 @Transactional
@@ -76,7 +77,15 @@ public class ProductService implements IProductService {
 
     @Override
     public void addOrUpdateProduct(ProductDTO productDTO) {
+        Date createdDate = null;
+        if(productDTO.getId() != null){
+            ProductEntity updatedProductEntity = productRepository.findById(productDTO.getId()).orElse(null);
+            createdDate = updatedProductEntity.getCreatedDate();
+        }
         ProductEntity productEntity = modelMapper.map(productDTO, ProductEntity.class);
+        if(createdDate != null){
+            productEntity.setCreatedDate(createdDate);
+        }
         // Product Category
         ProductCategoryEntity productCategoryEntity = new ProductCategoryEntity();
         if(productDTO.getProductCategoryName().equals(SystemConstant.JEWELRY)){

@@ -23,5 +23,8 @@ public class RevenueResponseDTO {
     // purchaseRevenue
     List<Long> numberOfPurchaseOrderList;
     List<Double> purchaseTotalPriceList;
+    // staffRevenue
+    List<String> staffNameList;
+    List<Double> staffTotalRevenueList;
 
 }

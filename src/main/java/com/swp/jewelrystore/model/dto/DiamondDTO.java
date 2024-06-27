@@ -24,15 +24,18 @@ public class DiamondDTO {
     @ApiModelProperty(example="")
     private String gemName;
 
+    @NotEmpty(message="Nguồn gốc không được để trống")
     @JsonProperty("origin")
     @ApiModelProperty(example="Nhân tạo")
     private String origin;
 
 
     @JsonProperty("color")
+    @NotEmpty(message="Màu sắc không được để trống")
     @ApiModelProperty(example="Z")
     private String color;
 
+    @NotEmpty(message="Độ tinh khiết không được để trống")
     @JsonProperty("clarity")
     @ApiModelProperty(example="I1")
     private String clarity;
@@ -43,6 +46,7 @@ public class DiamondDTO {
     @Min(value = 0, message="Giá trị trọng lượng phải lớn hơn 0")
     private Double caratWeight;
 
+    @NotEmpty(message = "Giác cắt không được để trống")
     @JsonProperty("cut")
     @ApiModelProperty(example="GD")
     private String cut;

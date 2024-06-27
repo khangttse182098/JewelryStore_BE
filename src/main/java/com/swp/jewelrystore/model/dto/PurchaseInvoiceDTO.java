@@ -18,7 +18,7 @@ public class PurchaseInvoiceDTO {
     private Long userId;
 
     @NotNull(message = "Product id is required")
-    @ApiModelProperty(example = "[1, 2]")
+    @ApiModelProperty(example = "[2]")
     private List<Long> productId;
 
     @NotEmpty(message = "Sell order code is required")

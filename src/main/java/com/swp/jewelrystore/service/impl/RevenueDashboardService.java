@@ -6,11 +6,13 @@ import com.swp.jewelrystore.converter.RevenueByDateConverter;
 import com.swp.jewelrystore.entity.PurchaseOrderEntity;
 import com.swp.jewelrystore.entity.SellOrderDetailEntity;
 import com.swp.jewelrystore.entity.SellOrderEntity;
+import com.swp.jewelrystore.entity.UserEntity;
 import com.swp.jewelrystore.model.response.InvoiceResponseDTO;
 import com.swp.jewelrystore.model.response.RevenueByDateResponseDTO;
 import com.swp.jewelrystore.model.response.RevenueResponseDTO;
 import com.swp.jewelrystore.repository.PurchaseOrderRepository;
 import com.swp.jewelrystore.repository.SellOrderRepository;
+import com.swp.jewelrystore.repository.UserRepository;
 import com.swp.jewelrystore.service.IOrderService;
 import com.swp.jewelrystore.service.IRevenueDashboardService;
 import com.swp.jewelrystore.utils.StringUtils;
@@ -32,6 +34,8 @@ public class RevenueDashboardService implements IRevenueDashboardService {
     private RevenueByDateConverter revenueByDateConverter;
     @Autowired
     private PurchaseOrderRepository purchaseOrderRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public RevenueResponseDTO getTotalRevenueByTime(Map<String, String> params) {
@@ -61,6 +65,8 @@ public class RevenueDashboardService implements IRevenueDashboardService {
         RevenueResponseDTO purchaseTmpRevenueResponseDTO = getPurchaseRevenueByDate(params);
         revenueResponseDTO.setPurchaseTotalPriceList(purchaseTmpRevenueResponseDTO.getPurchaseTotalPriceList());
         revenueResponseDTO.setNumberOfPurchaseOrderList(purchaseTmpRevenueResponseDTO.getNumberOfPurchaseOrderList());
+
+        //
         return revenueResponseDTO;
     }
     public RevenueResponseDTO getSellRevenueByDate(Map<String, String> params) {

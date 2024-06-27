@@ -8,17 +8,20 @@ import com.swp.jewelrystore.model.dto.RegisterDTO;
 import com.swp.jewelrystore.model.dto.UserDTO;
 import com.swp.jewelrystore.model.response.LoginResponseDTO;
 import com.swp.jewelrystore.model.response.UserResponseDTO;
+import com.swp.jewelrystore.model.response.UserRevenueResponseDTO;
 import com.swp.jewelrystore.repository.RoleRepository;
 import com.swp.jewelrystore.repository.UserRepository;
 import com.swp.jewelrystore.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -62,14 +65,14 @@ public class UserService implements IUserService {
     @Override
     public void addOrUpdateUser(RegisterDTO registerDTO) {
         BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
-        // registerDTO have id
+        // registerDTO do not have id
         if ( registerDTO.getId() != null){
             UserEntity userEntity = modelMapper.map(registerDTO, UserEntity.class);
             // existed user
             // when update, front-end will not give the password to backend -> get existed password
             UserEntity existedUser = userRepository.findById(registerDTO.getId()).get();
             userEntity.setRole(roleRepository.findById(UserRoleConverter.convertRoleFromTextToNumber(registerDTO.getRole())).get());
-            userEntity.setPassword(existedUser.getPassword());
+            userEntity.setPassword(bCrypt.encode(registerDTO.getPassword()));
             userEntity.setStatus(1L);
             userRepository.save(userEntity);
         } else {
@@ -90,6 +93,11 @@ public class UserService implements IUserService {
          for (UserEntity item: listUser){
              item.setStatus(0L);
          }
+    }
+
+    @Override
+    public List<UserRevenueResponseDTO> getUserRevenue(Map<String, String> params) {
+        return userRepository.getUserRevenue(params);
     }
 
 }

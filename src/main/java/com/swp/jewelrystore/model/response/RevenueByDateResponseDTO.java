@@ -9,4 +9,5 @@ public class RevenueByDateResponseDTO {
     private Double totalPrice;
     private String createdDate;
     private Long numberOfOrder;
+
 }
