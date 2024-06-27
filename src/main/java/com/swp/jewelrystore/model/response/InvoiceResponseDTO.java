@@ -19,6 +19,7 @@ public class InvoiceResponseDTO {
     private Long customerId;
     private Long discountValue;
     private String discountCode;
+    private Long userId;
     List<ProductResponseDTO> productResponseDTOList;
     List<MaterialResponseDTO> materialResponseDTOList;
     List<DiamondCriteriaResponseDTO> diamondCriteriaResponseDTOS;
