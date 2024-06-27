@@ -68,7 +68,6 @@ public class UserService implements IUserService {
         // registerDTO do not have id
         if ( registerDTO.getId() != null){
             UserEntity userEntity = modelMapper.map(registerDTO, UserEntity.class);
-
             userEntity.setRole(roleRepository.findById(UserRoleConverter.convertRoleFromTextToNumber(registerDTO.getRole())).get());
             userEntity.setPassword(bCrypt.encode(registerDTO.getPassword()));
             userEntity.setStatus(1L);

@@ -46,7 +46,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                     sql.append(" AND role.name LIKE '%" + param.getValue().trim() + "%'");
                 }
                 else{
-                    sql.append(" AND " + param.getKey() + " LIKE '%" + param.getValue().trim() + "%'");
+                    sql.append(" AND " + param.getKey() + "  LIKE '%" + param.getValue().trim() + "%'");
                 }
             }
         }
