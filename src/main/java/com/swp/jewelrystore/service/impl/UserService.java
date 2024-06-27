@@ -68,6 +68,9 @@ public class UserService implements IUserService {
         // registerDTO do not have id
         if ( registerDTO.getId() != null){
             UserEntity userEntity = modelMapper.map(registerDTO, UserEntity.class);
+            // existed user
+            // when update, front-end will not give the password to backend -> get existed password
+            UserEntity existedUser = userRepository.findById(registerDTO.getId()).get();
             userEntity.setRole(roleRepository.findById(UserRoleConverter.convertRoleFromTextToNumber(registerDTO.getRole())).get());
             userEntity.setPassword(bCrypt.encode(registerDTO.getPassword()));
             userEntity.setStatus(1L);

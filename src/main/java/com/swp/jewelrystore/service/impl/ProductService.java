@@ -79,8 +79,8 @@ public class ProductService implements IProductService {
     public void addOrUpdateProduct(ProductDTO productDTO) {
         Date createdDate = null;
         if(productDTO.getId() != null){
-            ProductEntity productEntity1 = productRepository.findById(productDTO.getId()).orElse(null);
-            createdDate = productEntity1.getCreatedDate();
+            ProductEntity updatedProductEntity = productRepository.findById(productDTO.getId()).orElse(null);
+            createdDate = updatedProductEntity.getCreatedDate();
         }
         ProductEntity productEntity = modelMapper.map(productDTO, ProductEntity.class);
         if(createdDate != null){
