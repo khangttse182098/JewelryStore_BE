@@ -71,7 +71,7 @@ public class UserService implements IUserService {
             // existed user
             // when update, front-end will not give the password to backend -> get existed password
             UserEntity existedUser = userRepository.findById(registerDTO.getId()).get();
-            userEntity.setUserName(existedUser.getUserName());s
+            userEntity.setUserName(existedUser.getUserName());
             userEntity.setPassword(existedUser.getPassword());
             userEntity.setRole(roleRepository.findById(UserRoleConverter.convertRoleFromTextToNumber(registerDTO.getRole())).get());
             userEntity.setStatus(1L);

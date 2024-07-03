@@ -58,9 +58,11 @@ public class ProductConverter {
         // type of gem
         List<ProductGemEntity> listProductGem = productGemRepository.findAllByProductId(productEntity.getId());
         if(!listProductGem.isEmpty()){
+
             List<String> gemNameList = new ArrayList<>();
             for (ProductGemEntity productGemEntity : listProductGem) {
                 gemNameList.add(productGemEntity.getGem().getGemName());
+                productResponseDTO.setGemId(productGemEntity.getGem().getId());
             }
             String gemName = String.join(",", gemNameList);
             productResponseDTO.setGemName(gemName);

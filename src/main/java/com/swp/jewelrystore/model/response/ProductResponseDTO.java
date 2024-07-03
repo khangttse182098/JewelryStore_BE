@@ -29,4 +29,5 @@ public class ProductResponseDTO {
     private Double discountPrice;
     private String subCategoryType;
     private Long isSold;
+    private Long gemId;
 }
