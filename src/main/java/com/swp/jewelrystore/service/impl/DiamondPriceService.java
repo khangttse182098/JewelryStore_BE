@@ -87,12 +87,26 @@ public class DiamondPriceService implements IDiamondPriceService {
         for (GemPriceResponseDTO gemPrice : listDistinctGem) {
             GemPriceDistinctResponseDTO gemDistinct = modelMapper.map(gemPrice.getId(), GemPriceDistinctResponseDTO.class);
             GemPriceEntity gemPriceEntity = gemPriceRepository.getGemDistinctInformation(gemPrice);
-            gemDistinct.setCaratWeightFrom(gemPriceEntity.getCaratWeightFrom());
-            gemDistinct.setCaratWeightTo(gemPriceEntity.getCaratWeightTo());
-            gemDistinct.setSellPrice(gemPriceEntity.getSellPrice());
-            gemDistinct.setBuyPrice(gemPriceEntity.getBuyPrice());
-            gemDistinct.setEffectDate(dateTimeConverter.convertToDateTimeResponse(gemPriceEntity.getEffectDate()));
-            result.add(gemDistinct);
+            // null là do chưa đến ngày áp dụng
+            // chưa đến ngày áp dụng thì
+            if (gemPriceEntity == null){
+               // query to get gem with higher effect date but smallest in the higher
+                GemPriceEntity gemPriceEntityWithHigherDate = gemPriceRepository.getGemExistedWithHigherDate(gemPrice);
+                gemDistinct.setCaratWeightFrom(gemPriceEntityWithHigherDate.getCaratWeightFrom());
+                gemDistinct.setCaratWeightTo(gemPriceEntityWithHigherDate.getCaratWeightTo());
+                gemDistinct.setSellPrice(gemPriceEntityWithHigherDate.getSellPrice());
+                gemDistinct.setBuyPrice(gemPriceEntityWithHigherDate.getBuyPrice());
+                gemDistinct.setEffectDate(dateTimeConverter.convertToDateTimeResponse(gemPriceEntityWithHigherDate.getEffectDate()));
+                result.add(gemDistinct);
+            } else {
+                gemDistinct.setCaratWeightFrom(gemPriceEntity.getCaratWeightFrom());
+                gemDistinct.setCaratWeightTo(gemPriceEntity.getCaratWeightTo());
+                gemDistinct.setSellPrice(gemPriceEntity.getSellPrice());
+                gemDistinct.setBuyPrice(gemPriceEntity.getBuyPrice());
+                gemDistinct.setEffectDate(dateTimeConverter.convertToDateTimeResponse(gemPriceEntity.getEffectDate()));
+                result.add(gemDistinct);
+            }
+
         }
         return result;
     }

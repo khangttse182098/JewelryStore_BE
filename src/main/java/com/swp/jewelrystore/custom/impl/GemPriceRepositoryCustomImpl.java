@@ -59,6 +59,29 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
         return result;
     }
 
+    @Override
+    public GemPriceEntity getGemExistedWithHigherDate(GemPriceResponseDTO gemPriceResponseDTO) {
+        String sql = buildQueryToGetDistinctInformationWithHigherDate(gemPriceResponseDTO);
+        Query query = entityManager.createNativeQuery(sql,GemPriceEntity.class);
+        List<GemPriceEntity> gemPriceEntities = query.getResultList();
+        if (!gemPriceEntities.isEmpty()) {
+            return gemPriceEntities.get(0);
+        }
+        return null;
+    }
+
+    private String buildQueryToGetDistinctInformationWithHigherDate(GemPriceResponseDTO gemPriceResponseDTO){
+        String sql = "select * from gemprice where origin = '"
+                + gemPriceResponseDTO.getId().getOrigin() +"' and color = '"
+                + gemPriceResponseDTO.getId().getColor()+ "' and clarity = '"
+                + gemPriceResponseDTO.getId().getClarity() + "' and carat_weight_from = '"
+                + gemPriceResponseDTO.getId().getCarat_weight_from()+ "' and carat_weight_to = '"
+                + gemPriceResponseDTO.getId().getCarat_weight_to() + "' and cut = '" +
+                gemPriceResponseDTO.getId().getCut()+ "' and effect_date >= now() order by effect_date ASC limit 1";
+        System.out.println(sql);
+        return sql;
+    }
+
 
     private String buildQueryForCheckGemWithoutDate(DiamondCriteriaDTO diamondCriteriaDTO){
         String sql = "select gemprice.* from gemprice where origin = '"

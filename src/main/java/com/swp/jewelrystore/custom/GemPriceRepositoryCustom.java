@@ -18,4 +18,5 @@ public interface GemPriceRepositoryCustom {
     List<GemPriceResponseDTO> getGemDistinct();
     GemPriceEntity getGemDistinctInformation(GemPriceResponseDTO gemPriceResponseDTO);
     List<GemPriceEntity> getGemExistedWithoutDate(DiamondCriteriaDTO diamondCriteriaDTO);
+    GemPriceEntity getGemExistedWithHigherDate(GemPriceResponseDTO gemPriceResponseDTO);
 }
