@@ -16,7 +16,7 @@ public class DiamondResponseDTO {
     private String cut;
     private String caratWeight;
     private String color;
-    private Double sellPrice;
+    private Object sellPrice;
     private String proportions;
     private String polish;
     private String symmetry;

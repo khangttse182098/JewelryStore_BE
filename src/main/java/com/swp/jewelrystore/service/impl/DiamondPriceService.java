@@ -41,11 +41,17 @@ public class DiamondPriceService implements IDiamondPriceService {
         for (GemEntity gem : listGem) {
             DiamondResponseDTO diamond = modelMapper.map(gem, DiamondResponseDTO.class);
             DiamondCriteriaDTO diamondCriteria = modelMapper.map(diamond, DiamondCriteriaDTO.class);
-            GemPriceEntity gemPriceEntity = gemPriceRepository.checkGemCaratInRange(diamondCriteria);
-            if (gemPriceEntity == null){
+            List<GemPriceEntity> listGemExistedWithoutDate = gemPriceRepository.getGemExistedWithoutDate(diamondCriteria);
+            // tiêu chí 4C + 1O không tồn tại trong bảng gemprice
+            if (listGemExistedWithoutDate.isEmpty()){
                 diamond.setSellPrice(0.0);
-            } else {
-                diamond.setSellPrice(gemPriceEntity.getSellPrice());
+            } else { // đá tồn tại nhưng chưa có ngày
+                GemPriceEntity gemPriceEntity = gemPriceRepository.checkGemCaratInRange(diamondCriteria);
+                if (gemPriceEntity == null){
+                    diamond.setSellPrice("Chưa đến ngày áp dụng");
+                } else {
+                    diamond.setSellPrice(gemPriceEntity.getSellPrice());
+                }
             }
             result.add(diamond);
         }
@@ -115,6 +121,7 @@ public class DiamondPriceService implements IDiamondPriceService {
     public void addNewPriceForDiamondEntity(GemPriceDTO gemPriceDTO) {
         GemPriceEntity gemPrice = modelMapperIgnoreEffectDate.map(gemPriceDTO, GemPriceEntity.class);
         gemPrice.setEffectDate(dateTimeConverter.convertToDateTimeDTO(gemPriceDTO.getEffectDate()));
+        // thêm try catch cho lỗi quá ngày hiện tại
         gemPriceRepository.save(gemPrice);
     }
 
