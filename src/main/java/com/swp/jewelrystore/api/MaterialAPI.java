@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/material")
+@RequestMapping("/api/material")    
 @CrossOrigin
 @RequiredArgsConstructor
 public class MaterialAPI {
