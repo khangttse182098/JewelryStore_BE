@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 @RequiredArgsConstructor
 public class MaterialPriceService implements IMaterialPriceService {
@@ -43,6 +45,10 @@ public class MaterialPriceService implements IMaterialPriceService {
             } else if (materialPriceDTO.getEffectDate().isEmpty()){
                 throw new MaterialException("Ngày hiệu lực của giá vàng không thể để trống");
             }
+            Date effectDate = dateTimeConverter.convertToDateTimeDTO(materialPriceDTO.getEffectDate());
+            if (effectDate.after(new Date())){
+                throw new MaterialException("Ngày hiệu lực của giá vàng không được lớn hơn ngày hiện tại");
+            }
             MaterialEntity materialEntity = new MaterialEntity();
             materialEntity.setName(materialPriceDTO.getGoldName());
             materialRepository.save(materialEntity);
@@ -50,7 +56,7 @@ public class MaterialPriceService implements IMaterialPriceService {
             materialPriceEntity.setMaterial(materialEntity);
             materialPriceEntity.setBuyPrice(materialPriceDTO.getBuyPrice());
             materialPriceEntity.setSellPrice(materialPriceDTO.getSellPrice());
-            materialPriceEntity.setEffectDate(dateTimeConverter.convertToDateTimeDTO(materialPriceDTO.getEffectDate()));
+            materialPriceEntity.setEffectDate(effectDate);
             materialPriceRepository.save(materialPriceEntity);
         }
 
