@@ -69,10 +69,10 @@ public class DiamondPriceAPI {
     }
 
     @PostMapping("/information/add")
-    public ResponseEntity<ResponseDTO> addDiamondEntity(@Valid @RequestBody DiamondDTO diamondDTO){
+    public ResponseEntity<ResponseDTO> addOrUpdateDiamondEntity(@Valid @RequestBody DiamondDTO diamondDTO){
         ResponseDTO responseDTO = new ResponseDTO();
         try {
-            String result = diamondPriceService.addDiamondEntity(diamondDTO);
+            String result = diamondPriceService.addOrUpdateDiamondEntity(diamondDTO);
             responseDTO.setMessage(result);
             responseDTO.setData(diamondDTO);
             return ResponseEntity.ok().body(responseDTO);

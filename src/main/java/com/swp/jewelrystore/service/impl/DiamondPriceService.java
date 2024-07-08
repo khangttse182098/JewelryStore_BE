@@ -4,13 +4,14 @@ import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.customexception.DiamondException;
 import com.swp.jewelrystore.entity.GemEntity;
 import com.swp.jewelrystore.entity.GemPriceEntity;
+import com.swp.jewelrystore.entity.ProductGemEntity;
+import com.swp.jewelrystore.entity.SellOrderDetailEntity;
 import com.swp.jewelrystore.model.dto.*;
 import com.swp.jewelrystore.model.response.DiamondResponseDTO;
 import com.swp.jewelrystore.model.response.GemDetailResponseDTO;
 import com.swp.jewelrystore.model.response.GemPriceDistinctResponseDTO;
 import com.swp.jewelrystore.model.response.GemPriceResponseDTO;
-import com.swp.jewelrystore.repository.GemPriceRepository;
-import com.swp.jewelrystore.repository.GemRepository;
+import com.swp.jewelrystore.repository.*;
 import com.swp.jewelrystore.service.IDiamondPriceService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -33,6 +34,8 @@ public class DiamondPriceService implements IDiamondPriceService {
     private final DateTimeConverter dateTimeConverter;
     private final ModelMapper modelMapperIgnoreId;
     private final ModelMapper modelMapperIgnoreEffectDate;
+    private final ProductGemRepository productGemRepository;
+    private final SellOrderDetailRepository sellOrderDetailRepository;
 
     @Override
     public List<DiamondResponseDTO> getDiamondInformation() {
@@ -51,6 +54,21 @@ public class DiamondPriceService implements IDiamondPriceService {
                     diamond.setSellPrice("Chưa đến ngày áp dụng");
                 } else {
                     diamond.setSellPrice(gemPriceEntity.getSellPrice());
+                }
+            }
+            // kiểm tra xem kim cương đã đính với hóa đơn bán nào hay chưa -> đã đính = 1, ko đính = 0
+            List<ProductGemEntity> checkAssignedGemWithProduct = productGemRepository.findAllByGemId(gem.getId());
+            // check xem cái gem id tồn tại trong product-gem hay ko
+            if (checkAssignedGemWithProduct.isEmpty()){
+                diamond.setStatus(0L);
+            } else {
+                for (ProductGemEntity productGem : checkAssignedGemWithProduct) {
+                    List<SellOrderDetailEntity> listSellOrderWithProduct = sellOrderDetailRepository.findAllByProduct(productGem.getProduct());
+                    if (listSellOrderWithProduct.isEmpty()){
+                        diamond.setStatus(0L);
+                    } else {
+                        diamond.setStatus(1L);
+                    }
                 }
             }
             result.add(diamond);
@@ -112,23 +130,50 @@ public class DiamondPriceService implements IDiamondPriceService {
     }
 
     @Override
-    public String addDiamondEntity(DiamondDTO diamondDTO) {
-          GemEntity existedGemEntity = gemRepository.findByGemName(diamondDTO.getGemName().trim());
-           if (existedGemEntity != null){
-              throw new DiamondException("Tên kim cương đã tồn tại ! Vui lòng thử lại");
-          }
+    public String addOrUpdateDiamondEntity(DiamondDTO diamondDTO) {
+        List<GemEntity> listGem = gemRepository.findAll();
           // add information for gem
-          GemEntity gemEntity = modelMapper.map(diamondDTO, GemEntity.class);
-          gemEntity.setGemCode(gemPriceRepository.autoGenerateCode());
-          gemEntity.setActive(1L);
-          gemRepository.save(gemEntity);
-          DiamondCriteriaDTO diamondCriteriaDTO = modelMapper.map(gemEntity, DiamondCriteriaDTO.class);
-          GemPriceEntity existedGemPriceEntity = gemPriceRepository.checkGemCaratInRange(diamondCriteriaDTO);
-          // existed
-          if (existedGemPriceEntity == null){
-               return "Kim cương chưa có giá !";
-          }
-          return "Thêm kim cương thành công";
+           if (diamondDTO.getId() == null){
+               GemEntity existedGemEntity = gemRepository.findByGemName(diamondDTO.getGemName().trim());
+               if (existedGemEntity != null){
+                   throw new DiamondException("Tên kim cương đã tồn tại ! Vui lòng thử lại");
+               }
+               GemEntity gemEntity = modelMapper.map(diamondDTO, GemEntity.class);
+               gemEntity.setGemCode(gemPriceRepository.autoGenerateCode());
+               gemEntity.setActive(1L);
+               gemRepository.save(gemEntity);
+               DiamondCriteriaDTO diamondCriteriaDTO = modelMapper.map(gemEntity, DiamondCriteriaDTO.class);
+               GemPriceEntity existedGemPriceEntity = gemPriceRepository.checkGemCaratInRange(diamondCriteriaDTO);
+               // existed
+               if (existedGemPriceEntity == null){
+                   return "Kim cương chưa có giá !";
+               }
+               return "Thêm kim cương thành công";
+           } else { // update information for product gem
+               // check whether diamond is assigned to sell order or not
+               List<ProductGemEntity> listAssignedGemWithProduct = productGemRepository.findAllByGemId(diamondDTO.getId());
+               // gem nằm trong sản phẩm thì phải check xem sản phẩm đinh kèm có nằm trong hóa đơn bán hay ko
+               // nếu gem ko nằm trong sản phẩm thì auto sửa được
+               if (!listAssignedGemWithProduct.isEmpty()){
+                   for (ProductGemEntity productGem : listAssignedGemWithProduct) {
+                       List<SellOrderDetailEntity> listSellOrderWithProduct = sellOrderDetailRepository.findAllByProduct(productGem.getProduct());
+                       if (!listSellOrderWithProduct.isEmpty()){
+                           throw new DiamondException("Kim cương đã được đính kèm với sản phẩm hóa đơn bán, ko thể xóa");
+                       }
+                   }
+               }
+               for (GemEntity gem : listGem) {
+                   if (gem.getGemName().trim().equals(diamondDTO.getGemName().trim()) && gem.getId() != diamondDTO.getId()){
+                       throw new DiamondException("Tên kim cương đã tồn tại ! Vui lòng thử lại");
+                   }
+               }
+               GemEntity updateGemEntity = modelMapper.map(diamondDTO, GemEntity.class);
+               updateGemEntity.setGemCode(gemRepository.findById(diamondDTO.getId()).get().getGemCode());
+               updateGemEntity.setActive(1L);
+               gemRepository.save(updateGemEntity);
+               return "Cập nhật thông tin mới cho kim cương thành công";
+           }
+
     }
 
     @Override

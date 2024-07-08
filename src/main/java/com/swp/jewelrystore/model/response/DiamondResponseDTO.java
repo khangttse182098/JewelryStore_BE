@@ -21,4 +21,5 @@ public class DiamondResponseDTO {
     private String polish;
     private String symmetry;
     private String fluorescence;
+    private Long status;
 }
