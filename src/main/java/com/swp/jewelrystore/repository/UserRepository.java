@@ -21,4 +21,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> , UserRe
     UserEntity findByPhone(String phoneNumber);
     @Query(value = "SELECT user.* FROM user JOIN role ON user.role_id = role.role_id WHERE role.code = :code ", nativeQuery = true)
     List<UserEntity> findByRoleCode(@Param("code") String code);
+    UserEntity findOneByUserNameAndStatus(String username, Long status);
+
 }
