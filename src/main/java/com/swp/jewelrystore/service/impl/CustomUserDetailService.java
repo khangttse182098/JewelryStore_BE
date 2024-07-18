@@ -42,6 +42,7 @@ public class CustomUserDetailService implements UserDetailsService {
         userDTO.setPassword(userEntity.getPassword());
         RoleDTO roleDTO = new RoleDTO();
         roleDTO.setCode(userEntity.getRole().getCode());
+        roleDTO.setName((userEntity.getRole().getName()));
         userDTO.setRole(roleDTO);
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_"+userDTO.getRole().getCode()));

@@ -38,8 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider());
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -50,9 +50,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/manager/**").hasAnyRole("MANAGER")
                 .antMatchers("/cashier/**").hasAnyRole("MANAGER", "CASHIER")
                 .antMatchers("/login").permitAll()
+                .antMatchers("/").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JsonUsernamePasswordAuthenticationFilter(authenticationManager()),
                         UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
+                    response.setContentType("application/json");
+                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                    response.getWriter().write("{\"message\": \"Authentication failed\"}");
+                })
+                .and()
                 .sessionManagement()
                 .maximumSessions(1);
     }

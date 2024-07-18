@@ -40,15 +40,10 @@ public class UserService implements IUserService {
     public LoginResponseDTO login(UserDTO userDTO) {
         LoginResponseDTO loginResponseDTO  = new LoginResponseDTO();
         UserEntity userEntity = userRepository.findByUserName(userDTO.getUsername());
-        BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
-        if (!bCrypt.matches(userDTO.getPassword(), userEntity.getPassword())) {
-            loginResponseDTO.setMessage(SystemConstant.LOGIN_FAIL);
-        }else {
-            loginResponseDTO = modelMapper.map(userEntity, LoginResponseDTO.class);
-            loginResponseDTO.setRoleCode(userEntity.getRole().getCode());
-            loginResponseDTO.setRoleName(userEntity.getRole().getName());
-            loginResponseDTO.setMessage(SystemConstant.LOGIN_SUCCESS);
-        }
+        loginResponseDTO = modelMapper.map(userEntity, LoginResponseDTO.class);
+        loginResponseDTO.setRoleCode(userEntity.getRole().getCode());
+        loginResponseDTO.setRoleName(userEntity.getRole().getName());
+        loginResponseDTO.setMessage(SystemConstant.LOGIN_SUCCESS);
         return loginResponseDTO;
     }
 
