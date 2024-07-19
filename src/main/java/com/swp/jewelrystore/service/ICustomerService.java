@@ -11,4 +11,6 @@ public interface ICustomerService {
     Long checkExisted(CustomerDTO customerDTO);
     List<CustomerResponseDTO> getCustomerList(Map<String, String> phoneNumber);
     CustomerDetailDTO getCustomerDetail(Long id);
+    String addOrUpdateCustomer(CustomerDTO customerDTO);
+    String deleteCustomer(Long id);
 }

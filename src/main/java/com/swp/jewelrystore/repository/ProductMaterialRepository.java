@@ -10,4 +10,5 @@ public interface ProductMaterialRepository extends JpaRepository<ProductMaterial
     List<ProductMaterialEntity> findAllByProductId(Long productId);
     ProductMaterialEntity findByWeight(Double weight);
     void deleteAllByProductIdIn(List<Long> ids);
+    List<ProductMaterialEntity> findAllByMaterialId(Long materialId);
 }

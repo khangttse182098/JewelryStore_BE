@@ -1,10 +1,9 @@
 package com.swp.jewelrystore.api;
 
+import com.swp.jewelrystore.model.dto.WarrantyDTO;
 import com.swp.jewelrystore.service.PDFGeneratorService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormat;
@@ -17,17 +16,17 @@ import java.util.Date;
 public class WarrantyAPI {
      private final PDFGeneratorService pdfGeneratorService;
 
-     @GetMapping("/pdf/generate")
-    public void generatePDF(HttpServletResponse response) {
+     @PostMapping("/pdf/generate")
+    public void generatePDF(HttpServletResponse response, @RequestBody WarrantyDTO warrantyDTO) {
          response.setContentType("application/pdf");
          DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
          String currentDateTime = dateFormatter.format(new Date());
 
          String headerKey = "Content-Disposition";
-         String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+         String headerValue = "attachment; filename=pdf_" + warrantyDTO.getCustomerName() + "_" +currentDateTime + ".pdf";
          response.setHeader(headerKey, headerValue);
          try {
-             pdfGeneratorService.exportPDFFile(response);
+             pdfGeneratorService.exportPDFFile(response, warrantyDTO);
          } catch (Exception e){
              e.printStackTrace();
          }

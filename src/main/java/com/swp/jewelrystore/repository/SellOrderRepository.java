@@ -18,5 +18,5 @@ public interface SellOrderRepository extends JpaRepository<SellOrderEntity, Long
     List<SellOrderEntity> findByUser_IdAndStatusNot(Long id, String status);
     @Query(value = "SELECT * FROM sellorder WHERE MONTH(created_date) = :month AND YEAR(created_date) = :year", nativeQuery = true)
     List<SellOrderEntity> findByCreatedDateMonth(@Param("month") int month, @Param("year") int year);
-
+    List<SellOrderEntity> findByCustomer_Id(Long id);
 }

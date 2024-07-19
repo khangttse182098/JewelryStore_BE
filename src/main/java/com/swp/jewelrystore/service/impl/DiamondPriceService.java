@@ -196,4 +196,5 @@ public class DiamondPriceService implements IDiamondPriceService {
         Collections.reverse(result);
         return result;
     }
+
 }

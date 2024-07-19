@@ -12,4 +12,5 @@ public interface PurchaseOrderDetailRepository extends JpaRepository<PurchaseOrd
     void deleteByProductIn(List<ProductEntity> products);
     List<PurchaseOrderDetailEntity> findPurchaseOrderDetailEntitiesByProductIsIn(List<ProductEntity> products);
     List<PurchaseOrderDetailEntity> findByPurchaseOrderIn(List<PurchaseOrderEntity> purchaseOrderEntityList);
+    List<PurchaseOrderDetailEntity> findAllByMaterialId(Long materialId);
 }

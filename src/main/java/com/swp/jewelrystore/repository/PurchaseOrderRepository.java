@@ -16,4 +16,5 @@ public interface PurchaseOrderRepository extends JpaRepository <PurchaseOrderEnt
     List<PurchaseOrderEntity> findByUserIdAndStatusNot(Long customerId,String status);
     @Query(value = "SELECT * FROM purchaseorder WHERE MONTH(created_date) = :month AND YEAR(created_date) = :year", nativeQuery = true)
     List<PurchaseOrderEntity> findByCreatedDateMonth(@Param("month") int month, @Param("year") int year);
+    List<PurchaseOrderEntity> findByCustomerId(Long id);
 }   
