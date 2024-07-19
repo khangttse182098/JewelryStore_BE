@@ -1,32 +1,60 @@
 package com.swp.jewelrystore.model.dto;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public class MyUserDetail extends User {
+public class MyUserDetail implements UserDetails {
+    private String username;
+    private String password;
+    private Collection<? extends GrantedAuthority> authorities;
 
     public MyUserDetail(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+        this.username = username;
+        this.password = password;
+        this.authorities = authorities;
     }
 
-    private Long id;
-    private String fullName;
-
-    public Long getId() {
-        return id;
+    public MyUserDetail() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getFullName() {
-        return fullName;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

@@ -28,26 +28,12 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if(username.isEmpty()){
-            System.out.println("0 co");
-        }else{
-            System.out.println(username);
+        UserEntity user = userRepository.findOneByUserNameAndStatus(username, 1L);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
         }
-
-        UserSecurityDTO userDTO = new UserSecurityDTO();
-        UserEntity userEntity = userRepository.findOneByUserNameAndStatus(username, 1L);
-        if(userEntity == null){
-            throw new UsernameNotFoundException("Username not found");
-        }
-        userDTO.setPassword(userEntity.getPassword());
-        RoleDTO roleDTO = new RoleDTO();
-        roleDTO.setCode(userEntity.getRole().getCode());
-        roleDTO.setName((userEntity.getRole().getName()));
-        userDTO.setRole(roleDTO);
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_"+userDTO.getRole().getCode()));
-        MyUserDetail myUserDetail = new MyUserDetail(username,userDTO.getPassword(),true,true,true,true,authorities);
-        BeanUtils.copyProperties(userDTO, myUserDetail);
-        return myUserDetail;
+        authorities.add(new SimpleGrantedAuthority("ROLE_"+user.getRole().getCode()));
+        return new MyUserDetail(user.getUserName(), user.getPassword(),true,true,true,true, authorities);
     }
 }
