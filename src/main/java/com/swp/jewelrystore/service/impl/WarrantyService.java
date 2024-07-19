@@ -21,7 +21,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
-import java.awt.*;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -94,14 +95,15 @@ public class WarrantyService implements PDFGeneratorService {
 
 
             // buy date
-            LocalDateTime now = LocalDateTime.now();
+            ZoneId vietnamZoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+            ZonedDateTime vietnamTime = ZonedDateTime.now(vietnamZoneId);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-            String formattedDateTime = now.format(formatter);
+            String formattedDateTime = vietnamTime.format(formatter);
             Paragraph buyDate = new Paragraph("Ngày mua:           " + formattedDateTime, fontParagraph);
             buyDate.setAlignment(Element.ALIGN_LEFT);
 
             // out date
-            LocalDateTime sixMonthsLater = now.plus(6, ChronoUnit.MONTHS);
+            ZonedDateTime sixMonthsLater = vietnamTime.plusMonths(6);
             String formattedSixMonthsLater = sixMonthsLater.format(formatter);
             Paragraph outDate = new Paragraph("Ngày hết hạn:       " + formattedSixMonthsLater, fontParagraph);
             outDate.setAlignment(Element.ALIGN_LEFT);
@@ -144,6 +146,7 @@ public class WarrantyService implements PDFGeneratorService {
                 table.addCell(cell);
                 cell = new PdfPCell(new Phrase(warranty.getDescription(), fontParagraph));
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setPadding(6);
                 table.addCell(cell);
                 index++;
             }
@@ -155,7 +158,6 @@ public class WarrantyService implements PDFGeneratorService {
             // note-content
             Paragraph note_content = new Paragraph("  * Quá thời gian bảo hành, sản phẩm có bị tác động từ bên ngoài (tác động của con người: làm vỡ, hỏng,...)", fontParagraph);
             note.setAlignment(30);
-            note.setSpacingAfter(15);
 
             // signature
             Paragraph signature = new Paragraph("Kí tên quầy", fontParagraph);
