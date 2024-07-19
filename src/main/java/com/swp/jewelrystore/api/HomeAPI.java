@@ -8,6 +8,8 @@ import com.swp.jewelrystore.service.IUserService;
 import com.swp.jewelrystore.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +21,8 @@ public class HomeAPI {
 
     @GetMapping(value = "/")
     public LoginResponseDTO login() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getPrincipal());
         String userName =  SecurityUtils.getPrincipal().getUsername();
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(userName);
