@@ -4,10 +4,7 @@ package com.swp.jewelrystore.service.impl;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.*;
 import com.swp.jewelrystore.entity.ProductEntity;
 import com.swp.jewelrystore.entity.WarrantyEntity;
 import com.swp.jewelrystore.model.dto.WarrantyDTO;
@@ -21,15 +18,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
+import java.awt.*;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.io.FileOutputStream;
 
@@ -46,7 +42,7 @@ public class WarrantyService implements PDFGeneratorService {
     public void exportPDFFile(HttpServletResponse response, WarrantyDTO warrantyDTO) {
         Document document = new Document(PageSize.A4);
         try {
-            PdfWriter.getInstance(document, response.getOutputStream());
+            PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream());
             document.open();
 
             InputStream fontStream = getClass().getResourceAsStream("/font/RobotoSlab-Light.ttf");
@@ -77,8 +73,15 @@ public class WarrantyService implements PDFGeneratorService {
             }
             byte[] imageBytes = toByteArray(imageStream);
             Image image = Image.getInstance(imageBytes);
-            image.setAlignment(Element.ALIGN_CENTER);
-            document.add(image);
+
+            image.setAbsolutePosition(0,100);
+            image.scaleToFit(PageSize.A4.getWidth(), PageSize.A4.getHeight());
+            PdfContentByte canvas = writer.getDirectContentUnder();
+            PdfGState gState = new PdfGState();
+            gState.setFillOpacity(0.2f); // Set the opacity here (0.0f to 1.0f)
+            canvas.setGState(gState);
+            canvas.addImage(image);
+
 
             // title
             Paragraph title = new Paragraph("PHIẾU BẢO HÀNH", fontTitle);
@@ -160,7 +163,8 @@ public class WarrantyService implements PDFGeneratorService {
             note.setAlignment(30);
 
             // signature
-            Paragraph signature = new Paragraph("Kí tên quầy", fontParagraph);
+            Paragraph signature = new Paragraph("Xác nhận bởi", fontParagraph);
+            signature.setSpacingBefore(25);
             signature.setAlignment(Element.ALIGN_RIGHT);
 
             document.add(title);
@@ -173,6 +177,24 @@ public class WarrantyService implements PDFGeneratorService {
             document.add(note);
             document.add(note_content);
             document.add(signature);
+
+            PdfContentByte canvasUnder = writer.getDirectContentUnder();
+            canvasUnder.setRGBColorFill(0, 0, 0);
+            canvasUnder.rectangle(0, 0, PageSize.A4.getWidth(), 100);
+            canvasUnder.fill();
+
+
+            PdfContentByte canvasOver = writer.getDirectContent();
+            canvasOver.setRGBColorFill(255, 255, 255); // Set color fill to white for text
+            Font whiteFont = new Font(baseFont, 14, Font.NORMAL, Color.WHITE);
+            Phrase company = new Phrase("Công ty TNHH Mahika Store", whiteFont);
+            Phrase contact = new Phrase("Liên hệ:  68686868", whiteFont);
+            Phrase address = new Phrase("Địa chỉ:  Xã Tự Cường, Huyện Tự Lực, Tỉnh Kiên Giang", whiteFont);
+            ColumnText.showTextAligned(canvasOver, Element.ALIGN_CENTER, company, PageSize.A4.getWidth() / 2, 70, 0);
+            ColumnText.showTextAligned(canvasOver, Element.ALIGN_CENTER, contact, PageSize.A4.getWidth() / 2, 45, 0);
+            ColumnText.showTextAligned(canvasOver, Element.ALIGN_CENTER, address, PageSize.A4.getWidth() / 2, 20, 0);
+
+
         } catch (Exception e){
             e.printStackTrace();
         } finally {
