@@ -25,10 +25,10 @@ public class WarrantyEntity {
     private String warrantyNumber;
 
     @Column(name = "start_date", nullable = false)
-    private Instant startDate;
+    private Date startDate;
 
     @Column(name = "end_date", nullable = false)
-    private Instant endDate;
+    private Date endDate;
 
     @Column(name = "description")
     private String description;

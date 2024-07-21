@@ -62,8 +62,10 @@ public class DiscountService implements IDiscountService {
     @Override
     public void addOrUpdateDiscountInformation(DiscountDTO discountDTO) {
          DiscountEntity discountEntity = new DiscountEntity();
-         discountEntity.setId(discountDTO.getId());
-         if(discountRepository.findByCode(discountDTO.getCode()) != null){
+         if(discountDTO.getId() != null && discountDTO.getId() > 0){
+             discountEntity.setId(discountDTO.getId());
+         }
+         if(discountRepository.findByCode(discountDTO.getCode()) != null && discountDTO.getId() == null){
              throw new DiscountException(discountDTO.getCode() + " đã tồn tại!");
          }
          discountEntity.setCode(discountDTO.getCode());

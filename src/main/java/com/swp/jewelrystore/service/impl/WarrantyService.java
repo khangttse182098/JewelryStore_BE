@@ -1,10 +1,12 @@
 package com.swp.jewelrystore.service.impl;
 
 
+import ch.qos.logback.classic.pattern.DateConverter;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
 import com.lowagie.text.pdf.*;
+import com.swp.jewelrystore.converter.DateTimeConverter;
 import com.swp.jewelrystore.entity.ProductEntity;
 import com.swp.jewelrystore.entity.WarrantyEntity;
 import com.swp.jewelrystore.model.dto.WarrantyDTO;
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Service;
 
 
 import java.awt.*;
+import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
 import java.io.ByteArrayOutputStream;
@@ -26,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.io.FileOutputStream;
 
@@ -37,9 +42,12 @@ public class WarrantyService implements PDFGeneratorService {
 
    private final ProductRepository productRepository;
    private final WarrantyRepository warrantyRepository;
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     @Override
     public void exportPDFFile(HttpServletResponse response, WarrantyDTO warrantyDTO) {
+
         Document document = new Document(PageSize.A4);
         try {
             PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream());
@@ -101,15 +109,19 @@ public class WarrantyService implements PDFGeneratorService {
             ZoneId vietnamZoneId = ZoneId.of("Asia/Ho_Chi_Minh");
             ZonedDateTime vietnamTime = ZonedDateTime.now(vietnamZoneId);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
             String formattedDateTime = vietnamTime.format(formatter);
             Paragraph buyDate = new Paragraph("Ngày mua:           " + formattedDateTime, fontParagraph);
             buyDate.setAlignment(Element.ALIGN_LEFT);
+            SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            Date startDate = inputFormat.parse(formattedDateTime);
 
-            // out date
+                    // out date
             ZonedDateTime sixMonthsLater = vietnamTime.plusMonths(6);
             String formattedSixMonthsLater = sixMonthsLater.format(formatter);
             Paragraph outDate = new Paragraph("Ngày hết hạn:       " + formattedSixMonthsLater, fontParagraph);
             outDate.setAlignment(Element.ALIGN_LEFT);
+            Date endDate = inputFormat.parse(formattedSixMonthsLater);
 
             // Product information
             Paragraph productTitle = new Paragraph("Thông tin sản phẩm bảo hành", fontBold);
@@ -140,7 +152,19 @@ public class WarrantyService implements PDFGeneratorService {
                 cell = new PdfPCell(new Phrase(String.valueOf(index), fontParagraph));
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
-                WarrantyEntity warranty = warrantyRepository.findByProduct(item);
+                WarrantyEntity warranty =new WarrantyEntity();
+                warranty.setWarrantyNumber(generateRandomCode(7));
+                warranty.setStartDate(startDate);
+                warranty.setEndDate(endDate);
+                warranty.setProduct(item);
+                warranty.setDescription("Phiếu bảo hành 6 tháng cho " + item.getProductName() + ", cam kết sửa chữa miễn phí lỗi kỹ thuật và cung cấp dịch vụ vệ sinh, bảo dưỡng định kỳ");
+                if(new Date().after(endDate)){
+                    warranty.setStatus("Hết hạn");
+                }else{
+                    warranty.setStatus("Đang hiệu lực");
+                }
+                warranty.setCreatedDate(new Date());
+                warrantyRepository.save(warranty);
                 cell = new PdfPCell(new Phrase(warranty.getWarrantyNumber(), fontParagraph));
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
@@ -213,5 +237,12 @@ public class WarrantyService implements PDFGeneratorService {
             buffer.write(data, 0, nRead);
         }
         return buffer.toByteArray();
+    }
+    public static String generateRandomCode(int length) {
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+        }
+        return sb.toString();
     }
 }

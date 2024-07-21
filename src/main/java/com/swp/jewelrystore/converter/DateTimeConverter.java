@@ -40,7 +40,6 @@ public class DateTimeConverter {
     }
 
 
-
     public String convertToDateCompareToDB(String date) {
         StringTokenizer token = new StringTokenizer(date, "/");
         String day = token.nextToken();
