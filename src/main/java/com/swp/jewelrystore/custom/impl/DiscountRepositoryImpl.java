@@ -34,7 +34,7 @@ public class DiscountRepositoryImpl implements DiscountRepositoryCustom {
         LocalDateTime current = LocalDateTime.parse(currentDate, formatter);
         for(Map.Entry<String, String> param : filter.entrySet()){
              if (param.getKey().equals("isAvailable")){
-                where.append(" AND now() BETWEEN start_date AND end_date");
+                where.append(" AND (SELECT DATE_FORMAT(CONVERT_TZ(NOW(), @@session.time_zone, '+07:00'), '%Y-%m-%d %H:%i:%s')) BETWEEN start_date AND end_date");
              }
              else if (param.getKey().contains("time")){
                  if (param.getValue().contains("Hôm nay")){
@@ -81,7 +81,7 @@ public class DiscountRepositoryImpl implements DiscountRepositoryCustom {
 
     @Override
     public DiscountEntity findApplyingDiscount() {
-        String sql = "SELECT * FROM discount WHERE now() BETWEEN start_date AND end_date";
+        String sql = "SELECT * FROM discount WHERE (SELECT DATE_FORMAT(CONVERT_TZ(NOW(), @@session.time_zone, '+07:00'), '%Y-%m-%d %H:%i:%s')) BETWEEN start_date AND end_date";
         Query query = entityManager.createNativeQuery(sql, DiscountEntity.class);
         return (DiscountEntity)query.getResultList().get(0);
     }
