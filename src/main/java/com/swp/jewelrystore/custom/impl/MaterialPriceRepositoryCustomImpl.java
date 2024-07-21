@@ -26,7 +26,7 @@ public class MaterialPriceRepositoryCustomImpl implements MaterialPriceRepositor
     }
 
     private String buildQueryFilter(String materialId) {
-        String sql = "select materialprice.* from materialprice where material_id = " + materialId + " and effect_date <= now() order by effect_date DESC, material_price_id DESC limit 1";
+        String sql = "select materialprice.* from materialprice where material_id = " + materialId + " and effect_date <= (SELECT DATE_FORMAT(CONVERT_TZ(NOW(), @@session.time_zone, '+07:00'), '%Y-%m-%d %H:%i:%s')) order by effect_date DESC, material_price_id DESC limit 1";
         return sql;
     }
 }

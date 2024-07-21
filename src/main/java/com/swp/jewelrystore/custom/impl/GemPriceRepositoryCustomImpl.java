@@ -77,7 +77,7 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
                 + gemPriceResponseDTO.getId().getClarity() + "' and carat_weight_from = '"
                 + gemPriceResponseDTO.getId().getCarat_weight_from()+ "' and carat_weight_to = '"
                 + gemPriceResponseDTO.getId().getCarat_weight_to() + "' and cut = '" +
-                gemPriceResponseDTO.getId().getCut()+ "' and effect_date >= now() order by effect_date ASC limit 1";
+                gemPriceResponseDTO.getId().getCut()+ "' and effect_date >= (SELECT DATE_FORMAT(CONVERT_TZ(NOW(), @@session.time_zone, '+07:00'), '%Y-%m-%d %H:%i:%s')) order by effect_date ASC limit 1";
         System.out.println(sql);
         return sql;
     }
@@ -103,7 +103,7 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
                 + diamondCriteriaDTO.getClarity() + "' and ( carat_weight_from <= "
                 + diamondCriteriaDTO.getCaratWeight()+ " and "
                 + diamondCriteriaDTO.getCaratWeight() + " <= carat_weight_to ) and cut = '" +
-                diamondCriteriaDTO.getCut()+ "'" + " and effect_date <= now() order by effect_date DESC, gem_price_id DESC limit 1";
+                diamondCriteriaDTO.getCut()+ "'" + " and effect_date <= (SELECT DATE_FORMAT(CONVERT_TZ(NOW(), @@session.time_zone, '+07:00'), '%Y-%m-%d %H:%i:%s')) order by effect_date DESC, gem_price_id DESC limit 1";
         System.out.println(sql);
         return sql;
     }
@@ -121,7 +121,7 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
     }
 
     private String buildQueryFilter(GemEntity gemEntity) {
-        String sql = "select gemprice.* from gemprice where origin = '" + gemEntity.getOrigin() +"' and color = '" + gemEntity.getColor()+ "' and clarity = '" + gemEntity.getClarity() + "' and ( carat_weight_from <= " + gemEntity.getCaratWeight()+ " and " + gemEntity.getCaratWeight() + " <= carat_weight_to ) and cut = '" + gemEntity.getCut()+"' and effect_date <= now() order by effect_date DESC, gem_price_id DESC limit 1";
+        String sql = "select gemprice.* from gemprice where origin = '" + gemEntity.getOrigin() +"' and color = '" + gemEntity.getColor()+ "' and clarity = '" + gemEntity.getClarity() + "' and ( carat_weight_from <= " + gemEntity.getCaratWeight()+ " and " + gemEntity.getCaratWeight() + " <= carat_weight_to ) and cut = '" + gemEntity.getCut()+"' and effect_date <= (SELECT DATE_FORMAT(CONVERT_TZ(NOW(), @@session.time_zone, '+07:00'), '%Y-%m-%d %H:%i:%s')) order by effect_date DESC, gem_price_id DESC limit 1";
         return sql;
     }
 
@@ -166,7 +166,7 @@ public class GemPriceRepositoryCustomImpl implements GemPriceRepositoryCustom {
                 + gemPriceResponseDTO.getId().getClarity() + "' and carat_weight_from = '"
                 + gemPriceResponseDTO.getId().getCarat_weight_from()+ "' and carat_weight_to = '"
                 + gemPriceResponseDTO.getId().getCarat_weight_to() + "' and cut = '" +
-                gemPriceResponseDTO.getId().getCut()+ "' and effect_date <= now() order by effect_date DESC limit 1";
+                gemPriceResponseDTO.getId().getCut()+ "' and effect_date <= (SELECT DATE_FORMAT(CONVERT_TZ(NOW(), @@session.time_zone, '+07:00'), '%Y-%m-%d %H:%i:%s')) order by effect_date DESC limit 1";
         System.out.println(sql);
         return sql;
     }
