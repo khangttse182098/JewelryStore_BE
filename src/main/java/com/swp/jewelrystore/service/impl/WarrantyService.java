@@ -159,7 +159,7 @@ public class WarrantyService implements PDFGeneratorService {
                 warranty.setProduct(item);
                 warranty.setDescription("Phiếu bảo hành 6 tháng cho " + item.getProductName() + ", cam kết sửa chữa miễn phí lỗi kỹ thuật và cung cấp dịch vụ vệ sinh, bảo dưỡng định kỳ");
                 if(new Date().after(endDate)){
-                    warranty.setStatus("Hết hạn");
+                    warranty.setStatus("Hết hạn");  
                 }else{
                     warranty.setStatus("Đang hiệu lực");
                 }
